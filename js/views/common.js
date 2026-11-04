@@ -84,11 +84,8 @@
       return '<li class="ss ss-' + st + (isNext ? ' is-next' : '') + '" title="' + esc(tip) + '">' +
         '<span class="ss-name">' + esc(w.name) + '</span><span class="ss-date">' + date + '</span></li>';
     };
-    return '<div class="ss-wrap">' + M.blocks(dir).map((g) =>
-      '<div class="ss-group" style="flex:' + g.items.length + ' 1 0">' +
-        (g.label ? '<div class="ss-group-label">' + esc(g.label) + '</div>' : '') +
-        '<ol class="step-strip" aria-label="' + esc(g.label || '工程') + '">' + g.items.map((x) => item(x.w, x.i)).join('') + '</ol>' +
-      '</div>').join('') + '</div>';
+    // 一覧ではブロック（国内・国際など）の見出しは付けずに、工程を1列に並べる
+    return '<ol class="step-strip" aria-label="工程">' + wf.map((w, i) => item(w, i)).join('') + '</ol>';
   };
 
   UI.markDot = function (color, attrs) {

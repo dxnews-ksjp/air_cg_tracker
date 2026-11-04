@@ -198,6 +198,8 @@
       const p = M.progress(h, m.direction);
       (h.steps || []).forEach((s, i) => {
         if (!s.plannedDate || !wf[i]) return;
+        // 担当者の作業がない工程（仕立て・搭載など）は、前の工程が終わるまでタスクに出さない
+        if (wf[i].hideWhileWaiting && !s.actualAt && i !== p.done) return;
         const key = M.stepTaskKey(h.id, s.code);
         place({
           key, kind: 'STEP', date: s.plannedDate, mawb: m, hawb: h,

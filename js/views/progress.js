@@ -129,7 +129,7 @@
     const partial = g.shown.length !== g.all.length;
     const alert = s.overdueCount
       ? '<span class="alert-badge overdue" title="遅延しているHAWBの件数と最大遅延日数">⚠ 遅延' + s.overdueCount + '件・最大' + s.maxOverdueDays + '日</span>'
-      : (s.soonCount ? '<span class="alert-badge soon">⏰ 期限間近' + s.soonCount + '件</span>' : '');
+      : ''; // 期限間近の件数はMAWB行には表示しない（HAWB行の警告欄に表示）
     return '<div class="mawb-row' + (s.overdueCount ? ' has-overdue' : '') + '">' +
       '<button type="button" class="toggle" data-act="toggle" data-id="' + m.id + '" aria-expanded="' + open + '" aria-label="配下HAWBを' + (open ? '閉じる' : '開く') + '">' + (open ? '▾' : '▸') + '</button>' +
       '<div class="m-main">' + UI.dirBadge(m.direction) +
@@ -160,15 +160,15 @@
     const has = (v) => v !== null && v !== undefined && v !== '';
     const qty = (has(h.pieces) ? U.fmtNum(h.pieces, 0) + 'pcs' : '-') + ' / ' + (has(h.weightKg) ? U.fmtNum(h.weightKg) + 'kg' : '-');
     const lbl = (t) => '<span class="muted-label">' + t + '</span>';
-    return '<div class="hawb-row' + (a.level ? ' lv-' + a.level : '') + (p.complete ? ' is-done' : '') + '" data-href="#/hawb/' + h.id + '">' +
+    const party = M.partyName(h, m.direction) || '';
+    return '<div class="hawb-row' + (p.complete ? ' is-done' : '') + '" data-href="#/hawb/' + h.id + '">' +
       '<div class="h-no"><a href="#/hawb/' + h.id + '">' + esc(h.hawbNo) + '</a></div>' +
-      '<div class="h-party">' + lbl(M.partyLabel(m.direction)) + esc(M.partyName(h, m.direction)) + '</div>' +
-      '<div class="h-com">' + lbl('品名') + esc(h.commodity || '—') + '</div>' +
+      '<div class="h-party" title="' + esc(party) + '">' + lbl(M.partyLabel(m.direction)) + esc(party) + '</div>' +
+      '<div class="h-com" title="' + esc(h.commodity || '') + '">' + lbl('品名') + esc(h.commodity || '—') + '</div>' +
       '<div class="h-qty">' + lbl('個数/重量') + qty + '</div>' +
       '<div class="h-asg">' + lbl('担当') + esc(h.assignee || '—') + '</div>' +
       '<div class="h-sp">' + UI.specialLabels(h) + '</div>' +
-      '<div class="h-status">' + UI.statusText(p) + UI.progressBar(p) + '<small>' + p.done + '/' + p.total + '</small>' +
-        '<div>' + UI.nextStep(p, today) + '</div></div>' +
+      '<div class="h-status">' + UI.statusText(p) + UI.progressBar(p) + '<small>' + p.done + '/' + p.total + '</small></div>' +
       '<div class="h-alert">' + UI.alertBadge(a) + '</div>' +
       '<div class="h-steps">' + UI.stepStrip(h, m.direction, today) + '</div>' +
       '</div>';
@@ -192,7 +192,6 @@
       '</div>' +
       filterBar(snap) +
       '<div class="list-tools"><span class="count">MAWB ' + groups.length + '件 / HAWB ' + hawbCount + '件</span>' +
-        '<span class="legend"><span class="lg lg-overdue">遅延</span><span class="lg lg-soon">期限間近（今日・明日）</span></span>' +
         '<span class="spacer"></span>' +
         '<button type="button" class="btn btn-sm" data-act="expand-all">すべて開く</button>' +
         '<button type="button" class="btn btn-sm" data-act="collapse-all">すべて閉じる</button></div>' +
