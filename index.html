@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>航空貨物 進捗管理（デモ）</title>
+  <meta name="description" content="国際航空輸出入業務の進捗管理デモアプリ">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">✈</span>
+      <span class="brand-name">航空貨物 進捗管理</span>
+      <span class="demo-tag">デモ版</span>
+    </div>
+    <nav class="tabs" aria-label="メインメニュー">
+      <a class="tab" data-tab="progress" href="#/progress">進捗管理</a>
+      <a class="tab" data-tab="tasks" href="#/tasks">タスク管理 <span id="task-badge" class="tab-badges"></span></a>
+    </nav>
+    <span id="today-label" class="today-label"></span>
+  </header>
+
+  <main id="main" class="container" tabindex="-1">
+    <p class="muted">読み込み中…</p>
+  </main>
+
+  <noscript>このアプリを使うには JavaScript を有効にしてください。</noscript>
+
+  <!-- 読み込み順に依存関係があります（設定 → 共通 → ロジック → データ → 画面 → 本体） -->
+  <script src="js/config.js"></script>
+  <script src="js/util.js"></script>
+  <script src="js/model.js"></script>
+  <script src="js/seed.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/csv.js"></script>
+  <script src="js/views/common.js"></script>
+  <script src="js/views/forms.js"></script>
+  <script src="js/views/progress.js"></script>
+  <script src="js/views/detail.js"></script>
+  <script src="js/views/tasks.js"></script>
+  <script src="js/views/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
