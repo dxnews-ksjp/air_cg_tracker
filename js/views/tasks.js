@@ -45,8 +45,7 @@
     }
     return '<tr class="' + (t.done ? 'is-done' : '') + ' mark-row-' + (t.color || 'none').toLowerCase() + '" data-href="' + (h.id ? '#/hawb/' + h.id : '') + '">' +
       '<td class="c-mark" data-label="色">' + UI.markDot(t.color, 'data-mark="' + esc(t.key) + '"') + '</td>' +
-      '<td data-label="MAWB">' + (m.id ? UI.dirBadge(m.direction) + ' <a href="#/mawb/' + m.id + '">' + esc(m.mawbNo) + '</a>' : '—') + '</td>' +
-      '<td data-label="HAWB">' + (h.id ? '<a href="#/hawb/' + h.id + '">' + esc(h.hawbNo) + '</a>' : '—') + '</td>' +
+      '<td data-label="HAWB">' + (m.id ? UI.dirBadge(m.direction) + ' ' : '') + (h.id ? '<a href="#/hawb/' + h.id + '">' + esc(h.hawbNo) + '</a>' : '—') + '</td>' +
       '<td data-label="' + (m.id ? M.partyLabel(m.direction) : '輸出者／輸入者') + '">' + (m.id ? esc(M.partyName(h, m.direction) || '') : '') + '</td>' +
       '<td data-label="内容" class="c-content">' + kindTag + '<span class="task-text">' + esc(t.content) + '</span>' +
         (t.overdueDays ? '<span class="late">' + U.fmtDate(t.date) + ' 予定・' + t.overdueDays + '日超過</span>' : '') + sp +
@@ -65,7 +64,7 @@
       '</div>' +
       (shown.length
         ? '<div class="table-scroll"><table class="data-table rwd task-table"><thead><tr>' +
-            '<th class="c-mark">色</th><th>MAWB</th><th>HAWB</th><th>輸出者／輸入者</th><th>タスク内容</th><th class="c-act">操作</th>' +
+            '<th class="c-mark">色</th><th>HAWB</th><th>輸出者／輸入者</th><th>タスク内容</th><th class="c-act">操作</th>' +
           '</tr></thead><tbody>' + shown.map(taskRow).join('') + '</tbody></table></div>'
         : UI.empty(opt.emptyMsg)) +
       '</section>';
