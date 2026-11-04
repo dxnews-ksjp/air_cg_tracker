@@ -23,19 +23,25 @@ App.config = {
    * code   : データ保存用の識別子（変更しないこと）
    * name   : 画面表示名
    * base/offset : 「ETD/ETAから予定日を自動入力」したときの基準日と日数
+   * block  : 工程のまとまり（BLOCKS のキー）。一覧・詳細で見出しを付けて区切ります
    */
   WORKFLOWS: {
     EXPORT: [
-      { code: 'ORDER',        name: '受注',         base: 'ETD', offset: -5 },
-      { code: 'BOOKING',      name: 'ブッキング',   base: 'ETD', offset: -4 },
-      { code: 'SPACE',        name: 'コンファーム', base: 'ETD', offset: -3 },
-      { code: 'PICKUP',       name: '集荷',         base: 'ETD', offset: -2 },
-      { code: 'EXP_CUSTOMS',  name: '通関',         base: 'ETD', offset: -1 },
-      { code: 'BUILD_UP',     name: '仕立て',       base: 'ETD', offset: 0 },
-      { code: 'LOADED',       name: '搭載',         base: 'ETD', offset: 0 },
-      { code: 'DEPARTED',     name: '出発',         base: 'ETD', offset: 0 },
-      { code: 'BILLING',      name: '請求',         base: 'ETA', offset: 3 },
-      { code: 'DONE',         name: '完了',         base: 'ETA', offset: 5 },
+      // 国内
+      { code: 'ORDER',        name: '受注',         base: 'ETD', offset: -5, block: 'DOMESTIC' },
+      { code: 'BOOKING',      name: 'ブッキング',   base: 'ETD', offset: -4, block: 'DOMESTIC' },
+      { code: 'SPACE',        name: 'コンファーム', base: 'ETD', offset: -3, block: 'DOMESTIC' },
+      { code: 'PICKUP',       name: '集荷',         base: 'ETD', offset: -2, block: 'DOMESTIC' },
+      { code: 'EXP_CUSTOMS',  name: '通関',         base: 'ETD', offset: -1, block: 'DOMESTIC' },
+      { code: 'BUILD_UP',     name: '仕立て',       base: 'ETD', offset: -1, block: 'DOMESTIC' },
+      { code: 'LOADED',       name: '搭載',         base: 'ETD', offset: 0,  block: 'DOMESTIC' },
+      // 国際
+      { code: 'DEPARTED',     name: '出発',         base: 'ETD', offset: 0,  block: 'INTERNATIONAL' },
+      { code: 'ARRIVED',      name: '到着',         base: 'ETA', offset: 0,  block: 'INTERNATIONAL' },
+      // 海外（今後、海外での通関・配送などの工程をここに追加予定）
+      // 請求・完了
+      { code: 'BILLING',      name: '請求',         base: 'ETA', offset: 3,  block: 'CLOSING' },
+      { code: 'DONE',         name: '完了',         base: 'ETA', offset: 5,  block: 'CLOSING' },
     ],
     IMPORT: [
       { code: 'PRE_ALERT',    name: 'プレアラート受領', base: 'ETA', offset: -2 },
@@ -49,6 +55,14 @@ App.config = {
       { code: 'BILLING',      name: '請求',             base: 'ETA', offset: 5 },
       { code: 'DONE',         name: '完了',             base: 'ETA', offset: 7 },
     ],
+  },
+
+  // 工程のまとまり（表示名）
+  BLOCKS: {
+    DOMESTIC: '国内',
+    INTERNATIONAL: '国際',
+    OVERSEAS: '海外',
+    CLOSING: '請求・完了',
   },
 
   // タスク管理タブの「自分チェック用」色マーカー（クリックするたびに順番に切り替わる）

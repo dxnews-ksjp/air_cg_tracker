@@ -236,7 +236,13 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 .h-status small { margin-left: 2px; }
 /* 横並びの工程バー */
 .h-steps { grid-column: 1 / -1; overflow-x: auto; padding-bottom: 2px; }
-.step-strip { list-style: none; margin: 0; padding: 0; display: flex; min-width: max-content; }
+.ss-wrap { display: flex; gap: 10px; min-width: max-content; }
+.ss-group { display: flex; flex-direction: column; min-width: max-content; }
+.ss-group-label {
+  font-size: 11px; font-weight: 700; color: var(--text-2); background: #e9edf3;
+  border-radius: 4px; padding: 1px 8px; margin-bottom: 4px; text-align: center;
+}
+.step-strip { list-style: none; margin: 0; padding: 0; display: flex; flex: 1; }
 .ss {
   flex: 1 1 0; min-width: 84px; padding: 5px 6px 0; border-top: 4px solid #dfe4ea;
   display: flex; flex-direction: column; align-items: center; text-align: center; line-height: 1.35;
@@ -279,6 +285,11 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 .all-done { font-size: 16px; font-weight: 700; color: var(--done); margin: 4px 0; }
 
 .timeline { list-style: none; margin: 0; padding: 0; }
+.tl-block {
+  font-size: 12px; font-weight: 700; color: var(--text-2); background: #e9edf3;
+  border-radius: 4px; padding: 2px 10px; margin: 4px 0 10px; display: inline-block;
+}
+.tl-block + .tl-item { margin-top: 0; }
 .tl-item { position: relative; display: flex; gap: 12px; padding: 0 0 14px; }
 .tl-item:not(:last-child)::before { content: ""; position: absolute; left: 13px; top: 28px; bottom: 0; width: 2px; background: #dfe4ea; }
 .tl-item.tl-done:not(:last-child)::before { background: #9fd1b3; }
@@ -381,6 +392,7 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
 .steps-table { width: 100%; border-collapse: collapse; }
 .steps-table th, .steps-table td { padding: 4px 6px; border-bottom: 1px solid #eef1f5; text-align: left; font-size: 13px; }
 .steps-table thead th { color: var(--text-2); font-size: 12px; }
+.steps-table tr.block-row th { background: #e9edf3; color: var(--text-2); font-size: 12px; padding: 3px 8px; }
 .steps-table td.num { color: var(--muted); width: 28px; }
 .steps-table input { width: 100%; }
 .form-errors { background: var(--overdue-soft); border: 1px solid #e3a4a4; border-radius: 6px; padding: 8px 12px; color: #8e1c1c; font-size: 13px; }
@@ -499,6 +511,7 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
   .steps-table thead { display: none; }
   .steps-table tr { display: grid; grid-template-columns: 24px 1fr; padding: 6px 0; border-bottom: 1px solid #eef1f5; }
   .steps-table td, .steps-table th { border: 0; padding: 2px 4px; }
+  .steps-table tr.block-row { display: block; }
   .steps-table td:nth-child(3), .steps-table td:nth-child(4) { grid-column: 2; }
   .legend { width: 100%; }
 }

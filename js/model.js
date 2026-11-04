@@ -11,6 +11,24 @@
   const M = {};
 
   M.workflow = (dir) => cfg.WORKFLOWS[dir] || [];
+  /**
+   * 工程をブロックごとにまとめる
+   * 戻り値: [{ key, label, items: [{ w, i }] }]（ブロック指定のない工程は label が空）
+   */
+  M.blocks = function (dir) {
+    const out = [];
+    M.workflow(dir).forEach((w, i) => {
+      const key = w.block || '';
+      let g = out[out.length - 1];
+      if (!g || g.key !== key) {
+        g = { key, label: key ? (cfg.BLOCKS[key] || key) : '', items: [] };
+        out.push(g);
+      }
+      g.items.push({ w, i });
+    });
+    return out;
+  };
+
   M.dirLabel = (dir) => (cfg.DIRECTIONS[dir] || {}).label || dir;
 
   /** 輸出入区分に合わせて工程配列を作り直す（同じコードの工程は予定日・実績を引き継ぐ） */
