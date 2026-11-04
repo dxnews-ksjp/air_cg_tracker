@@ -170,6 +170,7 @@
       '<div class="h-status">' + UI.statusText(p) + UI.progressBar(p) + '<small>' + p.done + '/' + p.total + '</small>' +
         '<div>' + UI.nextStep(p, today) + '</div></div>' +
       '<div class="h-alert">' + UI.alertBadge(a) + '</div>' +
+      '<div class="h-steps">' + UI.stepStrip(h, m.direction, today) + '</div>' +
       '</div>';
   }
 

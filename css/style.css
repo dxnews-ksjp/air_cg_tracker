@@ -234,6 +234,24 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 .hawb-row .muted-label { display: none; }
 .h-status { font-size: 13px; }
 .h-status small { margin-left: 2px; }
+/* 横並びの工程バー */
+.h-steps { grid-column: 1 / -1; overflow-x: auto; padding-bottom: 2px; }
+.step-strip { list-style: none; margin: 0; padding: 0; display: flex; min-width: max-content; }
+.ss {
+  flex: 1 1 0; min-width: 84px; padding: 5px 6px 0; border-top: 4px solid #dfe4ea;
+  display: flex; flex-direction: column; align-items: center; text-align: center; line-height: 1.35;
+}
+.ss + .ss { margin-left: 3px; }
+.ss-name { font-size: 12px; color: var(--text-2); white-space: nowrap; }
+.ss-date { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ss-done { border-top-color: var(--done); }
+.ss-done .ss-name, .ss-done .ss-date { color: var(--done); }
+.ss-overdue { border-top-color: var(--overdue); }
+.ss-overdue .ss-name, .ss-overdue .ss-date { color: var(--overdue); font-weight: 700; }
+.ss-soon { border-top-color: var(--soon-line); }
+.ss-soon .ss-date { color: var(--soon); font-weight: 700; }
+.ss.is-next .ss-name { color: var(--text); font-weight: 700; }
+.ss.is-next:not(.ss-overdue):not(.ss-soon) { border-top-color: var(--primary); }
 .hawb-empty { padding: 12px 18px; color: var(--muted); }
 
 /* ---------- 詳細 ---------- */
@@ -416,6 +434,7 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
   .h-com { grid-column: 1; grid-row: 2; } .h-qty { grid-column: 2; grid-row: 2; } .h-asg { grid-column: 3; grid-row: 2; }
   .h-alert { grid-column: 4; grid-row: 2; }
   .h-sp { grid-column: 1 / 5; grid-row: 3; }
+  .h-steps { grid-column: 1 / 5; grid-row: 4; }
   .h-sp:empty { display: none; }
   .hawb-row .muted-label { display: inline; }
 }
