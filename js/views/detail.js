@@ -172,13 +172,13 @@
     const rows = hawbs.map((h) => {
       const p = M.progress(h, m.direction);
       const a = M.hawbAlert(h, m.direction, today);
-      return '<tr class="' + (a.level ? 'lv-' + a.level : '') + (p.complete ? ' is-done' : '') + '" data-href="#/hawb/' + h.id + '">' +
+      return '<tr class="' + (p.complete ? 'is-done' : '') + '" data-href="#/hawb/' + h.id + '">' +
         '<td data-label="HAWB番号"><a href="#/hawb/' + h.id + '">' + esc(h.hawbNo) + '</a></td>' +
         '<td data-label="' + M.partyLabel(m.direction) + '">' + esc(M.partyName(h, m.direction)) + '</td>' +
         '<td data-label="品名">' + esc(h.commodity || '') + '</td>' +
         '<td data-label="担当">' + esc(h.assignee || '—') + '</td>' +
         '<td data-label="特殊貨物">' + UI.specialLabels(h) + '</td>' +
-        '<td data-label="ステータス">' + UI.statusText(p) + ' ' + UI.progressBar(p) + '<br>' + UI.nextStep(p, today) + '</td>' +
+        '<td data-label="ステータス">' + UI.statusText(p) + ' ' + UI.progressBar(p) + '</td>' +
         '<td data-label="警告">' + UI.alertBadge(a) + '</td></tr>';
     }).join('');
 

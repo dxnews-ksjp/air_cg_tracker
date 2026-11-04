@@ -214,20 +214,19 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 .hawb-row {
   position: relative; display: grid; align-items: center; gap: 12px;
   grid-template-columns: var(--hawb-cols);
-  padding: 9px 14px 9px 18px; border-bottom: 1px solid #edf0f4; cursor: pointer;
+  row-gap: 2px; padding: 4px 14px 6px 18px; border-bottom: 1px solid #edf0f4; cursor: pointer;
   border-left: 2px solid #c9d2de; margin-left: 4px;
 }
 .hawb-row:last-child { border-bottom: 0; }
 .hawb-row::before { content: ""; position: absolute; left: -2px; top: 50%; width: 12px; border-top: 2px solid #c9d2de; }
 .hawb-row:hover { background: #f5f8fc; }
-.hawb-row.lv-overdue { background: var(--overdue-soft); box-shadow: inset 4px 0 0 var(--overdue); }
-.hawb-row.lv-overdue:hover { background: #fbe1e1; }
-.hawb-row.lv-soon { background: var(--soon-bg); box-shadow: inset 4px 0 0 var(--soon-line); }
-.hawb-row.lv-soon:hover { background: #fdefc4; }
 .hawb-row.is-done { color: var(--text-2); }
 .hawb-row.is-done .h-no a { color: var(--text-2); }
 .h-no a { font-weight: 700; font-variant-numeric: tabular-nums; }
-.h-party { word-break: break-word; }
+/* 1行目は折り返さずに1行で表示（はみ出す分は「…」で省略、マウスを乗せると全文表示） */
+.hawb-row > div:not(.h-steps) { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hawb-row .sp-label { margin-top: 0; margin-bottom: 0; }
+.hawb-row .alert-badge { padding: 1px 8px; }
 .h-com { font-size: 13px; color: var(--text-2); }
 .h-qty { font-variant-numeric: tabular-nums; font-size: 13px; }
 .h-asg { font-size: 13px; }
@@ -236,13 +235,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 .h-status small { margin-left: 2px; }
 /* 横並びの工程バー */
 .h-steps { grid-column: 1 / -1; overflow-x: auto; padding-bottom: 2px; }
-.ss-wrap { display: flex; gap: 10px; min-width: max-content; }
-.ss-group { display: flex; flex-direction: column; min-width: max-content; }
-.ss-group-label {
-  font-size: 11px; font-weight: 700; color: var(--text-2); background: #e9edf3;
-  border-radius: 4px; padding: 1px 8px; margin-bottom: 4px; text-align: center;
-}
-.step-strip { list-style: none; margin: 0; padding: 0; display: flex; flex: 1; }
+.step-strip { list-style: none; margin: 0; padding: 0; display: flex; min-width: max-content; }
 .ss {
   flex: 1 1 0; min-width: 84px; padding: 5px 6px 0; border-top: 4px solid #dfe4ea;
   display: flex; flex-direction: column; align-items: center; text-align: center; line-height: 1.35;
@@ -481,6 +474,7 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
   .hawb-list { padding: 4px 0 4px 8px; }
   .hawb-row { grid-template-columns: 1fr; gap: 4px; padding: 10px 10px 10px 16px; }
   .hawb-row > * { grid-column: 1 !important; grid-row: auto !important; }
+  .hawb-row > div:not(.h-steps) { white-space: normal; }
   .h-alert:empty, .h-sp:empty { display: none; }
 
   /* テーブルをカード表示に */
