@@ -88,47 +88,6 @@
     return groups;
   }
 
-  function summaryCards(snap, today) {
-    const mawbById = {};
-    snap.mawbs.forEach((m) => { mawbById[m.id] = m; });
-    const c = { open: 0, overdue: 0, soon: 0, dg: 0, reefer: 0, other: 0 };
-    snap.hawbs.forEach((h) => {
-      const m = mawbById[h.mawbId];
-      if (!m) return;
-      const p = M.progress(h, m.direction);
-      if (p.complete) return;
-      c.open++;
-      const a = M.hawbAlert(h, m.direction, today);
-      if (a.level === 'overdue') c.overdue++;
-      if (a.level === 'soon') c.soon++;
-      ['dg', 'reefer', 'other'].forEach((k) => { if (h.special && h.special[k]) c[k]++; });
-    });
-    const f = state.filter;
-    const card = (key, label, n, cls, filt) => {
-      const active = filt && Object.keys(filt).every((k) => f[k] === filt[k]) &&
-        Object.keys(DEFAULT_FILTER).filter((k) => !(k in filt) && k !== 'q' && k !== 'dir').every((k) => !f[k]);
-      return '<button type="button" class="kpi ' + cls + (active ? ' active' : '') + '" data-kpi="' + key + '" aria-pressed="' + active + '">' +
-        '<span class="kpi-num">' + n + '</span><span class="kpi-label">' + esc(label) + '</span></button>';
-    };
-    return '<div class="kpis">' +
-      card('open', '進行中HAWB', c.open, 'kpi-open', { status: 'OPEN' }) +
-      card('overdue', '遅延あり', c.overdue, 'kpi-overdue', { alert: 'overdue', status: 'OPEN' }) +
-      card('soon', '期限間近（今日・明日）', c.soon, 'kpi-soon', { alert: 'soon', status: 'OPEN' }) +
-      card('dg', '危険品', c.dg, 'kpi-dg', { special: 'dg', status: 'OPEN' }) +
-      card('reefer', '保冷品', c.reefer, 'kpi-reefer', { special: 'reefer', status: 'OPEN' }) +
-      card('other', 'その他特殊', c.other, 'kpi-other', { special: 'other', status: 'OPEN' }) +
-      '</div>';
-  }
-
-  const KPI_FILTERS = {
-    open: { status: 'OPEN' },
-    overdue: { alert: 'overdue', status: 'OPEN' },
-    soon: { alert: 'soon', status: 'OPEN' },
-    dg: { special: 'dg', status: 'OPEN' },
-    reefer: { special: 'reefer', status: 'OPEN' },
-    other: { special: 'other', status: 'OPEN' },
-  };
-
   function filterBar(snap) {
     const f = state.filter;
     const sel = (name, label, options) =>
@@ -190,22 +149,28 @@
       '</div>';
   }
 
+  // HAWB行の列見出し（PC表示のみ）
+  // HAWB行の列見出し（PC表示のみ）。相手先の列名は輸出入区分で切り替える
+  const hawbHead = (dir) => '<div class="hawb-head" aria-hidden="true">' +
+    ['HAWB番号', M.partyLabel(dir), '品名', '個数 / 重量', '担当', '特殊貨物', 'ステータス', '警告']
+      .map((t) => '<span>' + t + '</span>').join('') + '</div>';
+
   function hawbRow(x, m, today) {
     const h = x.h, p = x.p, a = x.a;
-    const qty = (h.pieces !== null && h.pieces !== undefined && h.pieces !== '' ? U.fmtNum(h.pieces, 0) + 'pcs' : '-') +
-      ' / ' + (h.weightKg !== null && h.weightKg !== undefined && h.weightKg !== '' ? U.fmtNum(h.weightKg) + 'kg' : '-');
+    const has = (v) => v !== null && v !== undefined && v !== '';
+    const qty = (has(h.pieces) ? U.fmtNum(h.pieces, 0) + 'pcs' : '-') + ' / ' + (has(h.weightKg) ? U.fmtNum(h.weightKg) + 'kg' : '-');
+    const lbl = (t) => '<span class="muted-label">' + t + '</span>';
     return '<div class="hawb-row' + (a.level ? ' lv-' + a.level : '') + (p.complete ? ' is-done' : '') + '" data-href="#/hawb/' + h.id + '">' +
-      '<div class="h-no"><a href="#/hawb/' + h.id + '">' + esc(h.hawbNo) + '</a>' +
-        '<small>' + UI.flightLine(m) + (m.etd ? ' ETD ' + U.fmtDate(m.etd) : '') + '</small></div>' +
-      '<div class="h-parties"><span class="party" title="荷主（輸出者）">' + esc(h.shipper) + '</span>' +
-        '<span class="arrow" aria-label="から">→</span><span class="party" title="荷受人（輸入者）">' + esc(h.consignee) + '</span>' +
-        '<small>' + esc(h.commodity || '') + '</small></div>' +
-      '<div class="h-qty">' + qty + (h.volumeWeightKg ? '<small>容積 ' + U.fmtNum(h.volumeWeightKg) + 'kg</small>' : '') + '</div>' +
-      '<div class="h-asg"><span class="muted-label">担当</span>' + esc(h.assignee || '—') + '</div>' +
+      '<div class="h-no"><a href="#/hawb/' + h.id + '">' + esc(h.hawbNo) + '</a></div>' +
+      '<div class="h-party">' + lbl(M.partyLabel(m.direction)) + esc(M.partyName(h, m.direction)) + '</div>' +
+      '<div class="h-com">' + lbl('品名') + esc(h.commodity || '—') + '</div>' +
+      '<div class="h-qty">' + lbl('個数/重量') + qty + '</div>' +
+      '<div class="h-asg">' + lbl('担当') + esc(h.assignee || '—') + '</div>' +
       '<div class="h-sp">' + UI.specialLabels(h) + '</div>' +
       '<div class="h-status">' + UI.statusText(p) + UI.progressBar(p) + '<small>' + p.done + '/' + p.total + '</small>' +
         '<div>' + UI.nextStep(p, today) + '</div></div>' +
       '<div class="h-alert">' + UI.alertBadge(a) + '</div>' +
+      '<div class="h-steps">' + UI.stepStrip(h, m.direction, today) + '</div>' +
       '</div>';
   }
 
@@ -225,7 +190,6 @@
           '<a class="btn" href="#/data">CSV・データ管理</a>' +
         '</div>' +
       '</div>' +
-      summaryCards(snap, today) +
       filterBar(snap) +
       '<div class="list-tools"><span class="count">MAWB ' + groups.length + '件 / HAWB ' + hawbCount + '件</span>' +
         '<span class="legend"><span class="lg lg-overdue">遅延</span><span class="lg lg-soon">期限間近（今日・明日）</span></span>' +
@@ -237,7 +201,7 @@
           const open = !state.collapsed.has(g.m.id);
           return '<section class="mawb-group' + (open ? ' open' : '') + '">' + mawbRow(g, today) +
             (open ? '<div class="hawb-list">' +
-              (g.shown.length ? g.shown.map((x) => hawbRow(x, g.m, today)).join('') : '<div class="hawb-empty">HAWBはまだありません。「＋HAWB」から登録できます。</div>') +
+              (g.shown.length ? hawbHead(g.m.direction) + g.shown.map((x) => hawbRow(x, g.m, today)).join('') : '<div class="hawb-empty">HAWBはまだありません。「＋HAWB」から登録できます。</div>') +
               '</div>' : '') +
             '</section>';
         }).join('') : UI.empty('条件に合う案件はありません。')) +
@@ -266,13 +230,6 @@
         try { ni.setSelectionRange(pos, pos); } catch (e) { /* noop */ }
       }, 250);
     });
-
-    el.querySelectorAll('[data-kpi]').forEach((b) => b.addEventListener('click', () => {
-      const filt = KPI_FILTERS[b.dataset.kpi];
-      const wasActive = b.classList.contains('active');
-      state.filter = Object.assign({}, DEFAULT_FILTER, { q: state.filter.q, dir: state.filter.dir }, wasActive ? {} : filt);
-      render(container);
-    }));
 
     el.addEventListener('click', async (e) => {
       const b = e.target.closest('[data-act]');

@@ -66,6 +66,26 @@
       (p.next.plannedDate ? '（' + U.fmtDate(p.next.plannedDate) + '）' : '') + '</span>';
   };
 
+  /**
+   * 横並びの工程バー（一覧用）。工程名と日付だけをシンプルに表示
+   * 日付：完了した工程は実績日、未完了の工程は予定日
+   */
+  UI.stepStrip = function (h, dir, today) {
+    const wf = M.workflow(dir);
+    const p = M.progress(h, dir);
+    const md = (s) => (s ? s.slice(5, 10).replace('-', '/') : '—');
+    return '<ol class="step-strip" aria-label="工程">' + wf.map((w, i) => {
+      const s = (h.steps || [])[i] || {};
+      const st = M.stepState(s, today);
+      const isNext = p.next && p.next.idx === i;
+      const date = s.actualAt ? md(s.actualAt) : md(s.plannedDate);
+      const tip = w.name + '　予定：' + (s.plannedDate ? U.fmtDate(s.plannedDate) : '未設定') +
+        (s.actualAt ? '　実績：' + U.fmtDT(s.actualAt) : '') + '（' + M.STATE_LABEL[st] + '）';
+      return '<li class="ss ss-' + st + (isNext ? ' is-next' : '') + '" title="' + esc(tip) + '">' +
+        '<span class="ss-name">' + esc(w.name) + '</span><span class="ss-date">' + date + '</span></li>';
+    }).join('') + '</ol>';
+  };
+
   UI.markDot = function (color, attrs) {
     const c = cfg.MARK_COLORS.find((x) => x.code === (color || '')) || cfg.MARK_COLORS[0];
     return '<button type="button" class="mark-dot mark-' + (c.code || 'none').toLowerCase() + '" ' + (attrs || '') +

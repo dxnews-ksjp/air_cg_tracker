@@ -157,24 +157,6 @@ small { font-size: 12px; color: var(--text-2); }
 .late-done { color: var(--soon); font-size: 12px; margin-left: 8px; }
 .muted-label { font-size: 11px; color: var(--muted); margin-right: 6px; }
 
-/* ---------- KPIカード ---------- */
-.kpis { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 14px; }
-.kpi {
-  display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
-  padding: 10px 14px; background: var(--surface); border: 1px solid var(--border);
-  border-left-width: 5px; border-radius: var(--radius); cursor: pointer; font: inherit; text-align: left; box-shadow: var(--shadow);
-}
-.kpi:hover { background: var(--surface-2); }
-.kpi.active { outline: 2px solid var(--primary); background: var(--primary-soft); }
-.kpi-num { font-size: 24px; font-weight: 700; line-height: 1.1; }
-.kpi-label { font-size: 12px; color: var(--text-2); }
-.kpi-open { border-left-color: var(--primary); }
-.kpi-overdue { border-left-color: var(--overdue); } .kpi-overdue .kpi-num { color: var(--overdue); }
-.kpi-soon { border-left-color: var(--soon-line); } .kpi-soon .kpi-num { color: var(--soon); }
-.kpi-dg { border-left-color: var(--dg); }
-.kpi-reefer { border-left-color: var(--reefer); }
-.kpi-other { border-left-color: var(--other); }
-
 /* ---------- 絞り込み ---------- */
 .filters {
   display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end;
@@ -223,10 +205,15 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 .m-partial { font-size: 12px; color: var(--muted); width: 100%; }
 .m-flags { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
 
-.hawb-list { padding: 4px 0 4px 28px; }
+.hawb-list { padding: 4px 0 4px 28px; --hawb-cols: minmax(120px, .8fr) minmax(160px, 1.5fr) minmax(120px, 1.1fr) minmax(105px, .7fr) 56px minmax(100px, .9fr) minmax(200px, 1.4fr) minmax(88px, auto); }
+.hawb-head {
+  display: grid; grid-template-columns: var(--hawb-cols); gap: 12px;
+  padding: 6px 14px 4px 18px; margin-left: 4px; border-left: 2px solid #c9d2de;
+  font-size: 11px; font-weight: 700; color: var(--muted);
+}
 .hawb-row {
   position: relative; display: grid; align-items: center; gap: 12px;
-  grid-template-columns: minmax(150px, 1fr) minmax(220px, 1.8fr) minmax(110px, .8fr) 80px minmax(110px, 1fr) minmax(220px, 1.4fr) minmax(90px, auto);
+  grid-template-columns: var(--hawb-cols);
   padding: 9px 14px 9px 18px; border-bottom: 1px solid #edf0f4; cursor: pointer;
   border-left: 2px solid #c9d2de; margin-left: 4px;
 }
@@ -240,13 +227,31 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 .hawb-row.is-done { color: var(--text-2); }
 .hawb-row.is-done .h-no a { color: var(--text-2); }
 .h-no a { font-weight: 700; font-variant-numeric: tabular-nums; }
-.h-no small, .h-parties small, .h-qty small { display: block; }
-.h-parties .arrow { color: var(--muted); margin: 0 4px; }
+.h-party { word-break: break-word; }
+.h-com { font-size: 13px; color: var(--text-2); }
 .h-qty { font-variant-numeric: tabular-nums; font-size: 13px; }
 .h-asg { font-size: 13px; }
-.h-asg .muted-label { display: none; }
+.hawb-row .muted-label { display: none; }
 .h-status { font-size: 13px; }
 .h-status small { margin-left: 2px; }
+/* 横並びの工程バー */
+.h-steps { grid-column: 1 / -1; overflow-x: auto; padding-bottom: 2px; }
+.step-strip { list-style: none; margin: 0; padding: 0; display: flex; min-width: max-content; }
+.ss {
+  flex: 1 1 0; min-width: 84px; padding: 5px 6px 0; border-top: 4px solid #dfe4ea;
+  display: flex; flex-direction: column; align-items: center; text-align: center; line-height: 1.35;
+}
+.ss + .ss { margin-left: 3px; }
+.ss-name { font-size: 12px; color: var(--text-2); white-space: nowrap; }
+.ss-date { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ss-done { border-top-color: var(--done); }
+.ss-done .ss-name, .ss-done .ss-date { color: var(--done); }
+.ss-overdue { border-top-color: var(--overdue); }
+.ss-overdue .ss-name, .ss-overdue .ss-date { color: var(--overdue); font-weight: 700; }
+.ss-soon { border-top-color: var(--soon-line); }
+.ss-soon .ss-date { color: var(--soon); font-weight: 700; }
+.ss.is-next .ss-name { color: var(--text); font-weight: 700; }
+.ss.is-next:not(.ss-overdue):not(.ss-soon) { border-top-color: var(--primary); }
 .hawb-empty { padding: 12px 18px; color: var(--muted); }
 
 /* ---------- 詳細 ---------- */
@@ -417,15 +422,19 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
    レスポンシブ
    ============================================================ */
 @media (max-width: 1180px) {
-  .kpis { grid-template-columns: repeat(3, 1fr); }
   .mawb-row { grid-template-columns: 32px 1fr 1fr auto; }
   .m-sum { grid-column: 2 / 4; }
   .m-flags { grid-column: 4; grid-row: 2; justify-content: flex-end; }
   .m-act { grid-column: 4; grid-row: 1; }
-  .hawb-row { grid-template-columns: minmax(140px, 1fr) minmax(200px, 1.6fr) minmax(100px, .7fr) minmax(200px, 1.4fr); }
-  .h-asg, .h-sp, .h-alert { grid-row: 2; }
-  .h-asg { grid-column: 1; } .h-sp { grid-column: 2 / 4; } .h-alert { grid-column: 4; }
-  .h-asg .muted-label { display: inline; }
+  .hawb-head { display: none; }
+  .hawb-list { --hawb-cols: minmax(120px, .8fr) minmax(160px, 1.4fr) minmax(130px, 1fr) minmax(200px, 1.4fr); }
+  .hawb-row { row-gap: 4px; }
+  .h-no { grid-column: 1; grid-row: 1; } .h-party { grid-column: 2; grid-row: 1; } .h-com { grid-column: 3; grid-row: 1; }
+  .h-status { grid-column: 4; grid-row: 1; }
+  .h-qty { grid-column: 1; grid-row: 2; } .h-asg { grid-column: 2; grid-row: 2; } .h-sp { grid-column: 3; grid-row: 2; }
+  .h-alert { grid-column: 4; grid-row: 2; }
+  .h-steps { grid-column: 1 / 5; grid-row: 3; }
+  .hawb-row .muted-label { display: inline; }
 }
 
 @media (max-width: 860px) {
@@ -444,9 +453,6 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
   .page-head h1 { font-size: 18px; }
   .page-head .actions { margin-left: 0; width: 100%; }
   .page-head .actions .btn { flex: 1; }
-  .kpis { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-  .kpi { padding: 8px 10px; }
-  .kpi-num { font-size: 20px; }
   .filter-toggle { display: flex; width: 100%; margin-bottom: 8px; }
   .filters:not(.task-filters) { display: none; }
   .filters.show { display: flex; }
@@ -463,7 +469,6 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
   .hawb-list { padding: 4px 0 4px 8px; }
   .hawb-row { grid-template-columns: 1fr; gap: 4px; padding: 10px 10px 10px 16px; }
   .hawb-row > * { grid-column: 1 !important; grid-row: auto !important; }
-  .h-qty small { display: inline; margin-left: 6px; }
   .h-alert:empty, .h-sp:empty { display: none; }
 
   /* テーブルをカード表示に */

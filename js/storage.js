@@ -77,6 +77,12 @@
         persist();
       } else {
         db = Object.assign(emptyDb(), loaded);
+        // 工程定義が変わっていても、保存済みデータを今の工程に揃える（同じコードの予定日・実績は引き継ぐ）
+        db.hawbs.forEach((h) => {
+          const m = mawbOf(h.mawbId);
+          if (m) M.normalizeSteps(h, m.direction);
+        });
+        persist();
       }
     },
 
