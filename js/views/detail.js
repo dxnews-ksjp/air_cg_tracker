@@ -171,7 +171,8 @@
       const a = M.hawbAlert(h, m.direction, today);
       return '<tr class="' + (a.level ? 'lv-' + a.level : '') + (p.complete ? ' is-done' : '') + '" data-href="#/hawb/' + h.id + '">' +
         '<td data-label="HAWB番号"><a href="#/hawb/' + h.id + '">' + esc(h.hawbNo) + '</a></td>' +
-        '<td data-label="荷主 → 荷受人">' + esc(h.shipper) + ' → ' + esc(h.consignee) + '</td>' +
+        '<td data-label="輸出者">' + esc(h.shipper) + '</td>' +
+        '<td data-label="輸入者">' + esc(h.consignee) + '</td>' +
         '<td data-label="品名">' + esc(h.commodity || '') + '</td>' +
         '<td data-label="担当">' + esc(h.assignee || '—') + '</td>' +
         '<td data-label="特殊貨物">' + UI.specialLabels(h) + '</td>' +
@@ -200,7 +201,7 @@
       '</div>' +
       '<section class="card"><h2>配下のHAWB</h2>' +
         (hawbs.length
-          ? '<div class="table-scroll"><table class="data-table rwd"><thead><tr><th>HAWB番号</th><th>荷主 → 荷受人</th><th>品名</th><th>担当</th><th>特殊貨物</th><th>ステータス</th><th>警告</th></tr></thead><tbody>' + rows + '</tbody></table></div>'
+          ? '<div class="table-scroll"><table class="data-table rwd"><thead><tr><th>HAWB番号</th><th>輸出者</th><th>輸入者</th><th>品名</th><th>担当</th><th>特殊貨物</th><th>ステータス</th><th>警告</th></tr></thead><tbody>' + rows + '</tbody></table></div>'
           : UI.empty('HAWBはまだありません。「＋HAWB追加」から登録できます。')) +
       '</section>';
     container.replaceChildren(el);

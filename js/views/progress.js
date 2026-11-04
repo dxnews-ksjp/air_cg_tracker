@@ -190,18 +190,23 @@
       '</div>';
   }
 
+  // HAWB行の列見出し（PC表示のみ）
+  const HAWB_HEAD = '<div class="hawb-head" aria-hidden="true">' +
+    ['HAWB番号', '輸出者', '輸入者', '品名', '個数 / 重量', '担当', '特殊貨物', 'ステータス', '警告']
+      .map((t) => '<span>' + t + '</span>').join('') + '</div>';
+
   function hawbRow(x, m, today) {
     const h = x.h, p = x.p, a = x.a;
-    const qty = (h.pieces !== null && h.pieces !== undefined && h.pieces !== '' ? U.fmtNum(h.pieces, 0) + 'pcs' : '-') +
-      ' / ' + (h.weightKg !== null && h.weightKg !== undefined && h.weightKg !== '' ? U.fmtNum(h.weightKg) + 'kg' : '-');
+    const has = (v) => v !== null && v !== undefined && v !== '';
+    const qty = (has(h.pieces) ? U.fmtNum(h.pieces, 0) + 'pcs' : '-') + ' / ' + (has(h.weightKg) ? U.fmtNum(h.weightKg) + 'kg' : '-');
+    const lbl = (t) => '<span class="muted-label">' + t + '</span>';
     return '<div class="hawb-row' + (a.level ? ' lv-' + a.level : '') + (p.complete ? ' is-done' : '') + '" data-href="#/hawb/' + h.id + '">' +
-      '<div class="h-no"><a href="#/hawb/' + h.id + '">' + esc(h.hawbNo) + '</a>' +
-        '<small>' + UI.flightLine(m) + (m.etd ? ' ETD ' + U.fmtDate(m.etd) : '') + '</small></div>' +
-      '<div class="h-parties"><span class="party" title="荷主（輸出者）">' + esc(h.shipper) + '</span>' +
-        '<span class="arrow" aria-label="から">→</span><span class="party" title="荷受人（輸入者）">' + esc(h.consignee) + '</span>' +
-        '<small>' + esc(h.commodity || '') + '</small></div>' +
-      '<div class="h-qty">' + qty + (h.volumeWeightKg ? '<small>容積 ' + U.fmtNum(h.volumeWeightKg) + 'kg</small>' : '') + '</div>' +
-      '<div class="h-asg"><span class="muted-label">担当</span>' + esc(h.assignee || '—') + '</div>' +
+      '<div class="h-no"><a href="#/hawb/' + h.id + '">' + esc(h.hawbNo) + '</a></div>' +
+      '<div class="h-shipper">' + lbl('輸出者') + esc(h.shipper) + '</div>' +
+      '<div class="h-consignee">' + lbl('輸入者') + esc(h.consignee) + '</div>' +
+      '<div class="h-com">' + lbl('品名') + esc(h.commodity || '—') + '</div>' +
+      '<div class="h-qty">' + lbl('個数/重量') + qty + '</div>' +
+      '<div class="h-asg">' + lbl('担当') + esc(h.assignee || '—') + '</div>' +
       '<div class="h-sp">' + UI.specialLabels(h) + '</div>' +
       '<div class="h-status">' + UI.statusText(p) + UI.progressBar(p) + '<small>' + p.done + '/' + p.total + '</small>' +
         '<div>' + UI.nextStep(p, today) + '</div></div>' +
@@ -237,7 +242,7 @@
           const open = !state.collapsed.has(g.m.id);
           return '<section class="mawb-group' + (open ? ' open' : '') + '">' + mawbRow(g, today) +
             (open ? '<div class="hawb-list">' +
-              (g.shown.length ? g.shown.map((x) => hawbRow(x, g.m, today)).join('') : '<div class="hawb-empty">HAWBはまだありません。「＋HAWB」から登録できます。</div>') +
+              (g.shown.length ? HAWB_HEAD + g.shown.map((x) => hawbRow(x, g.m, today)).join('') : '<div class="hawb-empty">HAWBはまだありません。「＋HAWB」から登録できます。</div>') +
               '</div>' : '') +
             '</section>';
         }).join('') : UI.empty('条件に合う案件はありません。')) +
