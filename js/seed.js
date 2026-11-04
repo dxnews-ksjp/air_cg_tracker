@@ -67,7 +67,7 @@
           special: { dg: true, dgNote: 'UN3481 Class 9 / PI967 Section II' },
           memo: '荷主からのMSDS未着。集荷前に要確認。' }),
         mkHawb(m1, { hawbNo: 'TYO-24110102', shipper: '東和精機株式会社', consignee: 'Pacific Instruments Inc.',
-          pieces: 6, weightKg: 420, volumeWeightKg: 515, commodity: '精密測定機器', assignee: '鈴木', done: 6 })
+          pieces: 6, weightKg: 420, volumeWeightKg: 515, commodity: '精密測定機器', assignee: '鈴木', done: 5 })
       );
 
       // ② 輸出：関西→シンガポール 3日前に出発済み（今日が請求予定・完了済み）
@@ -76,9 +76,9 @@
       mawbs.push(m2);
       hawbs.push(
         mkHawb(m2, { hawbNo: 'OSA-24102801', shipper: '浪速オートパーツ株式会社', consignee: 'Lion City Motors Pte. Ltd.',
-          pieces: 20, weightKg: 860, volumeWeightKg: 790, commodity: '自動車部品（ブレーキパッド）', assignee: '高橋', done: 9 }),
+          pieces: 20, weightKg: 860, volumeWeightKg: 790, commodity: '自動車部品（ブレーキパッド）', assignee: '高橋', done: 8 }),
         mkHawb(m2, { hawbNo: 'OSA-24102802', shipper: '株式会社関西テクノ', consignee: 'Straits Semicon Pte. Ltd.',
-          pieces: 1, weightKg: 1250, volumeWeightKg: 1480, commodity: '半導体製造装置部品', assignee: '高橋', done: 11,
+          pieces: 1, weightKg: 1250, volumeWeightKg: 1480, commodity: '半導体製造装置部品', assignee: '高橋', done: 10,
           special: { other: true, otherNote: '重量物（1ピース1.25t）・フォークリフト荷役' } })
       );
 
