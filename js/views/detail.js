@@ -40,6 +40,8 @@
     const a = M.hawbAlert(h, m.direction, today);
     const el = document.createElement('div');
 
+    const blockStart = {};
+    M.blocks(m.direction).forEach((g) => { if (g.label) blockStart[g.items[0].i] = g.label; });
     const timeline = wf.map((w, i) => {
       const s = h.steps[i] || {};
       const st = M.stepState(s, today);
@@ -49,7 +51,8 @@
       if (st === 'done' && s.plannedDate && s.actualAt.slice(0, 10) > s.plannedDate) {
         lateNote = '<span class="late-done">予定より' + U.diffDays(s.plannedDate, s.actualAt.slice(0, 10)) + '日遅れで完了</span>';
       }
-      return '<li class="tl-item tl-' + st + (isNext ? ' is-next' : '') + '">' +
+      return (blockStart[i] ? '<li class="tl-block">' + esc(blockStart[i]) + '</li>' : '') +
+        '<li class="tl-item tl-' + st + (isNext ? ' is-next' : '') + '">' +
         '<span class="tl-dot" aria-hidden="true">' + (st === 'done' ? '✓' : i + 1) + '</span>' +
         '<div class="tl-body">' +
           '<div class="tl-title"><strong>' + esc(w.name) + '</strong>' + UI.stateBadge(st) + (isNext ? '<span class="next-tag">次の工程</span>' : '') + '</div>' +

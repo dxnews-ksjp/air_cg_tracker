@@ -115,9 +115,11 @@
   function stepRows(dir, steps) {
     const map = {};
     (steps || []).forEach((s) => { map[s.code] = s; });
+    const blockStart = {};
+    M.blocks(dir).forEach((g) => { if (g.label) blockStart[g.items[0].i] = g.label; });
     return M.workflow(dir).map((w, i) => {
       const s = map[w.code] || {};
-      return '<tr>' +
+      return (blockStart[i] ? '<tr class="block-row"><th colspan="4">' + esc(blockStart[i]) + '</th></tr>' : '') + '<tr>' +
         '<td class="num">' + (i + 1) + '</td><th scope="row">' + esc(w.name) + '</th>' +
         '<td><input type="date" name="pl_' + w.code + '" value="' + esc(s.plannedDate || '') + '" aria-label="' + esc(w.name) + ' 予定日"></td>' +
         '<td><input type="datetime-local" name="ac_' + w.code + '" value="' + esc(s.actualAt || '') + '" aria-label="' + esc(w.name) + ' 実績日時"></td>' +

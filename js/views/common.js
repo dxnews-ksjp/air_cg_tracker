@@ -74,7 +74,7 @@
     const wf = M.workflow(dir);
     const p = M.progress(h, dir);
     const md = (s) => (s ? s.slice(5, 10).replace('-', '/') : '—');
-    return '<ol class="step-strip" aria-label="工程">' + wf.map((w, i) => {
+    const item = (w, i) => {
       const s = (h.steps || [])[i] || {};
       const st = M.stepState(s, today);
       const isNext = p.next && p.next.idx === i;
@@ -83,7 +83,12 @@
         (s.actualAt ? '　実績：' + U.fmtDT(s.actualAt) : '') + '（' + M.STATE_LABEL[st] + '）';
       return '<li class="ss ss-' + st + (isNext ? ' is-next' : '') + '" title="' + esc(tip) + '">' +
         '<span class="ss-name">' + esc(w.name) + '</span><span class="ss-date">' + date + '</span></li>';
-    }).join('') + '</ol>';
+    };
+    return '<div class="ss-wrap">' + M.blocks(dir).map((g) =>
+      '<div class="ss-group" style="flex:' + g.items.length + ' 1 0">' +
+        (g.label ? '<div class="ss-group-label">' + esc(g.label) + '</div>' : '') +
+        '<ol class="step-strip" aria-label="' + esc(g.label || '工程') + '">' + g.items.map((x) => item(x.w, x.i)).join('') + '</ol>' +
+      '</div>').join('') + '</div>';
   };
 
   UI.markDot = function (color, attrs) {
