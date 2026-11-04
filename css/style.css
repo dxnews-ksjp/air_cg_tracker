@@ -157,24 +157,6 @@ small { font-size: 12px; color: var(--text-2); }
 .late-done { color: var(--soon); font-size: 12px; margin-left: 8px; }
 .muted-label { font-size: 11px; color: var(--muted); margin-right: 6px; }
 
-/* ---------- KPIカード ---------- */
-.kpis { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 14px; }
-.kpi {
-  display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
-  padding: 10px 14px; background: var(--surface); border: 1px solid var(--border);
-  border-left-width: 5px; border-radius: var(--radius); cursor: pointer; font: inherit; text-align: left; box-shadow: var(--shadow);
-}
-.kpi:hover { background: var(--surface-2); }
-.kpi.active { outline: 2px solid var(--primary); background: var(--primary-soft); }
-.kpi-num { font-size: 24px; font-weight: 700; line-height: 1.1; }
-.kpi-label { font-size: 12px; color: var(--text-2); }
-.kpi-open { border-left-color: var(--primary); }
-.kpi-overdue { border-left-color: var(--overdue); } .kpi-overdue .kpi-num { color: var(--overdue); }
-.kpi-soon { border-left-color: var(--soon-line); } .kpi-soon .kpi-num { color: var(--soon); }
-.kpi-dg { border-left-color: var(--dg); }
-.kpi-reefer { border-left-color: var(--reefer); }
-.kpi-other { border-left-color: var(--other); }
-
 /* ---------- 絞り込み ---------- */
 .filters {
   display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end;
@@ -422,7 +404,6 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
    レスポンシブ
    ============================================================ */
 @media (max-width: 1180px) {
-  .kpis { grid-template-columns: repeat(3, 1fr); }
   .mawb-row { grid-template-columns: 32px 1fr 1fr auto; }
   .m-sum { grid-column: 2 / 4; }
   .m-flags { grid-column: 4; grid-row: 2; justify-content: flex-end; }
@@ -455,9 +436,6 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
   .page-head h1 { font-size: 18px; }
   .page-head .actions { margin-left: 0; width: 100%; }
   .page-head .actions .btn { flex: 1; }
-  .kpis { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-  .kpi { padding: 8px 10px; }
-  .kpi-num { font-size: 20px; }
   .filter-toggle { display: flex; width: 100%; margin-bottom: 8px; }
   .filters:not(.task-filters) { display: none; }
   .filters.show { display: flex; }

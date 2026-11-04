@@ -88,47 +88,6 @@
     return groups;
   }
 
-  function summaryCards(snap, today) {
-    const mawbById = {};
-    snap.mawbs.forEach((m) => { mawbById[m.id] = m; });
-    const c = { open: 0, overdue: 0, soon: 0, dg: 0, reefer: 0, other: 0 };
-    snap.hawbs.forEach((h) => {
-      const m = mawbById[h.mawbId];
-      if (!m) return;
-      const p = M.progress(h, m.direction);
-      if (p.complete) return;
-      c.open++;
-      const a = M.hawbAlert(h, m.direction, today);
-      if (a.level === 'overdue') c.overdue++;
-      if (a.level === 'soon') c.soon++;
-      ['dg', 'reefer', 'other'].forEach((k) => { if (h.special && h.special[k]) c[k]++; });
-    });
-    const f = state.filter;
-    const card = (key, label, n, cls, filt) => {
-      const active = filt && Object.keys(filt).every((k) => f[k] === filt[k]) &&
-        Object.keys(DEFAULT_FILTER).filter((k) => !(k in filt) && k !== 'q' && k !== 'dir').every((k) => !f[k]);
-      return '<button type="button" class="kpi ' + cls + (active ? ' active' : '') + '" data-kpi="' + key + '" aria-pressed="' + active + '">' +
-        '<span class="kpi-num">' + n + '</span><span class="kpi-label">' + esc(label) + '</span></button>';
-    };
-    return '<div class="kpis">' +
-      card('open', '進行中HAWB', c.open, 'kpi-open', { status: 'OPEN' }) +
-      card('overdue', '遅延あり', c.overdue, 'kpi-overdue', { alert: 'overdue', status: 'OPEN' }) +
-      card('soon', '期限間近（今日・明日）', c.soon, 'kpi-soon', { alert: 'soon', status: 'OPEN' }) +
-      card('dg', '危険品', c.dg, 'kpi-dg', { special: 'dg', status: 'OPEN' }) +
-      card('reefer', '保冷品', c.reefer, 'kpi-reefer', { special: 'reefer', status: 'OPEN' }) +
-      card('other', 'その他特殊', c.other, 'kpi-other', { special: 'other', status: 'OPEN' }) +
-      '</div>';
-  }
-
-  const KPI_FILTERS = {
-    open: { status: 'OPEN' },
-    overdue: { alert: 'overdue', status: 'OPEN' },
-    soon: { alert: 'soon', status: 'OPEN' },
-    dg: { special: 'dg', status: 'OPEN' },
-    reefer: { special: 'reefer', status: 'OPEN' },
-    other: { special: 'other', status: 'OPEN' },
-  };
-
   function filterBar(snap) {
     const f = state.filter;
     const sel = (name, label, options) =>
@@ -230,7 +189,6 @@
           '<a class="btn" href="#/data">CSV・データ管理</a>' +
         '</div>' +
       '</div>' +
-      summaryCards(snap, today) +
       filterBar(snap) +
       '<div class="list-tools"><span class="count">MAWB ' + groups.length + '件 / HAWB ' + hawbCount + '件</span>' +
         '<span class="legend"><span class="lg lg-overdue">遅延</span><span class="lg lg-soon">期限間近（今日・明日）</span></span>' +
@@ -271,13 +229,6 @@
         try { ni.setSelectionRange(pos, pos); } catch (e) { /* noop */ }
       }, 250);
     });
-
-    el.querySelectorAll('[data-kpi]').forEach((b) => b.addEventListener('click', () => {
-      const filt = KPI_FILTERS[b.dataset.kpi];
-      const wasActive = b.classList.contains('active');
-      state.filter = Object.assign({}, DEFAULT_FILTER, { q: state.filter.q, dir: state.filter.dir }, wasActive ? {} : filt);
-      render(container);
-    }));
 
     el.addEventListener('click', async (e) => {
       const b = e.target.closest('[data-act]');
