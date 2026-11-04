@@ -129,7 +129,7 @@
     const partial = g.shown.length !== g.all.length;
     const alert = s.overdueCount
       ? '<span class="alert-badge overdue" title="遅延しているHAWBの件数と最大遅延日数">⚠ 遅延' + s.overdueCount + '件・最大' + s.maxOverdueDays + '日</span>'
-      : (s.soonCount ? '<span class="alert-badge soon">⏰ 期限間近' + s.soonCount + '件</span>' : '');
+      : ''; // 期限間近の件数はMAWB行には表示しない（HAWB行の警告欄に表示）
     return '<div class="mawb-row' + (s.overdueCount ? ' has-overdue' : '') + '">' +
       '<button type="button" class="toggle" data-act="toggle" data-id="' + m.id + '" aria-expanded="' + open + '" aria-label="配下HAWBを' + (open ? '閉じる' : '開く') + '">' + (open ? '▾' : '▸') + '</button>' +
       '<div class="m-main">' + UI.dirBadge(m.direction) +
