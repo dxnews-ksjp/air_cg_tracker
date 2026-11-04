@@ -131,6 +131,10 @@
     return s;
   };
 
+  /** 一覧で表示する相手先：輸出は輸出者（荷主）、輸入は輸入者（荷受人） */
+  M.partyLabel = (dir) => (dir === 'IMPORT' ? '輸入者' : '輸出者');
+  M.partyName = (h, dir) => (dir === 'IMPORT' ? h.consignee : h.shipper);
+
   M.hasSpecial = (h) => cfg.SPECIALS.some((sp) => h.special && h.special[sp.key]);
 
   // ---------- タスク ----------
