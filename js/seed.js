@@ -76,9 +76,9 @@
       mawbs.push(m2);
       hawbs.push(
         mkHawb(m2, { hawbNo: 'OSA-24102801', shipper: '浪速オートパーツ株式会社', consignee: 'Lion City Motors Pte. Ltd.',
-          pieces: 20, weightKg: 860, volumeWeightKg: 790, commodity: '自動車部品（ブレーキパッド）', assignee: '高橋', done: 9 }),
+          pieces: 20, weightKg: 860, volumeWeightKg: 790, commodity: '自動車部品（ブレーキパッド）', assignee: '高橋', done: 10 }),
         mkHawb(m2, { hawbNo: 'OSA-24102802', shipper: '株式会社関西テクノ', consignee: 'Straits Semicon Pte. Ltd.',
-          pieces: 1, weightKg: 1250, volumeWeightKg: 1480, commodity: '半導体製造装置部品', assignee: '高橋', done: 11,
+          pieces: 1, weightKg: 1250, volumeWeightKg: 1480, commodity: '半導体製造装置部品', assignee: '高橋', done: 12,
           special: { other: true, otherNote: '重量物（1ピース1.25t）・フォークリフト荷役' } })
       );
 

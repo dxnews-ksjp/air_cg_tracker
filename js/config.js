@@ -38,6 +38,7 @@ App.config = {
       { code: 'LOADED',       name: '搭載',         base: 'ETD', offset: 0,  block: 'DOMESTIC', hideWhileWaiting: true },
       // 国際
       { code: 'DEPARTED',     name: '出発',         base: 'ETD', offset: 0,  block: 'INTERNATIONAL', hideWhileWaiting: true },
+      { code: 'TRANSIT',      name: '経由地',       base: 'ETD', offset: 0,  block: 'INTERNATIONAL', hideWhileWaiting: true },
       { code: 'ARRIVED',      name: '到着',         base: 'ETA', offset: 0,  block: 'INTERNATIONAL', hideWhileWaiting: true },
       // 海外（今後、海外での通関・配送などの工程をここに追加予定）
       // 請求・完了

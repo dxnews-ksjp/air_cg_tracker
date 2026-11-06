@@ -152,7 +152,7 @@
   // HAWB行の列見出し（PC表示のみ）
   // HAWB行の列見出し（PC表示のみ）。相手先の列名は輸出入区分で切り替える
   const hawbHead = (dir) => '<div class="hawb-head" aria-hidden="true">' +
-    ['HAWB番号', M.partyLabel(dir), '品名', '個数 / 重量', '担当', '特殊貨物', 'ステータス', '警告']
+    ['HAWB番号', M.partyLabel(dir), '品名', '個数 / 重量', '担当', '特殊貨物']
       .map((t) => '<span>' + t + '</span>').join('') + '</div>';
 
   function hawbRow(x, m, today) {
@@ -168,8 +168,6 @@
       '<div class="h-qty">' + lbl('個数/重量') + qty + '</div>' +
       '<div class="h-asg">' + lbl('担当') + esc(h.assignee || '—') + '</div>' +
       '<div class="h-sp">' + UI.specialLabels(h) + '</div>' +
-      '<div class="h-status">' + UI.statusText(p) + UI.progressBar(p) + '<small>' + p.done + '/' + p.total + '</small></div>' +
-      '<div class="h-alert">' + UI.alertBadge(a) + '</div>' +
       '<div class="h-steps">' + UI.stepStrip(h, m.direction, today) + '</div>' +
       '</div>';
   }

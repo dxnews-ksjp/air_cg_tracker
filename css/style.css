@@ -205,7 +205,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 .m-partial { font-size: 12px; color: var(--muted); width: 100%; }
 .m-flags { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
 
-.hawb-list { padding: 4px 0 4px 28px; --hawb-cols: minmax(120px, .8fr) minmax(160px, 1.5fr) minmax(120px, 1.1fr) minmax(105px, .7fr) 56px minmax(100px, .9fr) minmax(200px, 1.4fr) minmax(88px, auto); }
+.hawb-list { padding: 4px 0 4px 28px; --hawb-cols: minmax(130px, .8fr) minmax(200px, 1.6fr) minmax(160px, 1.3fr) minmax(120px, .8fr) 70px minmax(130px, 1fr); }
 .hawb-head {
   display: grid; grid-template-columns: var(--hawb-cols); gap: 12px;
   padding: 6px 14px 4px 18px; margin-left: 4px; border-left: 2px solid #c9d2de;
@@ -231,13 +231,11 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 .h-qty { font-variant-numeric: tabular-nums; font-size: 13px; }
 .h-asg { font-size: 13px; }
 .hawb-row .muted-label { display: none; }
-.h-status { font-size: 13px; }
-.h-status small { margin-left: 2px; }
 /* 横並びの工程バー */
 .h-steps { grid-column: 1 / -1; overflow-x: auto; padding-bottom: 2px; }
 .step-strip { list-style: none; margin: 0; padding: 0; display: flex; min-width: max-content; }
 .ss {
-  flex: 1 1 0; min-width: 84px; padding: 5px 6px 0; border-top: 4px solid #dfe4ea;
+  flex: 1 1 0; min-width: 76px; padding: 5px 3px 0; border-top: 4px solid #dfe4ea;
   display: flex; flex-direction: column; align-items: center; text-align: center; line-height: 1.35;
 }
 .ss + .ss { margin-left: 3px; }
@@ -432,12 +430,12 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
   .m-flags { grid-column: 4; grid-row: 2; justify-content: flex-end; }
   .m-act { grid-column: 4; grid-row: 1; }
   .hawb-head { display: none; }
-  .hawb-list { --hawb-cols: minmax(120px, .8fr) minmax(160px, 1.4fr) minmax(130px, 1fr) minmax(200px, 1.4fr); }
+  .hawb-list { --hawb-cols: minmax(120px, .8fr) minmax(160px, 1.4fr) minmax(130px, 1fr) minmax(120px, .8fr); }
   .hawb-row { row-gap: 4px; }
   .h-no { grid-column: 1; grid-row: 1; } .h-party { grid-column: 2; grid-row: 1; } .h-com { grid-column: 3; grid-row: 1; }
-  .h-status { grid-column: 4; grid-row: 1; }
-  .h-qty { grid-column: 1; grid-row: 2; } .h-asg { grid-column: 2; grid-row: 2; } .h-sp { grid-column: 3; grid-row: 2; }
-  .h-alert { grid-column: 4; grid-row: 2; }
+  .h-qty { grid-column: 4; grid-row: 1; }
+  .h-asg { grid-column: 1; grid-row: 2; } .h-sp { grid-column: 2 / 5; grid-row: 2; }
+  .h-sp:empty { display: none; }
   .h-steps { grid-column: 1 / 5; grid-row: 3; }
   .hawb-row .muted-label { display: inline; }
 }
@@ -475,7 +473,7 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
   .hawb-row { grid-template-columns: 1fr; gap: 4px; padding: 10px 10px 10px 16px; }
   .hawb-row > * { grid-column: 1 !important; grid-row: auto !important; }
   .hawb-row > div:not(.h-steps) { white-space: normal; }
-  .h-alert:empty, .h-sp:empty { display: none; }
+  .h-sp:empty { display: none; }
 
   /* テーブルをカード表示に */
   .rwd thead { display: none; }
