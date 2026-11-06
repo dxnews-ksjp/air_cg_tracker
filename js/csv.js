@@ -20,7 +20,8 @@
   }
 
   const BASE_COLS = [
-    ['輸出入区分', 'direction'], ['MAWB番号', 'mawbNo'], ['航空会社', 'airline'], ['便名', 'flightNo'],
+    ['輸出入区分', 'direction'], ['MAWB番号', 'mawbNo'], ['航空会社', 'airline'], ['1st便名', 'flightNo'], ['1st便 日付', 'flightDate'],
+    ['2nd便名', 'flight2No'], ['2nd便 日付', 'flight2Date'], ['経由地', 'transit'],
     ['出発地', 'origin'], ['到着地', 'destination'], ['ETD', 'etd'], ['ETA', 'eta'],
     ['HAWB番号', 'hawbNo'], ['荷主（輸出者）', 'shipper'], ['荷受人（輸入者）', 'consignee'],
     ['個数', 'pieces'], ['重量(kg)', 'weightKg'], ['容積重量(kg)', 'volumeWeightKg'], ['品名', 'commodity'],
@@ -55,6 +56,7 @@
         const sp = (h && h.special) || {};
         const v = {
           direction: M.dirLabel(m.direction), mawbNo: m.mawbNo, airline: m.airline, flightNo: m.flightNo,
+          flightDate: m.flightDate || '', flight2No: m.flight2No || '', flight2Date: m.flight2Date || '', transit: m.transit || '',
           origin: m.origin, destination: m.destination, etd: U.dtToCsv(m.etd), eta: U.dtToCsv(m.eta),
         };
         if (h) {
@@ -150,10 +152,16 @@
         const etd = U.normalizeDateTime(get(r, 'ETD'));
         const eta = U.normalizeDateTime(get(r, 'ETA'));
         if (etd === null || eta === null) { result.errors.push(line + '行目：ETD/ETAの日付形式が正しくありません'); return; }
+        const f1d = U.normalizeDate(get(r, '1st便 日付'));
+        const f2d = U.normalizeDate(get(r, '2nd便 日付'));
+        if (f1d === null || f2d === null) { result.errors.push(line + '行目：便の日付形式が正しくありません'); return; }
+        const f2 = get(r, '2nd便名').toUpperCase();
         const old = existMawb[mawbNo];
         m = {
           id: old ? old.id : U.uid('m'), mawbNo, direction: dir,
-          airline: get(r, '航空会社').toUpperCase(), flightNo: get(r, '便名').toUpperCase(),
+          airline: get(r, '航空会社').toUpperCase(), flightNo: (get(r, '1st便名') || get(r, '便名')).toUpperCase(),
+          flightDate: f1d || (etd || '').slice(0, 10),
+          flight2No: f2, flight2Date: f2 ? f2d : '', transit: f2 ? get(r, '経由地').toUpperCase() : '',
           origin: get(r, '出発地').toUpperCase(), destination: get(r, '到着地').toUpperCase(),
           etd, eta,
         };
@@ -192,11 +200,8 @@
         memo: get(r, 'メモ'),
         steps: stepList,
       };
-      M.normalizeSteps(h, m.direction);
+      M.normalizeSteps(h, m.direction, m);
       // 工程は順番に進むため、途中が抜けた実績は警告
-      let gap = false, seenEmpty = false;
-      h.steps.forEach((s) => { if (!s.actualAt) seenEmpty = true; else if (seenEmpty) gap = true; });
-      if (gap) result.warnings.push(line + '行目：HAWB ' + hawbNo + ' の実績に抜けがあります（抜けた工程から先は未完了として扱います）');
 
       newHawbs[hawbNo] = h;
       result.hawbs.push(h);

@@ -54,8 +54,20 @@
     return '<span class="st-badge st-' + state + '">' + esc(M.STATE_LABEL[state]) + '</span>';
   };
 
-  UI.flightLine = function (m) {
-    return esc(m.flightNo || m.airline || '-') + ' ' + esc(m.origin || '???') + '→' + esc(m.destination || '???');
+  /** 区間（経由地があれば 出発地→経由地→到着地） */
+  UI.route = function (m) {
+    return [m.origin || '???', m.flight2No && m.transit ? m.transit : null, m.destination || '???']
+      .filter(Boolean).map(esc).join('→');
+  };
+
+  /** 1ST FLT / 2ND FLT（便名と日付）。日付が未入力の1ST FLTはETDの日付を使う */
+  UI.flightText = function (no, date) {
+    if (!no) return '<span class="muted">—（直行便）</span>';
+    return '<strong>' + esc(no) + '</strong>' + (date ? ' / ' + U.fmtDate(date) : '');
+  };
+  UI.flights = function (m) {
+    return '<span><em>1ST FLT</em>' + UI.flightText(m.flightNo || m.airline || '', m.flightDate || (m.etd || '').slice(0, 10)) + '</span>' +
+      '<span><em>2ND FLT</em>' + UI.flightText(m.flight2No, m.flight2Date) + '</span>';
   };
 
   /** 次の工程と予定日（一覧用） */
@@ -76,9 +88,9 @@
     const md = (s) => (s ? s.slice(5, 10).replace('-', '/') : '—');
     const item = (w, i) => {
       const s = (h.steps || [])[i] || {};
-      const st = M.stepState(s, today);
+      const st = M.stepState(s, today, i, p);
       const isNext = p.next && p.next.idx === i;
-      const date = s.actualAt ? md(s.actualAt) : md(s.plannedDate);
+      const date = s.na ? '-' : (s.actualAt ? md(s.actualAt) : md(s.plannedDate));
       const tip = w.name + '　予定：' + (s.plannedDate ? U.fmtDate(s.plannedDate) : '未設定') +
         (s.actualAt ? '　実績：' + U.fmtDT(s.actualAt) : '') + '（' + M.STATE_LABEL[st] + '）';
       return '<li class="ss ss-' + st + (isNext ? ' is-next' : '') + '" title="' + esc(tip) + '">' +

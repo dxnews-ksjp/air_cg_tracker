@@ -23,7 +23,7 @@
     if (f.status && f.status.indexOf(':') > 0) {
       const [dir, code] = f.status.split(':');
       if (m.direction !== dir) return false;
-      const cur = p.done ? M.workflow(dir)[p.done - 1].code : 'NONE';
+      const cur = p.currentCode;
       if (cur !== code) return false;
     }
     if (f.assignee && (h.assignee || '') !== (f.assignee === '_none' ? '' : f.assignee)) return false;
@@ -57,7 +57,7 @@
       const all = (byMawb[m.id] || []).map((h) => ({
         h, p: M.progress(h, m.direction), a: M.hawbAlert(h, m.direction, today),
       }));
-      const mawbHit = q && [m.mawbNo, m.flightNo, m.airline, m.origin, m.destination].some((t) => keywordHit(t, q));
+      const mawbHit = q && [m.mawbNo, m.flightNo, m.flight2No, m.airline, m.origin, m.transit, m.destination].some((t) => keywordHit(t, q));
       let shown = all.filter((x) => hawbMatches(x.h, m, x.p, x.a, f));
       if (q && !mawbHit) {
         shown = shown.filter((x) => [x.h.hawbNo, x.h.shipper, x.h.consignee, x.h.commodity, x.h.assignee].some((t) => keywordHit(t, q)));
@@ -134,14 +134,11 @@
       '<button type="button" class="toggle" data-act="toggle" data-id="' + m.id + '" aria-expanded="' + open + '" aria-label="配下HAWBを' + (open ? '閉じる' : '開く') + '">' + (open ? '▾' : '▸') + '</button>' +
       '<div class="m-main">' + UI.dirBadge(m.direction) +
         '<a class="mawb-no" href="#/mawb/' + m.id + '">MAWB ' + esc(m.mawbNo) + '</a>' +
-        '<span class="flight">' + UI.flightLine(m) + '</span></div>' +
+        '<span class="flight">' + UI.route(m) + '</span></div>' +
+      '<div class="m-flights">' + UI.flights(m) + '</div>' +
       '<div class="m-sched"><span><em>ETD</em>' + (m.etd ? U.fmtDT(m.etd) : '—') + '</span><span><em>ETA</em>' + (m.eta ? U.fmtDT(m.eta) : '—') + '</span></div>' +
       '<div class="m-sum">' +
-        (s.count
-          ? '<span class="m-done">完了 <strong>' + s.doneCount + '</strong>/' + s.count + '</span>' +
-            UI.progressBar({ done: s.doneCount, total: s.count, pct: Math.round(s.doneCount / s.count * 100), complete: s.allDone }) +
-            '<span class="m-slow">' + (s.allDone ? '全件完了' : '最遅：<strong>' + esc(s.slowest) + '</strong>') + '</span>'
-          : '<span class="muted">HAWB未登録</span>') +
+        (s.count ? '' : '<span class="muted">HAWB未登録</span>') +
         (partial ? '<span class="m-partial">（' + g.all.length + '件中' + g.shown.length + '件表示）</span>' : '') +
       '</div>' +
       '<div class="m-flags">' + UI.specialIcons(s.specials) + alert + '</div>' +
@@ -152,7 +149,7 @@
   // HAWB行の列見出し（PC表示のみ）
   // HAWB行の列見出し（PC表示のみ）。相手先の列名は輸出入区分で切り替える
   const hawbHead = (dir) => '<div class="hawb-head" aria-hidden="true">' +
-    ['HAWB番号', M.partyLabel(dir), '品名', '個数 / 重量', '担当', '特殊貨物', 'ステータス', '警告']
+    ['HAWB番号', M.partyLabel(dir), '品名', '個数 / 重量', '担当', '特殊貨物']
       .map((t) => '<span>' + t + '</span>').join('') + '</div>';
 
   function hawbRow(x, m, today) {
@@ -168,8 +165,6 @@
       '<div class="h-qty">' + lbl('個数/重量') + qty + '</div>' +
       '<div class="h-asg">' + lbl('担当') + esc(h.assignee || '—') + '</div>' +
       '<div class="h-sp">' + UI.specialLabels(h) + '</div>' +
-      '<div class="h-status">' + UI.statusText(p) + UI.progressBar(p) + '<small>' + p.done + '/' + p.total + '</small></div>' +
-      '<div class="h-alert">' + UI.alertBadge(a) + '</div>' +
       '<div class="h-steps">' + UI.stepStrip(h, m.direction, today) + '</div>' +
       '</div>';
   }

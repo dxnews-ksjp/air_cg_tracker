@@ -55,9 +55,15 @@
       '</div>' +
       '<div class="grid-2">' +
         field('MAWB番号', input('mawbNo', m.mawbNo, 'placeholder="131-12345675" inputmode="numeric" autocomplete="off"'), { required: true, hint: '航空会社コード3桁-8桁' }) +
+        field('航空会社', input('airline', m.airline, 'placeholder="JL" maxlength="3" class="upper"')) +
         '<div class="grid-2 tight">' +
-          field('航空会社', input('airline', m.airline, 'placeholder="JL" maxlength="3" class="upper"')) +
-          field('便名', input('flightNo', m.flightNo, 'placeholder="JL062" maxlength="8" class="upper"')) +
+          field('1ST FLT 便名', input('flightNo', m.flightNo, 'placeholder="JL062" maxlength="8" class="upper"')) +
+          field('1ST FLT 日付', input('flightDate', m.flightDate, 'type="date"'), { hint: '空欄ならETDの日付' }) +
+        '</div>' +
+        '<div class="grid-3 tight span-2">' +
+          field('2ND FLT 便名', input('flight2No', m.flight2No, 'placeholder="直行便は空欄" maxlength="8" class="upper"')) +
+          field('2ND FLT 日付', input('flight2Date', m.flight2Date, 'type="date"')) +
+          field('経由地（IATA）', input('transit', m.transit, 'placeholder="HKG" maxlength="3" class="upper"')) +
         '</div>' +
         field('出発地（IATA）', input('origin', m.origin, 'placeholder="NRT" maxlength="3" class="upper"'), { required: true }) +
         field('到着地（IATA）', input('destination', m.destination, 'placeholder="LAX" maxlength="3" class="upper"'), { required: true }) +
@@ -83,6 +89,8 @@
       ['origin', 'destination'].forEach((k) => {
         if (!/^[A-Z]{3}$/.test(v[k])) errors.push({ name: k, msg: (k === 'origin' ? '出発地' : '到着地') + 'はIATA空港コード（英字3文字）で入力してください' });
       });
+      if (v.transit && !/^[A-Z]{3}$/.test(v.transit)) errors.push({ name: 'transit', msg: '経由地はIATA空港コード（英字3文字）で入力してください' });
+      if (!v.flight2No && (v.flight2Date || v.transit)) errors.push({ name: 'flight2No', msg: '2ND FLTの日付・経由地を入れる場合は、2ND FLTの便名も入力してください（直行便は3つとも空欄）' });
       if (v.origin && v.origin === v.destination) errors.push({ name: 'destination', msg: '出発地と到着地が同じです' });
       showErrors(form, errors);
       if (errors.length) return;
@@ -96,6 +104,8 @@
       }
       const data = Object.assign({}, m, {
         mawbNo: chk.normalized, direction: v.direction, airline: v.airline, flightNo: v.flightNo,
+        flightDate: v.flightDate || (v.etd || '').slice(0, 10),
+        flight2No: v.flight2No, flight2Date: v.flight2No ? v.flight2Date : '', transit: v.flight2No ? v.transit : '',
         origin: v.origin, destination: v.destination, etd: v.etd, eta: v.eta,
       });
       try {
@@ -112,14 +122,22 @@
   };
 
   // ======================= HAWB =======================
-  function stepRows(dir, steps) {
+  const isNa = (w, mawb) => !!(w.naIfDirect && mawb && M.isDirect(mawb));
+
+  function stepRows(dir, steps, mawb) {
     const map = {};
     (steps || []).forEach((s) => { map[s.code] = s; });
     const blockStart = {};
     M.blocks(dir).forEach((g) => { if (g.label) blockStart[g.items[0].i] = g.label; });
     return M.workflow(dir).map((w, i) => {
       const s = map[w.code] || {};
-      return (blockStart[i] ? '<tr class="block-row"><th colspan="4">' + esc(blockStart[i]) + '</th></tr>' : '') + '<tr>' +
+      const head = blockStart[i] ? '<tr class="block-row"><th colspan="4">' + esc(blockStart[i]) + '</th></tr>' : '';
+      if (isNa(w, mawb)) {
+        // 直行便では経由地は「該当なし」。入力欄は出さない
+        return head + '<tr class="na-row"><td class="num">' + (i + 1) + '</td><th scope="row">' + esc(w.name) + '</th>' +
+          '<td colspan="2" class="muted">— 直行便のため該当なし（MAWBに2ND FLTを入れると入力できます）</td></tr>';
+      }
+      return head + '<tr>' +
         '<td class="num">' + (i + 1) + '</td><th scope="row">' + esc(w.name) + '</th>' +
         '<td><input type="date" name="pl_' + w.code + '" value="' + esc(s.plannedDate || '') + '" aria-label="' + esc(w.name) + ' 予定日"></td>' +
         '<td><input type="datetime-local" name="ac_' + w.code + '" value="' + esc(s.actualAt || '') + '" aria-label="' + esc(w.name) + ' 実績日時"></td>' +
@@ -127,11 +145,13 @@
     }).join('');
   }
 
-  function readSteps(form, dir) {
+  function readSteps(form, dir, mawb) {
     return M.workflow(dir).map((w) => {
       const pl = form.querySelector('[name="pl_' + w.code + '"]');
       const ac = form.querySelector('[name="ac_' + w.code + '"]');
-      return { code: w.code, plannedDate: pl ? pl.value : '', actualAt: ac ? ac.value : '' };
+      const st = { code: w.code, plannedDate: pl ? pl.value : '', actualAt: ac ? ac.value : '' };
+      if (isNa(w, mawb)) st.na = true;
+      return st;
     });
   }
 
@@ -185,7 +205,7 @@
           '<button type="button" class="btn btn-sm" data-autofill="blank">ETD/ETAから予定日を入力（空欄のみ）</button>' +
           '<button type="button" class="btn btn-sm" data-autofill="all">すべて上書き</button>' +
         '</div>' +
-        '<p class="field-hint">実績は通常、詳細画面の「完了にする」ボタンで自動記録されます。ここでは修正が必要なときだけ変更してください。</p>' +
+        '<p class="field-hint">実績は通常、詳細画面の「完了にする」ボタンで自動記録されます。ここでは修正が必要なときだけ変更してください。日付は空欄でもかまいません（空欄の工程はグレー表示になり、後の工程に実績があればスキップ扱いになります）。</p>' +
         '<div class="table-scroll"><table class="steps-table"><thead><tr><th>#</th><th>工程</th><th>予定日</th><th>実績日時</th></tr></thead>' +
         '<tbody data-steps></tbody></table></div>' +
       '</fieldset>' +
@@ -206,15 +226,15 @@
 
     const renderSteps = () => {
       const m = curMawb();
-      if (curDir) stepsCache = readSteps(form, curDir);
+      if (curDir) stepsCache = readSteps(form, curDir, curMawb());
       if (!m) { tbody.innerHTML = '<tr><td colspan="4" class="muted">親MAWBを選ぶと工程が表示されます</td></tr>'; curDir = null; return; }
       curDir = m.direction;
-      tbody.innerHTML = stepRows(m.direction, stepsCache);
+      tbody.innerHTML = stepRows(m.direction, stepsCache, m);
     };
     renderSteps();
     if (!isEdit && curMawb()) {
       // 新規登録時は最初から予定日を自動入力しておく
-      const steps = readSteps(form, curDir);
+      const steps = readSteps(form, curDir, curMawb());
       M.autofillPlanned(steps, curDir, curMawb().etd, curMawb().eta, false);
       stepsCache = steps; curDir = null; renderSteps();
     }
@@ -222,7 +242,7 @@
       const wasEmpty = !curDir;
       renderSteps();
       if (wasEmpty && curMawb() && !isEdit) {
-        const steps = readSteps(form, curDir);
+        const steps = readSteps(form, curDir, curMawb());
         M.autofillPlanned(steps, curDir, curMawb().etd, curMawb().eta, false);
         stepsCache = steps; curDir = null; renderSteps();
       }
@@ -232,7 +252,7 @@
       const m = curMawb();
       if (!m) { U.toast('先に親MAWBを選んでください', 'warn'); return; }
       if (!m.etd && !m.eta) { U.toast('親MAWBにETD/ETAが入っていません', 'warn'); return; }
-      const steps = readSteps(form, curDir);
+      const steps = readSteps(form, curDir, curMawb());
       M.autofillPlanned(steps, curDir, m.etd, m.eta, b.dataset.autofill === 'all');
       stepsCache = steps; curDir = null; renderSteps();
       U.toast('予定日を入力しました', 'ok');
@@ -257,12 +277,7 @@
       [['dg', '危険品'], ['reefer', '保冷品'], ['other', 'その他特殊貨物']].forEach(([k, label]) => {
         if (v[k] && !v[k + 'Note']) errors.push({ name: k + 'Note', msg: label + 'の内容を入力してください' });
       });
-      const steps = curDir ? readSteps(form, curDir) : [];
-      let seenEmpty = false;
-      steps.forEach((s, i) => {
-        if (!s.actualAt) seenEmpty = true;
-        else if (seenEmpty) errors.push({ name: 'ac_' + s.code, msg: '「' + M.workflow(curDir)[i].name + '」より前に実績が空欄の工程があります。工程は順番に進めてください' });
-      });
+      const steps = curDir ? readSteps(form, curDir, curMawb()) : [];
       showErrors(form, errors);
       if (errors.length) return;
 

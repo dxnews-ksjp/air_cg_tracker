@@ -25,6 +25,7 @@ App.config = {
    * base/offset : 「ETD/ETAから予定日を自動入力」したときの基準日と日数
    * block  : 工程のまとまり（BLOCKS のキー）。一覧・詳細で見出しを付けて区切ります
    * hideWhileWaiting : true の工程は、前の工程が終わるまで（＝前工程待ちの間）タスク管理に表示しない
+   * naIfDirect : true の工程は、直行便（MAWBに2nd FLTがない）のとき「該当なし」になり、飛ばして進む
    */
   WORKFLOWS: {
     EXPORT: [
@@ -38,6 +39,7 @@ App.config = {
       { code: 'LOADED',       name: '搭載',         base: 'ETD', offset: 0,  block: 'DOMESTIC', hideWhileWaiting: true },
       // 国際
       { code: 'DEPARTED',     name: '出発',         base: 'ETD', offset: 0,  block: 'INTERNATIONAL', hideWhileWaiting: true },
+      { code: 'TRANSIT',      name: '経由地',       base: 'ETD', offset: 0,  block: 'INTERNATIONAL', hideWhileWaiting: true, naIfDirect: true },
       { code: 'ARRIVED',      name: '到着',         base: 'ETA', offset: 0,  block: 'INTERNATIONAL', hideWhileWaiting: true },
       // 海外（今後、海外での通関・配送などの工程をここに追加予定）
       // 請求・完了
@@ -46,6 +48,7 @@ App.config = {
     ],
     IMPORT: [
       { code: 'PRE_ALERT',    name: 'プレアラート受領', base: 'ETA', offset: -2 },
+      { code: 'TRANSIT',      name: '経由地',           base: 'ETD', offset: 0, hideWhileWaiting: true, naIfDirect: true },
       { code: 'ARRIVED',      name: '到着',             base: 'ETA', offset: 0 },
       { code: 'BONDED_IN',    name: '保税搬入',         base: 'ETA', offset: 0 },
       { code: 'DO_DOCS',      name: 'D/O・書類受領',    base: 'ETA', offset: 1 },
