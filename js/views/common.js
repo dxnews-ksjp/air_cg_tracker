@@ -89,15 +89,25 @@
     const item = (w, i) => {
       const s = (h.steps || [])[i] || {};
       const st = M.stepState(s, today, i, p);
-      const isNext = p.next && p.next.idx === i;
+      const c = M.colorState(s, today, i, p);
       const date = s.na ? '-' : (s.actualAt ? md(s.actualAt) : md(s.plannedDate));
       const tip = w.name + '　予定：' + (s.plannedDate ? U.fmtDate(s.plannedDate) : '未設定') +
-        (s.actualAt ? '　実績：' + U.fmtDT(s.actualAt) : '') + '（' + M.STATE_LABEL[st] + '）';
-      return '<li class="ss ss-' + st + (isNext ? ' is-next' : '') + '" title="' + esc(tip) + '">' +
+        (s.actualAt ? '　実績：' + U.fmtDT(s.actualAt) : '') + '（' + (c === 'na' ? M.STATE_LABEL[st] : M.COLOR_LABEL[c]) + '）';
+      return '<li class="ss ss-' + c + '" title="' + esc(tip) + '">' +
         '<span class="ss-name">' + esc(w.name) + '</span><span class="ss-date">' + date + '</span></li>';
     };
     // 一覧ではブロック（国内・国際など）の見出しは付けずに、工程を1列に並べる
     return '<ol class="step-strip" aria-label="工程">' + wf.map((w, i) => item(w, i)).join('') + '</ol>';
+  };
+
+  /** 色分けの凡例 */
+  UI.colorLegend = function () {
+    return '<span class="legend">' + ['done', 'active', 'overdue', 'na'].map((c) =>
+      '<span class="lg-ss ss-' + c + '">' + esc(M.COLOR_LABEL[c]) + '</span>').join('') + '</span>';
+  };
+
+  UI.colorBadge = function (c, label) {
+    return '<span class="st-badge cb-' + c + '">' + esc(label || M.COLOR_LABEL[c]) + '</span>';
   };
 
   UI.markDot = function (color, attrs) {

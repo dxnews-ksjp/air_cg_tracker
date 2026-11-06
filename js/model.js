@@ -48,6 +48,13 @@
       if (na) s.na = true;
       return s;
     });
+    // 予定日が必須の工程（仕立て）が空欄なら、指定の工程（通関）と同じ日付で補う
+    M.workflow(dir).forEach((w, i) => {
+      const s = hawb.steps[i];
+      if (!w.required || !w.defaultFrom || s.na || s.plannedDate) return;
+      const from = hawb.steps.find((x) => x.code === w.defaultFrom);
+      if (from && from.plannedDate) s.plannedDate = from.plannedDate;
+    });
     return hawb;
   };
 
@@ -93,6 +100,20 @@
     if (d <= cfg.SOON_DAYS) return 'soon';
     return 'pending';
   };
+
+  /**
+   * 色分け用の状態（工程バー・HAWB詳細）
+   * done=完了(淡い緑) / active=手配中(淡い黄・次に進める工程) / overdue=期限切れ(淡い赤)
+   * na=該当なし・日付なし(薄いグレー) / pending=未着手(白)
+   */
+  M.colorState = function (step, today, i, p) {
+    const st = M.stepState(step, today, i, p);
+    if (st === 'done' || st === 'overdue') return st;
+    if (st === 'na' || st === 'none' || st === 'skipped') return 'na';
+    if (p && p.next && p.next.idx === i) return 'active';
+    return 'pending';
+  };
+  M.COLOR_LABEL = { done: '完了', active: '手配中', overdue: '期限切れ', na: '該当なし', pending: '未着手' };
 
   M.STATE_LABEL = { done: '完了', na: '該当なし（直行便）', skipped: 'スキップ（日付なし）', overdue: '遅延', soon: '期限間近', pending: '予定', none: '予定日未設定' };
 

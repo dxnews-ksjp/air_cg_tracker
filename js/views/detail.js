@@ -47,6 +47,7 @@
     const timeline = wf.map((w, i) => {
       const s = h.steps[i] || {};
       const st = M.stepState(s, today, i, p);
+      const c = M.colorState(s, today, i, p);
       const isNext = p.next && p.next.idx === i;
       let lateNote = '';
       if (st === 'overdue') lateNote = '<span class="late">' + U.diffDays(s.plannedDate, today) + '日超過</span>';
@@ -54,10 +55,10 @@
         lateNote = '<span class="late-done">予定より' + U.diffDays(s.plannedDate, s.actualAt.slice(0, 10)) + '日遅れで完了</span>';
       }
       return (blockStart[i] ? '<li class="tl-block">' + esc(blockStart[i]) + '</li>' : '') +
-        '<li class="tl-item tl-' + st + (isNext ? ' is-next' : '') + '">' +
+        '<li class="tl-item tl-' + c + (isNext ? ' is-next' : '') + '">' +
         '<span class="tl-dot" aria-hidden="true">' + (st === 'done' ? '✓' : i + 1) + '</span>' +
         '<div class="tl-body">' +
-          '<div class="tl-title"><strong>' + esc(w.name) + '</strong>' + UI.stateBadge(st) + (isNext ? '<span class="next-tag">次の工程</span>' : '') + '</div>' +
+          '<div class="tl-title"><strong>' + esc(w.name) + '</strong>' + UI.colorBadge(c, c === 'na' ? M.STATE_LABEL[st] : '') + '</div>' +
           '<div class="tl-dates"><span><em>予定</em>' + (s.plannedDate ? U.fmtDate(s.plannedDate) : '—') + '</span>' +
           '<span><em>実績</em>' + (s.actualAt ? U.fmtDT(s.actualAt) : '—') + '</span>' + lateNote + '</div>' +
         '</div></li>';
