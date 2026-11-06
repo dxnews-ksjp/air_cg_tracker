@@ -88,7 +88,7 @@
     const md = (s) => (s ? s.slice(5, 10).replace('-', '/') : '—');
     const item = (w, i) => {
       const s = (h.steps || [])[i] || {};
-      const st = M.stepState(s, today);
+      const st = M.stepState(s, today, i, p);
       const isNext = p.next && p.next.idx === i;
       const date = s.na ? '-' : (s.actualAt ? md(s.actualAt) : md(s.plannedDate));
       const tip = w.name + '　予定：' + (s.plannedDate ? U.fmtDate(s.plannedDate) : '未設定') +

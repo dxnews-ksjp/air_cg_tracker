@@ -52,17 +52,18 @@
   };
 
   /**
-   * 進捗状況。工程は順番に進むので「先頭から連続して実績がある数」を完了数とする
+   * 進捗状況。「最後に実績が入っている工程」までを完了とする（途中の空欄はスキップ扱い）
    * 戻り値: { done, total, complete, currentName, next: {idx, code, name, plannedDate} | null, pct }
    */
   M.progress = function (hawb, dir) {
     const wf = M.workflow(dir);
     const steps = hawb.steps || [];
-    let done = 0;
-    // 該当なし（na）の工程は通過済みとして扱う
-    while (done < wf.length && steps[done] && (steps[done].actualAt || steps[done].na)) done++;
-    let last = done - 1;
-    while (last >= 0 && steps[last] && steps[last].na) last--;
+    // 最後に実績が入っている工程までを「通過済み」とする。
+    // 途中で日付が空欄の工程はスキップ扱い、該当なし（na）の工程は飛ばして進む
+    let last = -1;
+    steps.forEach((s, i) => { if (i < wf.length && s && s.actualAt) last = i; });
+    let done = last + 1;
+    while (done < wf.length && steps[done] && steps[done].na) done++;
     const complete = wf.length > 0 && done === wf.length;
     const next = complete ? null : {
       idx: done, code: wf[done].code, name: wf[done].name,
@@ -78,10 +79,14 @@
     };
   };
 
-  /** 工程1つの状態: done / na(該当なし) / overdue / soon / pending / none(予定日なし) */
-  M.stepState = function (step, today) {
+  /**
+   * 工程1つの状態: done / na(該当なし) / skipped(日付なしで通過) / overdue / soon / pending / none(予定日なし)
+   * i と p（M.progress の結果）を渡すと、通過済みなのに実績が空欄の工程を skipped にする
+   */
+  M.stepState = function (step, today, i, p) {
     if (step.na) return 'na';
     if (step.actualAt) return 'done';
+    if (p && i < p.done) return 'skipped';
     if (!step.plannedDate) return 'none';
     const d = U.diffDays(today, step.plannedDate);
     if (d < 0) return 'overdue';
@@ -89,7 +94,7 @@
     return 'pending';
   };
 
-  M.STATE_LABEL = { done: '完了', na: '該当なし（直行便）', overdue: '遅延', soon: '期限間近', pending: '予定', none: '予定日未設定' };
+  M.STATE_LABEL = { done: '完了', na: '該当なし（直行便）', skipped: 'スキップ（日付なし）', overdue: '遅延', soon: '期限間近', pending: '予定', none: '予定日未設定' };
 
   /**
    * HAWBの警告状況
@@ -98,8 +103,9 @@
   M.hawbAlert = function (hawb, dir, today) {
     const wf = M.workflow(dir);
     const r = { level: '', overdueDays: 0, overdueSteps: [], soonSteps: [] };
+    const p = M.progress(hawb, dir);
     (hawb.steps || []).forEach((s, i) => {
-      const st = M.stepState(s, today);
+      const st = M.stepState(s, today, i, p);
       const name = wf[i] ? wf[i].name : s.code;
       if (st === 'overdue') {
         r.overdueSteps.push(name);
@@ -212,6 +218,7 @@
       const p = M.progress(h, m.direction);
       (h.steps || []).forEach((s, i) => {
         if (s.na || !s.plannedDate || !wf[i]) return;
+        if (!s.actualAt && i < p.done) return; // スキップした工程はタスクにしない
         // 担当者の作業がない工程（仕立て・搭載など）は、前の工程が終わるまでタスクに出さない
         if (wf[i].hideWhileWaiting && !s.actualAt && i !== p.done) return;
         const key = M.stepTaskKey(h.id, s.code);

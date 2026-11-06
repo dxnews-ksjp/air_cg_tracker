@@ -202,9 +202,6 @@
       };
       M.normalizeSteps(h, m.direction, m);
       // 工程は順番に進むため、途中が抜けた実績は警告
-      let gap = false, seenEmpty = false;
-      h.steps.forEach((s) => { if (!s.actualAt) seenEmpty = true; else if (seenEmpty) gap = true; });
-      if (gap) result.warnings.push(line + '行目：HAWB ' + hawbNo + ' の実績に抜けがあります（抜けた工程から先は未完了として扱います）');
 
       newHawbs[hawbNo] = h;
       result.hawbs.push(h);

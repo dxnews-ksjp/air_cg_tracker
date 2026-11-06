@@ -138,9 +138,7 @@
       '<div class="m-flights">' + UI.flights(m) + '</div>' +
       '<div class="m-sched"><span><em>ETD</em>' + (m.etd ? U.fmtDT(m.etd) : '—') + '</span><span><em>ETA</em>' + (m.eta ? U.fmtDT(m.eta) : '—') + '</span></div>' +
       '<div class="m-sum">' +
-        (s.count
-          ? '<span class="m-slow">' + (s.allDone ? '全件完了' : '最遅：<strong>' + esc(s.slowest) + '</strong>') + '</span>'
-          : '<span class="muted">HAWB未登録</span>') +
+        (s.count ? '' : '<span class="muted">HAWB未登録</span>') +
         (partial ? '<span class="m-partial">（' + g.all.length + '件中' + g.shown.length + '件表示）</span>' : '') +
       '</div>' +
       '<div class="m-flags">' + UI.specialIcons(s.specials) + alert + '</div>' +

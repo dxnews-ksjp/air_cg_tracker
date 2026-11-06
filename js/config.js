@@ -48,6 +48,7 @@ App.config = {
     ],
     IMPORT: [
       { code: 'PRE_ALERT',    name: 'プレアラート受領', base: 'ETA', offset: -2 },
+      { code: 'TRANSIT',      name: '経由地',           base: 'ETD', offset: 0, hideWhileWaiting: true, naIfDirect: true },
       { code: 'ARRIVED',      name: '到着',             base: 'ETA', offset: 0 },
       { code: 'BONDED_IN',    name: '保税搬入',         base: 'ETA', offset: 0 },
       { code: 'DO_DOCS',      name: 'D/O・書類受領',    base: 'ETA', offset: 1 },

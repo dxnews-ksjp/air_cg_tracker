@@ -46,7 +46,7 @@
     M.blocks(m.direction).forEach((g) => { if (g.label) blockStart[g.items[0].i] = g.label; });
     const timeline = wf.map((w, i) => {
       const s = h.steps[i] || {};
-      const st = M.stepState(s, today);
+      const st = M.stepState(s, today, i, p);
       const isNext = p.next && p.next.idx === i;
       let lateNote = '';
       if (st === 'overdue') lateNote = '<span class="late">' + U.diffDays(s.plannedDate, today) + '日超過</span>';

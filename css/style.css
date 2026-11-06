@@ -147,7 +147,7 @@ small { font-size: 12px; color: var(--text-2); }
 .st-overdue { background: var(--overdue); color: #fff; }
 .st-soon { background: var(--soon-bg); color: var(--soon); border: 1px solid var(--soon-line); }
 .st-pending { background: #eef1f5; color: var(--text-2); }
-.st-na { background: #f1f3f6; color: #9aa3ae; }
+.st-na, .st-skipped { background: #f1f3f6; color: #9aa3ae; }
 .st-none { background: #f4f5f7; color: var(--muted); }
 
 .empty { padding: 28px; text-align: center; color: var(--muted); background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius); }
@@ -189,7 +189,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 .mawb-group { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
 .mawb-row {
   display: grid; align-items: center; gap: 12px;
-  grid-template-columns: 32px minmax(250px, 1.3fr) minmax(210px, 1.1fr) minmax(175px, .9fr) minmax(120px, .7fr) minmax(110px, .8fr) auto;
+  grid-template-columns: 32px minmax(250px, 1.3fr) minmax(210px, 1.1fr) minmax(175px, .9fr) minmax(0, .5fr) minmax(110px, .8fr) auto;
   padding: 10px 14px; background: #eef2f7; border-bottom: 1px solid var(--border);
 }
 .mawb-group:not(.open) .mawb-row { border-bottom: 0; }
@@ -250,8 +250,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 .ss-overdue .ss-name, .ss-overdue .ss-date { color: var(--overdue); font-weight: 700; }
 .ss-soon { border-top-color: var(--soon-line); }
 .ss-soon .ss-date { color: var(--soon); font-weight: 700; }
-.ss-na { border-top-color: #eceff3; }
-.ss-na .ss-name, .ss-na .ss-date { color: #b3bac4; }
+/* 日付が空欄の工程（予定日なし・スキップ・該当なし）は薄いグレー */
+.ss-na, .ss-none, .ss-skipped { border-top-color: #eceff3; }
+.ss-na .ss-name, .ss-na .ss-date, .ss-none .ss-name, .ss-none .ss-date,
+.ss-skipped .ss-name, .ss-skipped .ss-date { color: #b3bac4; }
 .ss.is-next .ss-name { color: var(--text); font-weight: 700; }
 .ss.is-next:not(.ss-overdue):not(.ss-soon) { border-top-color: var(--primary); }
 .hawb-empty { padding: 12px 18px; color: var(--muted); }
@@ -293,8 +295,9 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
   flex: 0 0 28px; height: 28px; border-radius: 50%; display: grid; place-items: center;
   font-size: 12px; font-weight: 700; background: #fff; border: 2px solid #c5ccd6; color: var(--text-2); z-index: 1;
 }
-.tl-na .tl-dot { border-color: #dfe4ea; color: #b3bac4; background: #f6f7f9; }
-.tl-na .tl-title strong, .tl-na .tl-dates { color: #b3bac4; }
+.tl-na .tl-dot, .tl-none .tl-dot, .tl-skipped .tl-dot { border-color: #dfe4ea; color: #b3bac4; background: #f6f7f9; }
+.tl-na .tl-title strong, .tl-na .tl-dates, .tl-none .tl-title strong, .tl-none .tl-dates,
+.tl-skipped .tl-title strong, .tl-skipped .tl-dates { color: #b3bac4; }
 .tl-done .tl-dot { background: var(--done); border-color: var(--done); color: #fff; }
 .tl-overdue .tl-dot { border-color: var(--overdue); color: var(--overdue); background: var(--overdue-soft); }
 .tl-soon .tl-dot { border-color: var(--soon-line); color: var(--soon); background: var(--soon-bg); }

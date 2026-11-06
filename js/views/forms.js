@@ -205,7 +205,7 @@
           '<button type="button" class="btn btn-sm" data-autofill="blank">ETD/ETAから予定日を入力（空欄のみ）</button>' +
           '<button type="button" class="btn btn-sm" data-autofill="all">すべて上書き</button>' +
         '</div>' +
-        '<p class="field-hint">実績は通常、詳細画面の「完了にする」ボタンで自動記録されます。ここでは修正が必要なときだけ変更してください。</p>' +
+        '<p class="field-hint">実績は通常、詳細画面の「完了にする」ボタンで自動記録されます。ここでは修正が必要なときだけ変更してください。日付は空欄でもかまいません（空欄の工程はグレー表示になり、後の工程に実績があればスキップ扱いになります）。</p>' +
         '<div class="table-scroll"><table class="steps-table"><thead><tr><th>#</th><th>工程</th><th>予定日</th><th>実績日時</th></tr></thead>' +
         '<tbody data-steps></tbody></table></div>' +
       '</fieldset>' +
@@ -278,12 +278,6 @@
         if (v[k] && !v[k + 'Note']) errors.push({ name: k + 'Note', msg: label + 'の内容を入力してください' });
       });
       const steps = curDir ? readSteps(form, curDir, curMawb()) : [];
-      let seenEmpty = false;
-      steps.forEach((s, i) => {
-        if (s.na) return; // 該当なしの工程は飛ばす
-        if (!s.actualAt) seenEmpty = true;
-        else if (seenEmpty) errors.push({ name: 'ac_' + s.code, msg: '「' + M.workflow(curDir)[i].name + '」より前に実績が空欄の工程があります。工程は順番に進めてください' });
-      });
       showErrors(form, errors);
       if (errors.length) return;
 
