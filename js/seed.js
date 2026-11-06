@@ -17,7 +17,9 @@
     const ts = U.now();
     return {
       id: U.uid('m'), mawbNo: U.makeMawbNo(o.prefix, o.serial), direction: o.direction,
-      airline: o.airline, flightNo: o.flightNo, origin: o.origin, destination: o.destination,
+      airline: o.airline, flightNo: o.flightNo, flightDate: (o.etd || '').slice(0, 10),
+      flight2No: o.flight2No || '', flight2Date: o.flight2Date || '', transit: o.transit || '',
+      origin: o.origin, destination: o.destination,
       etd: o.etd, eta: o.eta, createdAt: ts, updatedAt: ts,
     };
   }
@@ -38,7 +40,7 @@
       special: Object.assign({ dg: false, dgNote: '', reefer: false, reeferNote: '', other: false, otherNote: '' }, o.special || {}),
       memo: o.memo || '', createdAt: ts, updatedAt: ts,
     };
-    M.normalizeSteps(h, mawb.direction);
+    M.normalizeSteps(h, mawb.direction, mawb);
     M.autofillPlanned(h.steps, mawb.direction, mawb.etd, mawb.eta, true);
     Object.keys(o.override || {}).forEach((code) => {
       const s = h.steps.find((x) => x.code === code);
@@ -46,6 +48,7 @@
     });
     for (let i = 0; i < (o.done || 0) && i < h.steps.length; i++) {
       const s = h.steps[i];
+      if (s.na) continue; // 直行便の経由地は該当なし
       const hour = String(Math.min(8 + i, 20)).padStart(2, '0'); // 後の工程ほど遅い時刻にする
       // 実績は未来日にならないようにする
       s.actualAt = s.plannedDate && s.plannedDate < today ? s.plannedDate + 'T' + hour + ':' + (i % 2 ? '30' : '05') : U.now();
@@ -70,14 +73,15 @@
           pieces: 6, weightKg: 420, volumeWeightKg: 515, commodity: '精密測定機器', assignee: '鈴木', done: 5 })
       );
 
-      // ② 輸出：関西→シンガポール 3日前に出発済み（今日が請求予定・完了済み）
+      // ② 輸出：関西→シンガポール経由→ジャカルタ 3日前に出発済み（今日が請求予定・完了済み）
       const m2 = mkMawb({ prefix: '618', serial: '3307512', direction: 'EXPORT', airline: 'SQ', flightNo: 'SQ619',
-        origin: 'KIX', destination: 'SIN', etd: at(-3, '11:15'), eta: at(-3, '17:05') });
+        flight2No: 'SQ956', flight2Date: U.addDays(U.today(), -3), transit: 'SIN',
+        origin: 'KIX', destination: 'CGK', etd: at(-3, '11:15'), eta: at(-3, '19:50') });
       mawbs.push(m2);
       hawbs.push(
-        mkHawb(m2, { hawbNo: 'OSA-24102801', shipper: '浪速オートパーツ株式会社', consignee: 'Lion City Motors Pte. Ltd.',
+        mkHawb(m2, { hawbNo: 'OSA-24102801', shipper: '浪速オートパーツ株式会社', consignee: 'PT Nusantara Motor Parts',
           pieces: 20, weightKg: 860, volumeWeightKg: 790, commodity: '自動車部品（ブレーキパッド）', assignee: '高橋', done: 10 }),
-        mkHawb(m2, { hawbNo: 'OSA-24102802', shipper: '株式会社関西テクノ', consignee: 'Straits Semicon Pte. Ltd.',
+        mkHawb(m2, { hawbNo: 'OSA-24102802', shipper: '株式会社関西テクノ', consignee: 'PT Jawa Semikon Indonesia',
           pieces: 1, weightKg: 1250, volumeWeightKg: 1480, commodity: '半導体製造装置部品', assignee: '高橋', done: 12,
           special: { other: true, otherNote: '重量物（1ピース1.25t）・フォークリフト荷役' } })
       );

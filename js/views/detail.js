@@ -20,8 +20,10 @@
     return dl([
       ['MAWB番号', '<a href="#/mawb/' + m.id + '">' + esc(m.mawbNo) + '</a>', true],
       ['輸出入区分', UI.dirBadge(m.direction), true],
-      ['航空会社 / 便名', (m.airline || '—') + ' / ' + (m.flightNo || '—')],
-      ['区間', (m.origin || '???') + ' → ' + (m.destination || '???')],
+      ['航空会社', m.airline || ''],
+      ['1ST FLT', UI.flightText(m.flightNo, m.flightDate || (m.etd || '').slice(0, 10)), true],
+      ['2ND FLT', UI.flightText(m.flight2No, m.flight2Date) + (m.flight2No && m.transit ? '（経由地 ' + esc(m.transit) + '）' : ''), true],
+      ['区間', UI.route(m), true],
       ['ETD', m.etd ? U.fmtDT(m.etd, true) : ''],
       ['ETA', m.eta ? U.fmtDT(m.eta, true) : ''],
     ]);
@@ -88,7 +90,7 @@
                 '<p class="field-hint">押した時刻が実績日時として記録されます。' +
                   (p.next.plannedDate ? '（予定日：' + U.fmtDate(p.next.plannedDate) + '）' : '') + '</p>'
               : '<p class="all-done">✓ すべての工程が完了しています</p>') +
-            (p.done ? '<button type="button" class="btn btn-sm btn-link" data-act="revert">↶ 1つ戻す（「' + esc(wf[p.done - 1].name) + '」の実績を取り消し）</button>' : '') +
+            (p.lastIdx >= 0 ? '<button type="button" class="btn btn-sm btn-link" data-act="revert">↶ 1つ戻す（「' + esc(wf[p.lastIdx].name) + '」の実績を取り消し）</button>' : '') +
           '</section>' +
           '<section class="card"><h2>工程</h2><ol class="timeline">' + timeline + '</ol></section>' +
         '</div>' +
@@ -128,7 +130,7 @@
         App.refresh();
       } else if (act === 'revert') {
         const fresh = await App.repo.getHawb(id);
-        const name = M.workflow(m.direction)[M.progress(fresh, m.direction).done - 1].name;
+        const name = M.workflow(m.direction)[M.progress(fresh, m.direction).lastIdx].name;
         if (!(await U.confirm('「' + name + '」の実績日時を取り消して、1つ前の状態に戻しますか？', { okLabel: '戻す' }))) return;
         M.revert(fresh, m.direction);
         await App.repo.saveHawb(fresh);

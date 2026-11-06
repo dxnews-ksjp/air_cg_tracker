@@ -31,15 +31,23 @@
 
   M.dirLabel = (dir) => (cfg.DIRECTIONS[dir] || {}).label || dir;
 
-  /** 輸出入区分に合わせて工程配列を作り直す（同じコードの工程は予定日・実績を引き継ぐ） */
-  M.normalizeSteps = function (hawb, dir) {
+  /** 直行便か（2nd FLT が入っていなければ直行便） */
+  M.isDirect = (mawb) => !(mawb && mawb.flight2No);
+
+  /**
+   * 輸出入区分に合わせて工程配列を作り直す（同じコードの工程は予定日・実績を引き継ぐ）
+   * mawb を渡すと、直行便のときに「経由地」など naIfDirect の工程を「該当なし（na）」にする
+   */
+  M.normalizeSteps = function (hawb, dir, mawb) {
     const map = {};
     (hawb.steps || []).forEach((s) => { map[s.code] = s; });
-    hawb.steps = M.workflow(dir).map((w) => ({
-      code: w.code,
-      plannedDate: (map[w.code] && map[w.code].plannedDate) || '',
-      actualAt: (map[w.code] && map[w.code].actualAt) || '',
-    }));
+    hawb.steps = M.workflow(dir).map((w) => {
+      const old = map[w.code] || {};
+      const na = w.naIfDirect ? (mawb ? M.isDirect(mawb) : !!old.na) : false;
+      const s = { code: w.code, plannedDate: na ? '' : (old.plannedDate || ''), actualAt: na ? '' : (old.actualAt || '') };
+      if (na) s.na = true;
+      return s;
+    });
     return hawb;
   };
 
@@ -51,7 +59,10 @@
     const wf = M.workflow(dir);
     const steps = hawb.steps || [];
     let done = 0;
-    while (done < wf.length && steps[done] && steps[done].actualAt) done++;
+    // 該当なし（na）の工程は通過済みとして扱う
+    while (done < wf.length && steps[done] && (steps[done].actualAt || steps[done].na)) done++;
+    let last = done - 1;
+    while (last >= 0 && steps[last] && steps[last].na) last--;
     const complete = wf.length > 0 && done === wf.length;
     const next = complete ? null : {
       idx: done, code: wf[done].code, name: wf[done].name,
@@ -59,14 +70,17 @@
     };
     return {
       done, total: wf.length, complete,
-      currentName: done ? wf[done - 1].name : '未着手',
+      currentName: last >= 0 ? wf[last].name : '未着手',
+      currentCode: last >= 0 ? wf[last].code : 'NONE',
+      lastIdx: last, // 最後に実績を入れた工程の位置（「1つ戻す」の対象）
       next,
       pct: wf.length ? Math.round((done / wf.length) * 100) : 0,
     };
   };
 
-  /** 工程1つの状態: done / overdue / soon / pending / none(予定日なし) */
+  /** 工程1つの状態: done / na(該当なし) / overdue / soon / pending / none(予定日なし) */
   M.stepState = function (step, today) {
+    if (step.na) return 'na';
     if (step.actualAt) return 'done';
     if (!step.plannedDate) return 'none';
     const d = U.diffDays(today, step.plannedDate);
@@ -75,7 +89,7 @@
     return 'pending';
   };
 
-  M.STATE_LABEL = { done: '完了', overdue: '遅延', soon: '期限間近', pending: '予定', none: '予定日未設定' };
+  M.STATE_LABEL = { done: '完了', na: '該当なし（直行便）', overdue: '遅延', soon: '期限間近', pending: '予定', none: '予定日未設定' };
 
   /**
    * HAWBの警告状況
@@ -109,9 +123,9 @@
   /** 最後に完了した工程を1つ戻す。戻した工程名を返す */
   M.revert = function (hawb, dir) {
     const p = M.progress(hawb, dir);
-    if (p.done === 0) return null;
-    hawb.steps[p.done - 1].actualAt = '';
-    return M.workflow(dir)[p.done - 1].name;
+    if (p.lastIdx < 0) return null;
+    hawb.steps[p.lastIdx].actualAt = '';
+    return M.workflow(dir)[p.lastIdx].name;
   };
 
   /**
@@ -122,7 +136,7 @@
     const base = { ETD: (etd || '').slice(0, 10), ETA: (eta || '').slice(0, 10) };
     M.workflow(dir).forEach((w, i) => {
       const b = base[w.base];
-      if (!b || !steps[i]) return;
+      if (!b || !steps[i] || steps[i].na) return;
       if (overwrite || !steps[i].plannedDate) steps[i].plannedDate = U.addDays(b, w.offset);
     });
     return steps;
@@ -197,7 +211,7 @@
       const wf = M.workflow(m.direction);
       const p = M.progress(h, m.direction);
       (h.steps || []).forEach((s, i) => {
-        if (!s.plannedDate || !wf[i]) return;
+        if (s.na || !s.plannedDate || !wf[i]) return;
         // 担当者の作業がない工程（仕立て・搭載など）は、前の工程が終わるまでタスクに出さない
         if (wf[i].hideWhileWaiting && !s.actualAt && i !== p.done) return;
         const key = M.stepTaskKey(h.id, s.code);

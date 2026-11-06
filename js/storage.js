@@ -80,7 +80,7 @@
         // 工程定義が変わっていても、保存済みデータを今の工程に揃える（同じコードの予定日・実績は引き継ぐ）
         db.hawbs.forEach((h) => {
           const m = mawbOf(h.mawbId);
-          if (m) M.normalizeSteps(h, m.direction);
+          if (m) M.normalizeSteps(h, m.direction, m);
         });
         persist();
       }
@@ -106,7 +106,7 @@
         m.updatedAt = now;
         db.mawbs[idx] = m;
         // 輸出入区分が変わった場合に備えて配下HAWBの工程を揃える
-        db.hawbs.forEach((h) => { if (h.mawbId === m.id) M.normalizeSteps(h, m.direction); });
+        db.hawbs.forEach((h) => { if (h.mawbId === m.id) M.normalizeSteps(h, m.direction, m); });
       } else {
         m.id = m.id || U.uid('m');
         m.createdAt = m.updatedAt = now;
@@ -135,7 +135,7 @@
       if (!parent) fail('親MAWBが見つかりません。');
       const dup = db.hawbs.find((x) => x.hawbNo === h.hawbNo && x.id !== h.id);
       if (dup) fail('HAWB番号「' + h.hawbNo + '」はすでに登録されています。');
-      M.normalizeSteps(h, parent.direction);
+      M.normalizeSteps(h, parent.direction, parent);
       const now = U.now();
       const idx = db.hawbs.findIndex((x) => x.id === h.id);
       if (idx >= 0) {
@@ -207,7 +207,7 @@
       });
       hawbs.forEach((h) => {
         const parent = mawbOf(h.mawbId);
-        if (parent) M.normalizeSteps(h, parent.direction);
+        if (parent) M.normalizeSteps(h, parent.direction, parent);
         const idx = db.hawbs.findIndex((x) => x.id === h.id);
         if (idx >= 0) db.hawbs[idx] = Object.assign({}, db.hawbs[idx], h, { updatedAt: now });
         else db.hawbs.push(Object.assign({ createdAt: now }, h, { updatedAt: now }));
