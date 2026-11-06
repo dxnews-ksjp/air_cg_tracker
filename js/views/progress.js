@@ -187,6 +187,7 @@
       '</div>' +
       filterBar(snap) +
       '<div class="list-tools"><span class="count">MAWB ' + groups.length + '件 / HAWB ' + hawbCount + '件</span>' +
+        UI.colorLegend() +
         '<span class="spacer"></span>' +
         '<button type="button" class="btn btn-sm" data-act="expand-all">すべて開く</button>' +
         '<button type="button" class="btn btn-sm" data-act="collapse-all">すべて閉じる</button></div>' +

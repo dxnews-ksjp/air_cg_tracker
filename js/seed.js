@@ -1,7 +1,7 @@
 /**
  * ダミーデータ（動作確認用）
- * 日付はすべて「今日」を基準に計算するので、いつ開いても
- * 遅延・期限間近・完了済みの案件が混ざった状態になります。
+ * 日付はすべて「今日 + SHIFT_DAYS日」を基準に計算します（ダミーデータに戻すたびに作り直し）。
+ * 実績は今日より未来には入れないので、基準日より先の工程は未完了のままになります。
  * 会社名・番号はすべて架空のものです。
  */
 (function (App) {
@@ -9,8 +9,13 @@
   const U = App.util;
   const M = App.model;
 
+  // ダミーデータ全体を何日後ろにずらすか（0にすると今日基準）
+  const SHIFT_DAYS = 7;
+  const base = () => U.addDays(U.today(), SHIFT_DAYS);
+  const day = (n) => U.addDays(base(), n);
+
   function at(dayOffset, hhmm) {
-    return U.addDays(U.today(), dayOffset) + 'T' + hhmm;
+    return day(dayOffset) + 'T' + hhmm;
   }
 
   function mkMawb(o) {
@@ -26,7 +31,7 @@
 
   /**
    * o.done     : 先頭から何工程を完了済みにするか
-   * o.override : { 工程コード: 今日からの日数 } で予定日を上書き
+   * o.override : { 工程コード: 基準日からの日数 } で予定日を上書き
    */
   function mkHawb(mawb, o) {
     const ts = U.now();
@@ -44,14 +49,14 @@
     M.autofillPlanned(h.steps, mawb.direction, mawb.etd, mawb.eta, true);
     Object.keys(o.override || {}).forEach((code) => {
       const s = h.steps.find((x) => x.code === code);
-      if (s) s.plannedDate = U.addDays(today, o.override[code]);
+      if (s) s.plannedDate = day(o.override[code]);
     });
     for (let i = 0; i < (o.done || 0) && i < h.steps.length; i++) {
       const s = h.steps[i];
       if (s.na) continue; // 直行便の経由地は該当なし
+      if (!s.plannedDate || s.plannedDate > today) break; // 予定日が今日より先の工程には実績を入れない
       const hour = String(Math.min(8 + i, 20)).padStart(2, '0'); // 後の工程ほど遅い時刻にする
-      // 実績は未来日にならないようにする
-      s.actualAt = s.plannedDate && s.plannedDate < today ? s.plannedDate + 'T' + hour + ':' + (i % 2 ? '30' : '05') : U.now();
+      s.actualAt = s.plannedDate < today ? s.plannedDate + 'T' + hour + ':' + (i % 2 ? '30' : '05') : U.now();
     }
     return h;
   }
@@ -75,7 +80,7 @@
 
       // ② 輸出：関西→シンガポール経由→ジャカルタ 3日前に出発済み（今日が請求予定・完了済み）
       const m2 = mkMawb({ prefix: '618', serial: '3307512', direction: 'EXPORT', airline: 'SQ', flightNo: 'SQ619',
-        flight2No: 'SQ956', flight2Date: U.addDays(U.today(), -3), transit: 'SIN',
+        flight2No: 'SQ956', flight2Date: day(-3), transit: 'SIN',
         origin: 'KIX', destination: 'CGK', etd: at(-3, '11:15'), eta: at(-3, '19:50') });
       mawbs.push(m2);
       hawbs.push(
@@ -107,12 +112,34 @@
           special: { reefer: true, reeferNote: '-20℃ 冷凍（ドライアイス UN1845 同梱）' } })
       );
 
+      // ⑤〜⑦ 輸出：1MAWB-1HAWB の案件
+      const m5 = mkMawb({ prefix: '131', serial: '4537720', direction: 'EXPORT', airline: 'JL', flightNo: 'JL407',
+        origin: 'NRT', destination: 'FRA', etd: at(3, '11:25'), eta: at(3, '17:40') });
+      mawbs.push(m5);
+      hawbs.push(mkHawb(m5, { hawbNo: 'TYO-24110401', shipper: '株式会社光陽オプティクス', consignee: 'Rhein Optik GmbH',
+        pieces: 3, weightKg: 85, volumeWeightKg: 120, commodity: '精密光学部品', assignee: '佐藤', done: 3 }));
+
+      const m6 = mkMawb({ prefix: '205', serial: '7781046', direction: 'EXPORT', airline: 'NH', flightNo: 'NH919',
+        origin: 'HND', destination: 'PVG', etd: at(1, '09:55'), eta: at(1, '12:30') });
+      mawbs.push(m6);
+      hawbs.push(mkHawb(m6, { hawbNo: 'TYO-24110402', shipper: '北海フーズ株式会社', consignee: 'Shanghai Ocean Foods Co., Ltd.',
+        pieces: 10, weightKg: 240, volumeWeightKg: 260, commodity: '冷凍水産品サンプル', assignee: '田中', done: 4,
+        special: { reefer: true, reeferNote: '-18℃以下 冷凍' } }));
+
+      const m7 = mkMawb({ prefix: '297', serial: '2210583', direction: 'EXPORT', airline: 'CI', flightNo: 'CI107',
+        flight2No: 'CI835', flight2Date: day(5), transit: 'TPE',
+        origin: 'NRT', destination: 'BKK', etd: at(5, '14:20'), eta: at(5, '23:05') });
+      mawbs.push(m7);
+      hawbs.push(mkHawb(m7, { hawbNo: 'TYO-24110403', shipper: '東邦セミコン株式会社', consignee: 'Siam Electronics Co., Ltd.',
+        pieces: 4, weightKg: 60, volumeWeightKg: 95, commodity: '半導体ウエハ', assignee: '鈴木', done: 2,
+        special: { other: true, otherNote: '高額品・衝撃注意' } }));
+
       const byNo = (no) => hawbs.find((h) => h.hawbNo === no);
       const ts = U.now();
       const manualTasks = [
-        { id: U.uid('t'), hawbId: byNo('TYO-24110101').id, date: U.today(), content: '荷主にMSDS・インボイス原本を催促', done: false, createdAt: ts, updatedAt: ts },
-        { id: U.uid('t'), hawbId: byNo('DOH-77810011').id, date: U.today(), content: '保冷倉庫の受け入れ枠を確認', done: false, createdAt: ts, updatedAt: ts },
-        { id: U.uid('t'), hawbId: byNo('TYO-24110301').id, date: U.addDays(U.today(), 1), content: '美術品梱包業者と集荷日を調整', done: false, createdAt: ts, updatedAt: ts },
+        { id: U.uid('t'), hawbId: byNo('TYO-24110101').id, date: day(0), content: '荷主にMSDS・インボイス原本を催促', done: false, createdAt: ts, updatedAt: ts },
+        { id: U.uid('t'), hawbId: byNo('DOH-77810011').id, date: day(0), content: '保冷倉庫の受け入れ枠を確認', done: false, createdAt: ts, updatedAt: ts },
+        { id: U.uid('t'), hawbId: byNo('TYO-24110301').id, date: day(1), content: '美術品梱包業者と集荷日を調整', done: false, createdAt: ts, updatedAt: ts },
       ];
       const taskMarks = [
         { taskKey: M.stepTaskKey(byNo('TYO-24110101').id, 'PICKUP'), color: 'RED', updatedAt: ts },

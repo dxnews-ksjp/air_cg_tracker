@@ -138,7 +138,7 @@
           '<td colspan="2" class="muted">— 直行便のため該当なし（MAWBに2ND FLTを入れると入力できます）</td></tr>';
       }
       return head + '<tr>' +
-        '<td class="num">' + (i + 1) + '</td><th scope="row">' + esc(w.name) + '</th>' +
+        '<td class="num">' + (i + 1) + '</td><th scope="row">' + esc(w.name) + (w.required ? '<em class="req">必須</em>' : '') + '</th>' +
         '<td><input type="date" name="pl_' + w.code + '" value="' + esc(s.plannedDate || '') + '" aria-label="' + esc(w.name) + ' 予定日"></td>' +
         '<td><input type="datetime-local" name="ac_' + w.code + '" value="' + esc(s.actualAt || '') + '" aria-label="' + esc(w.name) + ' 実績日時"></td>' +
         '</tr>';
@@ -205,7 +205,7 @@
           '<button type="button" class="btn btn-sm" data-autofill="blank">ETD/ETAから予定日を入力（空欄のみ）</button>' +
           '<button type="button" class="btn btn-sm" data-autofill="all">すべて上書き</button>' +
         '</div>' +
-        '<p class="field-hint">実績は通常、詳細画面の「完了にする」ボタンで自動記録されます。ここでは修正が必要なときだけ変更してください。日付は空欄でもかまいません（空欄の工程はグレー表示になり、後の工程に実績があればスキップ扱いになります）。</p>' +
+        '<p class="field-hint">実績は通常、詳細画面の「完了にする」ボタンで自動記録されます。ここでは修正が必要なときだけ変更してください。日付は空欄でもかまいません（「必須」の工程を除く。空欄の工程はグレー表示になり、後の工程に実績があればスキップ扱いになります）。</p>' +
         '<div class="table-scroll"><table class="steps-table"><thead><tr><th>#</th><th>工程</th><th>予定日</th><th>実績日時</th></tr></thead>' +
         '<tbody data-steps></tbody></table></div>' +
       '</fieldset>' +
@@ -278,6 +278,10 @@
         if (v[k] && !v[k + 'Note']) errors.push({ name: k + 'Note', msg: label + 'の内容を入力してください' });
       });
       const steps = curDir ? readSteps(form, curDir, curMawb()) : [];
+      steps.forEach((s, i) => {
+        const w = M.workflow(curDir)[i];
+        if (w && w.required && !s.na && !s.plannedDate) errors.push({ name: 'pl_' + s.code, msg: '「' + w.name + '」の予定日は必須です（通関と同じ日付を入れる場合は「ETD/ETAから予定日を入力」も使えます）' });
+      });
       showErrors(form, errors);
       if (errors.length) return;
 

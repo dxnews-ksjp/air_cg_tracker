@@ -26,6 +26,7 @@ App.config = {
    * block  : 工程のまとまり（BLOCKS のキー）。一覧・詳細で見出しを付けて区切ります
    * hideWhileWaiting : true の工程は、前の工程が終わるまで（＝前工程待ちの間）タスク管理に表示しない
    * naIfDirect : true の工程は、直行便（MAWBに2nd FLTがない）のとき「該当なし」になり、飛ばして進む
+   * required / defaultFrom : 予定日が必須の工程。空欄のデータは defaultFrom の工程と同じ予定日で補う
    */
   WORKFLOWS: {
     EXPORT: [
@@ -35,7 +36,7 @@ App.config = {
       { code: 'SPACE',        name: 'コンファーム', base: 'ETD', offset: -3, block: 'DOMESTIC' },
       { code: 'PICKUP',       name: '集荷',         base: 'ETD', offset: -2, block: 'DOMESTIC' },
       { code: 'EXP_CUSTOMS',  name: '通関',         base: 'ETD', offset: -1, block: 'DOMESTIC' },
-      { code: 'BUILD_UP',     name: '仕立て',       base: 'ETD', offset: -1, block: 'DOMESTIC', hideWhileWaiting: true },
+      { code: 'BUILD_UP',     name: '仕立て',       base: 'ETD', offset: -1, block: 'DOMESTIC', hideWhileWaiting: true, required: true, defaultFrom: 'EXP_CUSTOMS' },
       { code: 'LOADED',       name: '搭載',         base: 'ETD', offset: 0,  block: 'DOMESTIC', hideWhileWaiting: true },
       // 国際
       { code: 'DEPARTED',     name: '出発',         base: 'ETD', offset: 0,  block: 'INTERNATIONAL', hideWhileWaiting: true },
