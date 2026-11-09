@@ -208,16 +208,20 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 .m-partial { font-size: 12px; color: var(--muted); width: 100%; }
 .m-flags { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
 
-.hawb-list { padding: 4px 0 4px 28px; --hawb-cols: minmax(130px, .8fr) minmax(220px, 2fr) 80px minmax(140px, 1.2fr); }
+/* PC：HAWB情報（番号・輸出者/輸入者・担当・特殊）の右に工程の日付を1行で並べる */
+.hawb-list { padding: 4px 0 4px 28px; --hawb-cols: 124px minmax(120px, 190px) 44px 58px minmax(0, 1fr); }
 .hawb-head {
-  display: grid; grid-template-columns: var(--hawb-cols); gap: 12px;
-  padding: 6px 14px 4px 18px; margin-left: 4px; border-left: 2px solid #c9d2de;
+  display: grid; grid-template-columns: var(--hawb-cols); gap: 12px; align-items: end;
+  padding: 6px 14px 6px 18px; margin-left: 4px; border-left: 2px solid #c9d2de;
   font-size: 11px; font-weight: 700; color: var(--muted);
 }
+.head-strip { list-style: none; margin: 0; padding: 0; display: flex; }
+.head-strip li { flex: 1 1 0; min-width: 0; text-align: center; line-height: 1.25; padding: 0 1px; overflow-wrap: anywhere; }
+.head-strip li + li { margin-left: 3px; }
 .hawb-row {
   position: relative; display: grid; align-items: center; gap: 12px;
   grid-template-columns: var(--hawb-cols);
-  row-gap: 2px; padding: 4px 14px 6px 18px; border-bottom: 1px solid #edf0f4; cursor: pointer;
+  padding: 5px 14px 5px 18px; border-bottom: 1px solid #edf0f4; cursor: pointer;
   border-left: 2px solid #c9d2de; margin-left: 4px;
 }
 .hawb-row:last-child { border-bottom: 0; }
@@ -233,8 +237,12 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 .h-asg { font-size: 13px; }
 .hawb-row .muted-label { display: none; }
 /* 横並びの工程バー */
-.h-steps { grid-column: 1 / -1; overflow-x: auto; padding-bottom: 2px; }
-.step-strip { list-style: none; margin: 0; padding: 0; display: flex; min-width: max-content; }
+.h-steps { min-width: 0; }
+.h-steps .ss { min-width: 0; padding: 5px 2px; }
+.h-steps .ss-name { display: none; } /* PCでは工程名は見出しに表示 */
+.h-steps .ss-date { font-size: 12.5px; }
+.h-sp .sp-mini { width: 20px; height: 20px; font-size: 11px; }
+.step-strip { list-style: none; margin: 0; padding: 0; display: flex; }
 .ss {
   flex: 1 1 0; min-width: 76px; padding: 4px 3px; border-radius: 4px;
   border: 1px solid var(--ss-line); background: var(--ss-bg); color: var(--ss-text);
@@ -439,13 +447,17 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
   .m-main { grid-column: 2; grid-row: 1; } .m-flights { grid-column: 3; grid-row: 1; } .m-act { grid-column: 4; grid-row: 1; }
   .m-sched { grid-column: 2; grid-row: 2; } .m-sum { grid-column: 3; grid-row: 2; }
   .m-flags { grid-column: 4; grid-row: 2; justify-content: flex-end; }
+}
+
+/* 狭い画面：工程は下の段に、工程名入りのマスで表示（横スクロール） */
+@media (max-width: 1100px) {
   .hawb-head { display: none; }
-  .hawb-list { --hawb-cols: minmax(120px, .8fr) minmax(160px, 1.6fr) 80px minmax(130px, 1fr); }
+  .hawb-list { --hawb-cols: minmax(120px, .8fr) minmax(160px, 1.6fr) 80px minmax(60px, .6fr); }
   .hawb-row { row-gap: 4px; }
-  .h-no { grid-column: 1; grid-row: 1; } .h-party { grid-column: 2; grid-row: 1; }
-  .h-asg { grid-column: 3; grid-row: 1; } .h-sp { grid-column: 4; grid-row: 1; }
-  .h-sp:empty { display: none; }
-  .h-steps { grid-column: 1 / 5; grid-row: 2; }
+  .h-steps { grid-column: 1 / -1; grid-row: 2; overflow-x: auto; padding-bottom: 2px; }
+  .h-steps .step-strip { min-width: max-content; }
+  .h-steps .ss { min-width: 76px; padding: 4px 3px; }
+  .h-steps .ss-name { display: inline; }
   .hawb-row .muted-label { display: inline; }
 }
 

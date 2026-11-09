@@ -148,9 +148,12 @@
 
   // HAWB行の列見出し（PC表示のみ）
   // HAWB行の列見出し（PC表示のみ）。相手先の列名は輸出入区分で切り替える
+  // 右側に工程名を並べ、HAWB行のマスには日付だけを表示する
   const hawbHead = (dir) => '<div class="hawb-head" aria-hidden="true">' +
-    ['HAWB番号', M.partyLabel(dir), '担当', '特殊貨物']
-      .map((t) => '<span>' + t + '</span>').join('') + '</div>';
+    ['HAWB番号', M.partyLabel(dir), '担当', '特殊']
+      .map((t) => '<span>' + t + '</span>').join('') +
+    '<ol class="head-strip">' + M.workflow(dir).filter((w) => !w.hideInList)
+      .map((w) => '<li>' + esc(w.name) + '</li>').join('') + '</ol></div>';
 
   function hawbRow(x, m, today) {
     const h = x.h, p = x.p, a = x.a;
@@ -160,7 +163,7 @@
       '<div class="h-no"><a href="#/hawb/' + h.id + '">' + esc(h.hawbNo) + '</a></div>' +
       '<div class="h-party" title="' + esc(party) + '">' + lbl(M.partyLabel(m.direction)) + esc(party) + '</div>' +
       '<div class="h-asg">' + lbl('担当') + esc(h.assignee || '—') + '</div>' +
-      '<div class="h-sp">' + UI.specialLabels(h) + '</div>' +
+      '<div class="h-sp">' + UI.specialIcons(h.special || {}) + '</div>' +
       '<div class="h-steps">' + UI.stepStrip(h, m.direction, today) + '</div>' +
       '</div>';
   }
