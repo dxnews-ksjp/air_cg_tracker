@@ -125,6 +125,10 @@ small { font-size: 12px; color: var(--text-2); }
 .sp-dg { background: var(--dg-soft); color: var(--dg); } .sp-dg .sp-icon { background: var(--dg); }
 .sp-reefer { background: var(--reefer-soft); color: var(--reefer); } .sp-reefer .sp-icon { background: var(--reefer); }
 .sp-other { background: var(--other-soft); color: var(--other); } .sp-other .sp-icon { background: var(--other); }
+.sp-tag { display: inline-block; padding: 2px 9px; border-radius: 6px; font-size: 12px; font-weight: 700; line-height: 1.5; white-space: nowrap; border: 1px solid transparent; }
+.sp-tag.sp-dg { background: var(--dg-soft); color: var(--dg); border-color: #f1b5b5; }
+.sp-tag.sp-reefer { background: var(--reefer-soft); color: var(--reefer); border-color: #b3cff0; }
+.sp-tag.sp-other { background: var(--other-soft); color: var(--other); border-color: #d2c2ee; }
 .sp-mini { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; color: #fff; font-size: 12px; font-weight: 700; margin-right: 3px; }
 .sp-mini.sp-dg { background: var(--dg); } .sp-mini.sp-reefer { background: var(--reefer); } .sp-mini.sp-other { background: var(--other); }
 .sp-full .sp-label { display: flex; width: 100%; margin: 0 0 6px; border-radius: 6px; padding: 6px 8px; white-space: normal; }

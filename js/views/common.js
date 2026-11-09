@@ -25,6 +25,12 @@
   };
 
   /** MAWB用：配下にある特殊貨物の種類をまとめて小さく表示 */
+  /** MAWB用：配下にある特殊貨物の種類を「危険品」「保冷品」などの角丸ラベルで表示 */
+  UI.specialTags = function (specials) {
+    return cfg.SPECIALS.filter((s) => specials[s.key]).map((s) =>
+      '<span class="sp-tag ' + s.cls + '" title="配下に' + esc(s.label) + 'あり">' + esc(s.label) + '</span>').join('');
+  };
+
   UI.specialIcons = function (specials) {
     return cfg.SPECIALS.filter((s) => specials[s.key]).map((s) =>
       '<span class="sp-mini ' + s.cls + '" title="配下に' + esc(s.label) + 'あり">' + s.short + '</span>').join('');

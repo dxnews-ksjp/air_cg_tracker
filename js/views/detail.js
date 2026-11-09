@@ -201,7 +201,7 @@
           ['最も遅れている工程', s.count ? (s.allDone ? '全件完了' : s.slowest) : ''],
           ['遅延', s.overdueCount ? '<span class="alert-badge overdue">⚠ ' + s.overdueCount + '件（最大' + s.maxOverdueDays + '日）</span>' : 'なし', true],
           ['期限間近', s.soonCount ? '<span class="alert-badge soon">⏰ ' + s.soonCount + '件</span>' : 'なし', true],
-          ['特殊貨物', UI.specialIcons(s.specials) || 'なし', true],
+          ['特殊貨物', UI.specialTags(s.specials) || 'なし', true],
         ]) + '</section>' +
       '</div>' +
       '<section class="card"><h2>配下のHAWB</h2>' +
