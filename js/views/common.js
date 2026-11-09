@@ -97,7 +97,8 @@
         '<span class="ss-name">' + esc(w.name) + '</span><span class="ss-date">' + date + '</span></li>';
     };
     // 一覧ではブロック（国内・国際など）の見出しは付けずに、工程を1列に並べる
-    return '<ol class="step-strip" aria-label="工程">' + wf.map((w, i) => item(w, i)).join('') + '</ol>';
+    // hideInList の工程（受注）は一覧には出さない（HAWB詳細には表示）
+    return '<ol class="step-strip" aria-label="工程">' + wf.map((w, i) => (w.hideInList ? '' : item(w, i))).join('') + '</ol>';
   };
 
   /** 色分けの凡例 */

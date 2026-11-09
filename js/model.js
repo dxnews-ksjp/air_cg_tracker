@@ -240,7 +240,7 @@
       (h.steps || []).forEach((s, i) => {
         if (s.na || !s.plannedDate || !wf[i]) return;
         if (!s.actualAt && i < p.done) return; // スキップした工程はタスクにしない
-        // 担当者の作業がない工程（仕立て・搭載など）は、前の工程が終わるまでタスクに出さない
+        // 担当者の作業がない工程（仕立て・出発など）は、前の工程が終わるまでタスクに出さない
         if (wf[i].hideWhileWaiting && !s.actualAt && i !== p.done) return;
         const key = M.stepTaskKey(h.id, s.code);
         place({

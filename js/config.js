@@ -27,17 +27,17 @@ App.config = {
    * hideWhileWaiting : true の工程は、前の工程が終わるまで（＝前工程待ちの間）タスク管理に表示しない
    * naIfDirect : true の工程は、直行便（MAWBに2nd FLTがない）のとき「該当なし」になり、飛ばして進む
    * required / defaultFrom : 予定日が必須の工程。空欄のデータは defaultFrom の工程と同じ予定日で補う
+   * hideInList : true の工程は、進捗管理の一覧（工程バー）に表示しない（HAWB詳細には表示）
    */
   WORKFLOWS: {
     EXPORT: [
       // 国内
-      { code: 'ORDER',        name: '受注',         base: 'ETD', offset: -5, block: 'DOMESTIC' },
-      { code: 'BOOKING',      name: 'ブッキング',   base: 'ETD', offset: -4, block: 'DOMESTIC' },
+      { code: 'ORDER',        name: '受注',         base: 'ETD', offset: -5, block: 'DOMESTIC', hideInList: true },
       { code: 'SPACE',        name: 'コンファーム', base: 'ETD', offset: -3, block: 'DOMESTIC' },
       { code: 'PICKUP',       name: '集荷',         base: 'ETD', offset: -2, block: 'DOMESTIC' },
       { code: 'EXP_CUSTOMS',  name: '通関',         base: 'ETD', offset: -1, block: 'DOMESTIC' },
       { code: 'BUILD_UP',     name: '仕立て',       base: 'ETD', offset: -1, block: 'DOMESTIC', hideWhileWaiting: true, required: true, defaultFrom: 'EXP_CUSTOMS' },
-      { code: 'LOADED',       name: '搭載',         base: 'ETD', offset: 0,  block: 'DOMESTIC', hideWhileWaiting: true },
+      { code: 'LOADED',       name: 'FHL送信',      base: 'ETD', offset: 0,  block: 'DOMESTIC' },
       // 国際
       { code: 'DEPARTED',     name: '出発',         base: 'ETD', offset: 0,  block: 'INTERNATIONAL', hideWhileWaiting: true },
       { code: 'TRANSIT',      name: '経由地',       base: 'ETD', offset: 0,  block: 'INTERNATIONAL', hideWhileWaiting: true, naIfDirect: true },
