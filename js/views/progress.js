@@ -141,7 +141,7 @@
         (s.count ? '' : '<span class="muted">HAWB未登録</span>') +
         (partial ? '<span class="m-partial">（' + g.all.length + '件中' + g.shown.length + '件表示）</span>' : '') +
       '</div>' +
-      '<div class="m-flags">' + UI.specialIcons(s.specials) + alert + '</div>' +
+      '<div class="m-flags">' + UI.specialTags(s.specials) + alert + '</div>' +
       '<div class="m-act"><button type="button" class="btn btn-sm" data-act="add-hawb" data-id="' + m.id + '">＋HAWB</button></div>' +
       '</div>';
   }
