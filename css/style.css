@@ -208,7 +208,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 .m-partial { font-size: 12px; color: var(--muted); width: 100%; }
 .m-flags { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
 
-.hawb-list { padding: 4px 0 4px 28px; --hawb-cols: minmax(130px, .8fr) minmax(200px, 1.6fr) minmax(160px, 1.3fr) minmax(120px, .8fr) 70px minmax(130px, 1fr); }
+.hawb-list { padding: 4px 0 4px 28px; --hawb-cols: minmax(130px, .8fr) minmax(220px, 2fr) 80px minmax(140px, 1.2fr); }
 .hawb-head {
   display: grid; grid-template-columns: var(--hawb-cols); gap: 12px;
   padding: 6px 14px 4px 18px; margin-left: 4px; border-left: 2px solid #c9d2de;
@@ -230,8 +230,6 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 .hawb-row > div:not(.h-steps) { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .hawb-row .sp-label { margin-top: 0; margin-bottom: 0; }
 .hawb-row .alert-badge { padding: 1px 8px; }
-.h-com { font-size: 13px; color: var(--text-2); }
-.h-qty { font-variant-numeric: tabular-nums; font-size: 13px; }
 .h-asg { font-size: 13px; }
 .hawb-row .muted-label { display: none; }
 /* 横並びの工程バー */
@@ -442,13 +440,12 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
   .m-sched { grid-column: 2; grid-row: 2; } .m-sum { grid-column: 3; grid-row: 2; }
   .m-flags { grid-column: 4; grid-row: 2; justify-content: flex-end; }
   .hawb-head { display: none; }
-  .hawb-list { --hawb-cols: minmax(120px, .8fr) minmax(160px, 1.4fr) minmax(130px, 1fr) minmax(120px, .8fr); }
+  .hawb-list { --hawb-cols: minmax(120px, .8fr) minmax(160px, 1.6fr) 80px minmax(130px, 1fr); }
   .hawb-row { row-gap: 4px; }
-  .h-no { grid-column: 1; grid-row: 1; } .h-party { grid-column: 2; grid-row: 1; } .h-com { grid-column: 3; grid-row: 1; }
-  .h-qty { grid-column: 4; grid-row: 1; }
-  .h-asg { grid-column: 1; grid-row: 2; } .h-sp { grid-column: 2 / 5; grid-row: 2; }
+  .h-no { grid-column: 1; grid-row: 1; } .h-party { grid-column: 2; grid-row: 1; }
+  .h-asg { grid-column: 3; grid-row: 1; } .h-sp { grid-column: 4; grid-row: 1; }
   .h-sp:empty { display: none; }
-  .h-steps { grid-column: 1 / 5; grid-row: 3; }
+  .h-steps { grid-column: 1 / 5; grid-row: 2; }
   .hawb-row .muted-label { display: inline; }
 }
 

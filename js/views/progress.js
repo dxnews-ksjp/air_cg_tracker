@@ -149,20 +149,16 @@
   // HAWB行の列見出し（PC表示のみ）
   // HAWB行の列見出し（PC表示のみ）。相手先の列名は輸出入区分で切り替える
   const hawbHead = (dir) => '<div class="hawb-head" aria-hidden="true">' +
-    ['HAWB番号', M.partyLabel(dir), '品名', '個数 / 重量', '担当', '特殊貨物']
+    ['HAWB番号', M.partyLabel(dir), '担当', '特殊貨物']
       .map((t) => '<span>' + t + '</span>').join('') + '</div>';
 
   function hawbRow(x, m, today) {
     const h = x.h, p = x.p, a = x.a;
-    const has = (v) => v !== null && v !== undefined && v !== '';
-    const qty = (has(h.pieces) ? U.fmtNum(h.pieces, 0) + 'pcs' : '-') + ' / ' + (has(h.weightKg) ? U.fmtNum(h.weightKg) + 'kg' : '-');
     const lbl = (t) => '<span class="muted-label">' + t + '</span>';
     const party = M.partyName(h, m.direction) || '';
     return '<div class="hawb-row' + (p.complete ? ' is-done' : '') + '" data-href="#/hawb/' + h.id + '">' +
       '<div class="h-no"><a href="#/hawb/' + h.id + '">' + esc(h.hawbNo) + '</a></div>' +
       '<div class="h-party" title="' + esc(party) + '">' + lbl(M.partyLabel(m.direction)) + esc(party) + '</div>' +
-      '<div class="h-com" title="' + esc(h.commodity || '') + '">' + lbl('品名') + esc(h.commodity || '—') + '</div>' +
-      '<div class="h-qty">' + lbl('個数/重量') + qty + '</div>' +
       '<div class="h-asg">' + lbl('担当') + esc(h.assignee || '—') + '</div>' +
       '<div class="h-sp">' + UI.specialLabels(h) + '</div>' +
       '<div class="h-steps">' + UI.stepStrip(h, m.direction, today) + '</div>' +
