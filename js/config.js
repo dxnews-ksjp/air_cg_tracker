@@ -33,12 +33,11 @@ App.config = {
     EXPORT: [
       // 国内
       { code: 'ORDER',        name: '受注',         base: 'ETD', offset: -5, block: 'DOMESTIC', hideInList: true },
-      { code: 'BOOKING',      name: 'ブッキング',   base: 'ETD', offset: -4, block: 'DOMESTIC' },
       { code: 'SPACE',        name: 'コンファーム', base: 'ETD', offset: -3, block: 'DOMESTIC' },
       { code: 'PICKUP',       name: '集荷',         base: 'ETD', offset: -2, block: 'DOMESTIC' },
       { code: 'EXP_CUSTOMS',  name: '通関',         base: 'ETD', offset: -1, block: 'DOMESTIC' },
       { code: 'BUILD_UP',     name: '仕立て',       base: 'ETD', offset: -1, block: 'DOMESTIC', hideWhileWaiting: true, required: true, defaultFrom: 'EXP_CUSTOMS' },
-      { code: 'LOADED',       name: '搭載',         base: 'ETD', offset: 0,  block: 'DOMESTIC', hideWhileWaiting: true },
+      { code: 'LOADED',       name: 'FHL送信',      base: 'ETD', offset: 0,  block: 'DOMESTIC' },
       // 国際
       { code: 'DEPARTED',     name: '出発',         base: 'ETD', offset: 0,  block: 'INTERNATIONAL', hideWhileWaiting: true },
       { code: 'TRANSIT',      name: '経由地',       base: 'ETD', offset: 0,  block: 'INTERNATIONAL', hideWhileWaiting: true, naIfDirect: true },

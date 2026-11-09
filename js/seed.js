@@ -71,11 +71,11 @@
       mawbs.push(m1);
       hawbs.push(
         mkHawb(m1, { hawbNo: 'TYO-24110101', shipper: '株式会社みなとエナジー', consignee: 'Sunset Battery Supply LLC',
-          pieces: 12, weightKg: 180, volumeWeightKg: 160, commodity: 'リチウムイオン電池（機器組込）', assignee: '佐藤', done: 3,
+          pieces: 12, weightKg: 180, volumeWeightKg: 160, commodity: 'リチウムイオン電池（機器組込）', assignee: '佐藤', done: 2,
           special: { dg: true, dgNote: 'UN3481 Class 9 / PI967 Section II' },
           memo: '荷主からのMSDS未着。集荷前に要確認。' }),
         mkHawb(m1, { hawbNo: 'TYO-24110102', shipper: '東和精機株式会社', consignee: 'Pacific Instruments Inc.',
-          pieces: 6, weightKg: 420, volumeWeightKg: 515, commodity: '精密測定機器', assignee: '鈴木', done: 5 })
+          pieces: 6, weightKg: 420, volumeWeightKg: 515, commodity: '精密測定機器', assignee: '鈴木', done: 4 })
       );
 
       // ② 輸出：関西→シンガポール経由→ジャカルタ 3日前に出発済み（今日が請求予定・完了済み）
@@ -85,9 +85,9 @@
       mawbs.push(m2);
       hawbs.push(
         mkHawb(m2, { hawbNo: 'OSA-24102801', shipper: '浪速オートパーツ株式会社', consignee: 'PT Nusantara Motor Parts',
-          pieces: 20, weightKg: 860, volumeWeightKg: 790, commodity: '自動車部品（ブレーキパッド）', assignee: '高橋', done: 10 }),
+          pieces: 20, weightKg: 860, volumeWeightKg: 790, commodity: '自動車部品（ブレーキパッド）', assignee: '高橋', done: 9 }),
         mkHawb(m2, { hawbNo: 'OSA-24102802', shipper: '株式会社関西テクノ', consignee: 'PT Jawa Semikon Indonesia',
-          pieces: 1, weightKg: 1250, volumeWeightKg: 1480, commodity: '半導体製造装置部品', assignee: '高橋', done: 12,
+          pieces: 1, weightKg: 1250, volumeWeightKg: 1480, commodity: '半導体製造装置部品', assignee: '高橋', done: 11,
           special: { other: true, otherNote: '重量物（1ピース1.25t）・フォークリフト荷役' } })
       );
 
@@ -117,13 +117,13 @@
         origin: 'NRT', destination: 'FRA', etd: at(3, '11:25'), eta: at(3, '17:40') });
       mawbs.push(m5);
       hawbs.push(mkHawb(m5, { hawbNo: 'TYO-24110401', shipper: '株式会社光陽オプティクス', consignee: 'Rhein Optik GmbH',
-        pieces: 3, weightKg: 85, volumeWeightKg: 120, commodity: '精密光学部品', assignee: '佐藤', done: 3 }));
+        pieces: 3, weightKg: 85, volumeWeightKg: 120, commodity: '精密光学部品', assignee: '佐藤', done: 2 }));
 
       const m6 = mkMawb({ prefix: '205', serial: '7781046', direction: 'EXPORT', airline: 'NH', flightNo: 'NH919',
         origin: 'HND', destination: 'PVG', etd: at(1, '09:55'), eta: at(1, '12:30') });
       mawbs.push(m6);
       hawbs.push(mkHawb(m6, { hawbNo: 'TYO-24110402', shipper: '北海フーズ株式会社', consignee: 'Shanghai Ocean Foods Co., Ltd.',
-        pieces: 10, weightKg: 240, volumeWeightKg: 260, commodity: '冷凍水産品サンプル', assignee: '田中', done: 4,
+        pieces: 10, weightKg: 240, volumeWeightKg: 260, commodity: '冷凍水産品サンプル', assignee: '田中', done: 3,
         special: { reefer: true, reeferNote: '-18℃以下 冷凍' } }));
 
       const m7 = mkMawb({ prefix: '297', serial: '2210583', direction: 'EXPORT', airline: 'CI', flightNo: 'CI107',
@@ -131,7 +131,7 @@
         origin: 'NRT', destination: 'BKK', etd: at(5, '14:20'), eta: at(5, '23:05') });
       mawbs.push(m7);
       hawbs.push(mkHawb(m7, { hawbNo: 'TYO-24110403', shipper: '東邦セミコン株式会社', consignee: 'Siam Electronics Co., Ltd.',
-        pieces: 4, weightKg: 60, volumeWeightKg: 95, commodity: '半導体ウエハ', assignee: '鈴木', done: 2,
+        pieces: 4, weightKg: 60, volumeWeightKg: 95, commodity: '半導体ウエハ', assignee: '鈴木', done: 1,
         special: { other: true, otherNote: '高額品・衝撃注意' } }));
 
       const byNo = (no) => hawbs.find((h) => h.hawbNo === no);
