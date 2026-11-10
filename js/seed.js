@@ -134,6 +134,27 @@
         pieces: 4, weightKg: 60, volumeWeightKg: 95, commodity: '半導体ウエハ', assignee: '鈴木', done: 1,
         special: { other: true, otherNote: '高額品・衝撃注意' } }));
 
+      // ⑧〜⑩ 1MAWB-1HAWB の案件（輸出2件・輸入1件）
+      const m8 = mkMawb({ prefix: '176', serial: '3348107', direction: 'EXPORT', airline: 'EK', flightNo: 'EK319',
+        origin: 'NRT', destination: 'DXB', etd: at(2, '22:30'), eta: at(3, '05:10') });
+      mawbs.push(m8);
+      hawbs.push(mkHawb(m8, { hawbNo: 'TYO-24110501', shipper: '中央電装株式会社', consignee: 'Desert Auto Parts Trading LLC',
+        pieces: 8, weightKg: 210, volumeWeightKg: 240, commodity: '自動車用センサー', assignee: '高橋', done: 2 }));
+
+      const m9 = mkMawb({ prefix: '160', serial: '5091236', direction: 'EXPORT', airline: 'CX', flightNo: 'CX505',
+        flight2No: 'CX767', flight2Date: day(4), transit: 'HKG',
+        origin: 'NRT', destination: 'SGN', etd: at(4, '10:05'), eta: at(4, '17:50') });
+      mawbs.push(m9);
+      hawbs.push(mkHawb(m9, { hawbNo: 'TYO-24110502', shipper: '株式会社さくらテキスタイル', consignee: 'Saigon Garment Co., Ltd.',
+        pieces: 25, weightKg: 320, volumeWeightKg: 410, commodity: 'アパレル生地サンプル', assignee: '田中', done: 2 }));
+
+      const m10 = mkMawb({ prefix: '074', serial: '6627315', direction: 'IMPORT', airline: 'KL', flightNo: 'KL861',
+        origin: 'AMS', destination: 'NRT', etd: at(1, '14:40'), eta: at(2, '09:15') });
+      mawbs.push(m10);
+      hawbs.push(mkHawb(m10, { hawbNo: 'AMS-90120011', shipper: 'Lowlands Medical Devices B.V.', consignee: '株式会社ケアテック東京',
+        pieces: 6, weightKg: 95, volumeWeightKg: 130, commodity: '医療機器（バッテリー内蔵）', assignee: '佐藤', done: 1,
+        special: { dg: true, dgNote: 'UN3481 Class 9 リチウムイオン電池（機器組込）' } }));
+
       const byNo = (no) => hawbs.find((h) => h.hawbNo === no);
       const ts = U.now();
       const manualTasks = [
