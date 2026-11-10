@@ -84,8 +84,11 @@ small { font-size: 12px; color: var(--text-2); }
   color: #13294b; font-weight: 700; font-size: 15px;
 }
 .tab:hover { background: #d0e1f7; color: #0b1a33; text-decoration: none; }
-/* 選択中：少し濃いブルーの背景＋左端にネイビーの線 */
-.tab.active { background: #c2d7f3; color: #0b1a33; box-shadow: inset 4px 0 0 #13294b; }
+/* 選択中：少し濃いブルーの背景＋左端に太めのネイビーの直線（左側の角は丸めずに真っ直ぐ） */
+.tab.active {
+  background: #c2d7f3; color: #0b1a33;
+  border-radius: 0 6px 6px 0; box-shadow: inset 7px 0 0 #13294b; padding-left: 17px;
+}
 .tab-badges { display: inline-flex; flex-wrap: wrap; gap: 4px; }
 .tb { font-size: 11px; background: #13294b; color: #fff; padding: 1px 6px; border-radius: 10px; font-weight: 600; white-space: nowrap; }
 .tb-light { background: #fff; color: #13294b; border: 1px solid #b7c9e3; }
