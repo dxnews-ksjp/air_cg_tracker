@@ -177,7 +177,7 @@
 
     el.innerHTML =
       '<div class="page-head">' +
-        '<h1>進捗管理</h1>' +
+        '<h1>進捗管理</h1>' + UI.disclaimer() +
         '<div class="actions">' +
           '<button type="button" class="btn btn-primary" data-act="new-mawb">＋ MAWB登録</button>' +
           '<button type="button" class="btn btn-primary" data-act="new-hawb">＋ HAWB登録</button>' +
