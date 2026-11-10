@@ -67,16 +67,17 @@ small { font-size: 12px; color: var(--text-2); }
 .logo { font-size: 20px; }
 .brand-name { font-weight: 700; font-size: 16px; letter-spacing: .02em; }
 .demo-tag { font-size: 11px; background: #f0b429; color: #3d2a00; padding: 1px 6px; border-radius: 4px; font-weight: 700; }
-/* 切り替えタブ：ロゴから少し右に離し、暗めの赤のボタンで目立たせる */
+/* 切り替えタブ：ロゴから少し右に離し、暗めの紫のボタンで目立たせる */
 .tabs { display: flex; gap: 8px; align-items: center; margin-left: 48px; padding: 6px 0; }
 .tab {
   display: flex; align-items: center; gap: 8px;
   padding: 8px 18px; border-radius: 8px;
-  background: #7f1d1d; color: #f6dada; font-weight: 700; font-size: 15px;
-  border: 1px solid #a33a3a; box-shadow: 0 1px 2px rgba(0, 0, 0, .25);
+  background: #4b2a6e; color: #e9dcf7; font-weight: 700; font-size: 15px;
+  border: 2px solid #6a4a8e; box-shadow: 0 1px 2px rgba(0, 0, 0, .25);
 }
-.tab:hover { background: #962323; color: #fff; text-decoration: none; }
-.tab.active { background: #b02a2a; color: #fff; border-color: #f0b429; box-shadow: inset 0 -3px 0 #f0b429, 0 1px 3px rgba(0, 0, 0, .3); }
+.tab:hover { background: #5c3486; color: #fff; text-decoration: none; }
+/* 選択中：少し明るい紫＋周囲を一定の太さの黄色線で囲む */
+.tab.active { background: #6b3fa0; color: #fff; border-color: #f0b429; box-shadow: 0 1px 3px rgba(0, 0, 0, .3); }
 .tab-badges { display: inline-flex; gap: 4px; }
 .tb { font-size: 11px; background: rgba(0, 0, 0, .28); color: #fff; padding: 1px 6px; border-radius: 10px; font-weight: 600; white-space: nowrap; }
 .tb-light { background: rgba(255, 255, 255, .18); }
