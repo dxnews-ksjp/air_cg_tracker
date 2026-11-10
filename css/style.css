@@ -67,21 +67,29 @@ small { font-size: 12px; color: var(--text-2); }
 .logo { font-size: 20px; }
 .brand-name { font-weight: 700; font-size: 16px; letter-spacing: .02em; }
 .demo-tag { font-size: 11px; background: #f0b429; color: #3d2a00; padding: 1px 6px; border-radius: 4px; font-weight: 700; }
-/* 切り替えタブ：ロゴから少し右に離し、暗めの紫のボタンで目立たせる */
-.tabs { display: flex; gap: 8px; align-items: center; margin-left: 48px; padding: 6px 0; }
-.tab {
-  display: flex; align-items: center; gap: 8px;
-  padding: 8px 18px; border-radius: 8px;
-  background: #4b2a6e; color: #e9dcf7; font-weight: 700; font-size: 15px;
-  border: 2px solid #6a4a8e; box-shadow: 0 1px 2px rgba(0, 0, 0, .25);
+/* ---------- 画面左端のメニュー（淡いブルーの背景に濃いネイビーの文字） ---------- */
+:root { --header-h: 51px; --side-w: 200px; }
+.layout { display: flex; align-items: flex-start; }
+.layout-main { flex: 1; min-width: 0; }
+.side-nav {
+  flex: 0 0 var(--side-w); width: var(--side-w);
+  position: sticky; top: var(--header-h); height: calc(100vh - var(--header-h)); overflow-y: auto;
+  background: #e3edfa; border-right: 1px solid #c5d7f0; padding: 16px 10px;
 }
-.tab:hover { background: #5c3486; color: #fff; text-decoration: none; }
-/* 選択中：少し明るい紫＋周囲を一定の太さの黄色線で囲む */
-.tab.active { background: #6b3fa0; color: #fff; border-color: #f0b429; box-shadow: 0 1px 3px rgba(0, 0, 0, .3); }
-.tab-badges { display: inline-flex; gap: 4px; }
-.tb { font-size: 11px; background: rgba(0, 0, 0, .28); color: #fff; padding: 1px 6px; border-radius: 10px; font-weight: 600; white-space: nowrap; }
-.tb-light { background: rgba(255, 255, 255, .18); }
-.tb-overdue { background: #fff; color: #b71c1c; }
+.side-nav-title { font-size: 11px; font-weight: 700; color: #4a5f80; letter-spacing: .08em; padding: 0 10px 8px; }
+.tabs { display: flex; flex-direction: column; gap: 4px; }
+.tab {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 4px 8px;
+  padding: 10px 12px; border-radius: 6px;
+  color: #13294b; font-weight: 700; font-size: 15px;
+}
+.tab:hover { background: #d0e1f7; color: #0b1a33; text-decoration: none; }
+/* 選択中：少し濃いブルーの背景＋左端にネイビーの線 */
+.tab.active { background: #c2d7f3; color: #0b1a33; box-shadow: inset 4px 0 0 #13294b; }
+.tab-badges { display: inline-flex; flex-wrap: wrap; gap: 4px; }
+.tb { font-size: 11px; background: #13294b; color: #fff; padding: 1px 6px; border-radius: 10px; font-weight: 600; white-space: nowrap; }
+.tb-light { background: #fff; color: #13294b; border: 1px solid #b7c9e3; }
+.tb-overdue { background: #c62828; color: #fff; }
 .today-label { margin-left: auto; font-size: 12px; color: #c9d6ea; }
 
 .container { max-width: 1440px; margin: 0 auto; padding: 20px; outline: none; }
@@ -465,7 +473,7 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
 }
 
 /* 狭い画面：工程は下の段に、工程名入りのマスで表示（横スクロール） */
-@media (max-width: 1100px) {
+@media (max-width: 1300px) {
   .hawb-head { display: none; }
   .hawb-list { --hawb-cols: minmax(120px, .8fr) minmax(160px, 1.6fr) 80px minmax(60px, .6fr); }
   .hawb-row { row-gap: 4px; }
@@ -481,13 +489,21 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
   .detail-grid > .col-main, .detail-grid > .col-side { min-width: 0; }
 }
 
+/* 画面が狭いとき：左のメニューをヘッダーの下に横並びで表示 */
+@media (max-width: 900px) {
+  .layout { display: block; }
+  .side-nav { position: static; width: auto; height: auto; padding: 8px 12px; border-right: 0; border-bottom: 1px solid #c5d7f0; }
+  .side-nav-title { display: none; }
+  .tabs { flex-direction: row; }
+  .tab { flex: 1; justify-content: center; }
+}
+
 @media (max-width: 720px) {
   body { font-size: 15px; }
   .app-header { padding: 0 12px; gap: 0 12px; }
   .brand { padding: 8px 0 4px; }
   .today-label { margin-left: auto; }
-  .tabs { width: 100%; order: 3; margin-left: 0; padding: 4px 0 8px; }
-  .tab { flex: 1; justify-content: center; padding: 8px 6px; font-size: 14px; flex-wrap: wrap; gap: 4px; }
+  .tab { justify-content: center; padding: 8px 6px; font-size: 14px; }
   .container { padding: 12px 16px; }
   .page-head h1 { font-size: 18px; }
   .page-head .actions { margin-left: 0; width: 100%; }

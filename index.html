@@ -15,20 +15,29 @@
       <span class="brand-name">航空貨物 進捗管理</span>
       <span class="demo-tag">デモ版</span>
     </div>
-    <nav class="tabs" aria-label="メインメニュー">
-      <a class="tab" data-tab="progress" href="#/progress">進捗管理</a>
-      <a class="tab" data-tab="tasks" href="#/tasks">タスク管理 <span id="task-badge" class="tab-badges"></span></a>
-    </nav>
     <span id="today-label" class="today-label"></span>
   </header>
 
-  <main id="main" class="container" tabindex="-1">
-    <p class="muted">読み込み中…</p>
-  </main>
+  <div class="layout">
+    <!-- 画面左端のメニュー（スマホではヘッダーの下に横並びで表示） -->
+    <aside class="side-nav">
+      <div class="side-nav-title">メニュー</div>
+      <nav class="tabs" aria-label="メインメニュー">
+        <a class="tab" data-tab="progress" href="#/progress"><span class="tab-label">進捗管理</span></a>
+        <a class="tab" data-tab="tasks" href="#/tasks"><span class="tab-label">タスク管理</span> <span id="task-badge" class="tab-badges"></span></a>
+      </nav>
+    </aside>
 
-  <footer class="app-disclaimer" role="note">
-    ※この画面はあくまでもイメージ共有を目的としてAIが作成したものであり、この通りに開発できることを保証するものではありません。
-  </footer>
+    <div class="layout-main">
+      <main id="main" class="container" tabindex="-1">
+        <p class="muted">読み込み中…</p>
+      </main>
+
+      <footer class="app-disclaimer" role="note">
+        ※この画面はあくまでもイメージ共有を目的としてAIが作成したものであり、この通りに開発できることを保証するものではありません。
+      </footer>
+    </div>
+  </div>
 
   <noscript>このアプリを使うには JavaScript を有効にしてください。</noscript>
 
