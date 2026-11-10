@@ -75,7 +75,7 @@
       '<nav class="crumbs" aria-label="パンくず"><a href="#/progress">進捗管理</a><span>›</span>' +
         '<a href="#/mawb/' + m.id + '">MAWB ' + esc(m.mawbNo) + '</a><span>›</span><span>HAWB ' + esc(h.hawbNo) + '</span></nav>' +
       '<div class="page-head">' +
-        '<h1>' + UI.dirBadge(m.direction) + ' HAWB ' + esc(h.hawbNo) + '</h1>' +
+        '<h1>' + UI.dirBadge(m.direction) + ' HAWB ' + esc(h.hawbNo) + '</h1>' + UI.disclaimer() +
         '<div class="actions"><button type="button" class="btn" data-act="edit">編集</button>' +
         '<button type="button" class="btn btn-danger-outline" data-act="delete">削除</button></div>' +
       '</div>' +
@@ -188,7 +188,7 @@
     el.innerHTML =
       '<nav class="crumbs" aria-label="パンくず"><a href="#/progress">進捗管理</a><span>›</span><span>MAWB ' + esc(m.mawbNo) + '</span></nav>' +
       '<div class="page-head">' +
-        '<h1>' + UI.dirBadge(m.direction) + ' MAWB ' + esc(m.mawbNo) + '</h1>' +
+        '<h1>' + UI.dirBadge(m.direction) + ' MAWB ' + esc(m.mawbNo) + '</h1>' + UI.disclaimer() +
         '<div class="actions"><button type="button" class="btn btn-primary" data-act="add-hawb">＋ HAWB追加</button>' +
         '<button type="button" class="btn" data-act="edit">編集</button>' +
         '<button type="button" class="btn btn-danger-outline" data-act="delete">削除</button></div>' +

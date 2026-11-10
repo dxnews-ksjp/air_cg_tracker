@@ -123,6 +123,9 @@
       ' title="自分チェック：' + esc(c.label) + '（クリックで切替）" aria-label="自分チェック：' + esc(c.label) + '"></button>';
   };
 
+  /** タイトル横に表示する注意事項（赤字・太字） */
+  UI.disclaimer = () => '<p class="disclaimer" role="note">※この画面はあくまでもイメージ共有を目的としてAIが作成したものであり、この通りに開発できることを保証するものではありません。</p>';
+
   UI.empty = (msg) => '<div class="empty">' + esc(msg) + '</div>';
 
   App.ui = UI;
