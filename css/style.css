@@ -83,6 +83,12 @@ small { font-size: 12px; color: var(--text-2); }
 
 .container { max-width: 1440px; margin: 0 auto; padding: 20px; outline: none; }
 
+/* ---------- 画面下部の注意事項 ---------- */
+.app-disclaimer {
+  max-width: 1440px; margin: 8px auto 24px; padding: 12px 20px;
+  color: #c62828; font-weight: 700; font-size: 14px; line-height: 1.6; text-align: center;
+}
+
 /* ---------- 共通部品 ---------- */
 .page-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
 .page-head h1 { font-size: 20px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
