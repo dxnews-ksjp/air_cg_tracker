@@ -2,7 +2,7 @@
    航空貨物 進捗管理（デモ）スタイル
    ============================================================ */
 :root {
-  --bg: #f9f9f9; /* メイン部分の背景（白っぽいグレー） */
+  --bg: #fefefe; /* メイン部分の背景（ほぼ白） */
   --surface: #ffffff;
   --surface-2: #f8fafc;
   --border: #d9dee6;
@@ -46,8 +46,8 @@ body {
   font-family: var(--font); font-size: 14px; line-height: 1.55;
 }
 body.modal-open { overflow: hidden; }
-/* タスク管理の画面は、ひと目で分かるよう背景を淡い緑に */
-body[data-tab="tasks"] { background: #f5f8ee; }
+/* タスク管理の画面は、ひと目で分かるよう背景を淡いクリーム色に */
+body[data-tab="tasks"] { background: #ffffe5; }
 a { color: var(--primary); text-decoration: none; }
 a:hover { text-decoration: underline; }
 h1, h2, h3 { margin: 0; line-height: 1.3; }
@@ -69,14 +69,14 @@ small { font-size: 12px; color: var(--text-2); }
 .logo { font-size: 20px; }
 .brand-name { font-weight: 700; font-size: 16px; letter-spacing: .02em; }
 .demo-tag { font-size: 11px; background: #f0b429; color: #3d2a00; padding: 1px 6px; border-radius: 4px; font-weight: 700; }
-/* ---------- 画面左端のメニュー（淡いブルーの背景に濃いネイビーの文字） ---------- */
+/* ---------- 画面左端のメニュー（白い背景に濃いネイビーの文字） ---------- */
 :root { --header-h: 51px; --side-w: 200px; }
 .layout { display: flex; align-items: flex-start; }
 .layout-main { flex: 1; min-width: 0; }
 .side-nav {
   flex: 0 0 var(--side-w); width: var(--side-w);
   position: sticky; top: var(--header-h); height: calc(100vh - var(--header-h)); overflow-y: auto;
-  background: #e3edfa; border-right: 1px solid #c5d7f0; padding: 16px 10px;
+  background: #ffffff; border-right: 1px solid #c5d7f0; padding: 16px 10px;
 }
 .side-nav-title { font-size: 11px; font-weight: 700; color: #4a5f80; letter-spacing: .08em; padding: 0 10px 8px; }
 .tabs { display: flex; flex-direction: column; gap: 4px; }
@@ -86,10 +86,10 @@ small { font-size: 12px; color: var(--text-2); }
   color: #13294b; font-weight: 700; font-size: 15px;
 }
 .tab:hover { background: #d0e1f7; color: #0b1a33; text-decoration: none; }
-/* 選択中：少し濃いブルーの背景＋左端に太めのネイビーの直線（左側の角は丸めずに真っ直ぐ） */
+/* 選択中：淡いブルーの背景＋左端に太めのロイヤルブルーの直線（左側の角は丸めずに真っ直ぐ） */
 .tab.active {
   background: #c2d7f3; color: #0b1a33;
-  border-radius: 0 6px 6px 0; box-shadow: inset 7px 0 0 #13294b; padding-left: 17px;
+  border-radius: 0 6px 6px 0; box-shadow: inset 7px 0 0 #4169e1; padding-left: 17px;
 }
 .tab-badges { display: inline-flex; flex-wrap: wrap; gap: 4px; }
 .tb { font-size: 11px; background: #13294b; color: #fff; padding: 1px 6px; border-radius: 10px; font-weight: 600; white-space: nowrap; }
