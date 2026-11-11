@@ -46,6 +46,8 @@ body {
   font-family: var(--font); font-size: 14px; line-height: 1.55;
 }
 body.modal-open { overflow: hidden; }
+/* タスク管理の画面は、ひと目で分かるよう背景を淡い緑に */
+body[data-tab="tasks"] { background: #f5f8ee; }
 a { color: var(--primary); text-decoration: none; }
 a:hover { text-decoration: underline; }
 h1, h2, h3 { margin: 0; line-height: 1.3; }
