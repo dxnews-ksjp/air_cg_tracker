@@ -2,7 +2,7 @@
    航空貨物 進捗管理（デモ）スタイル
    ============================================================ */
 :root {
-  --bg: #f9f9f9; /* メイン部分の背景（白っぽいグレー） */
+  --bg: #fefefe; /* メイン部分の背景（ほぼ白） */
   --surface: #ffffff;
   --surface-2: #f8fafc;
   --border: #d9dee6;
@@ -46,8 +46,8 @@ body {
   font-family: var(--font); font-size: 14px; line-height: 1.55;
 }
 body.modal-open { overflow: hidden; }
-/* タスク管理の画面は、ひと目で分かるよう背景を淡い緑に */
-body[data-tab="tasks"] { background: #f5f8ee; }
+/* タスク管理の画面は、ひと目で分かるよう背景を淡いクリーム色に */
+body[data-tab="tasks"] { background: #ffffe5; }
 a { color: var(--primary); text-decoration: none; }
 a:hover { text-decoration: underline; }
 h1, h2, h3 { margin: 0; line-height: 1.3; }
