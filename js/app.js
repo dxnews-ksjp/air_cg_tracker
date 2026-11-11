@@ -30,10 +30,8 @@
     });
     const c = await App.views.tasks.counts();
     const badge = document.getElementById('task-badge');
-    badge.innerHTML =
-      (c.overdue ? '<span class="tb tb-overdue" title="期限切れ">期限切れ ' + c.overdue + '</span>' : '') +
-      '<span class="tb" title="今日の未完了タスク">今日 ' + c.today + '</span>' +
-      '<span class="tb tb-light" title="明日の未完了タスク">明日 ' + c.tomorrow + '</span>';
+    // メニューには今日・明日の件数は出さず、期限切れがあるときだけ件数を表示する
+    badge.innerHTML = c.overdue ? '<span class="tb tb-overdue" title="期限切れ">期限切れ ' + c.overdue + '</span>' : '';
   }
 
   async function route() {
