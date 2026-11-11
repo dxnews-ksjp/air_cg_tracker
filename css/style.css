@@ -71,11 +71,18 @@ small { font-size: 12px; color: var(--text-2); }
 .demo-tag { font-size: 11px; background: #f0b429; color: #3d2a00; padding: 1px 6px; border-radius: 4px; font-weight: 700; }
 /* ---------- 画面左端のメニュー（白い背景に濃いネイビーの文字） ---------- */
 :root { --header-h: 51px; --side-w: 200px; }
+
+/* PC（幅901px以上）では画面全体を80%の大きさで表示する（ブラウザのズーム80%とほぼ同じ見え方）。
+   スマホ・タブレットなど幅900px以下は等倍のまま */
+@media (min-width: 901px) {
+  html { zoom: 0.8; }
+  :root { --vh-scale: 1.25; } /* ズーム中の 100vh は画面の80%になるため 1/0.8 倍して補正 */
+}
 .layout { display: flex; align-items: flex-start; }
 .layout-main { flex: 1; min-width: 0; }
 .side-nav {
   flex: 0 0 var(--side-w); width: var(--side-w);
-  position: sticky; top: var(--header-h); height: calc(100vh - var(--header-h)); overflow-y: auto;
+  position: sticky; top: var(--header-h); height: calc(100vh * var(--vh-scale, 1) - var(--header-h)); overflow-y: auto;
   background: #ffffff; border-right: 1px solid #c5d7f0; padding: 16px 10px;
 }
 .side-nav-title { font-size: 11px; font-weight: 700; color: #4a5f80; letter-spacing: .08em; padding: 0 10px 8px; }
@@ -470,7 +477,7 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
 /* ============================================================
    レスポンシブ
    ============================================================ */
-@media (max-width: 1180px) {
+@media (max-width: 944px) { /* 1180px × 0.8（ズーム80%に合わせた値） */
   .mawb-row { grid-template-columns: 32px 1fr 1fr auto; }
   .m-main { grid-column: 2; grid-row: 1; } .m-flights { grid-column: 3; grid-row: 1; } .m-act { grid-column: 4; grid-row: 1; }
   .m-sched { grid-column: 2; grid-row: 2; } .m-sum { grid-column: 3; grid-row: 2; }
@@ -478,7 +485,7 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
 }
 
 /* 狭い画面：工程は下の段に、工程名入りのマスで表示（横スクロール） */
-@media (max-width: 1300px) {
+@media (max-width: 1040px) { /* 1300px × 0.8（ズーム80%に合わせた値） */
   .hawb-head { display: none; }
   .hawb-list { --hawb-cols: minmax(120px, .8fr) minmax(160px, 1.6fr) 80px minmax(60px, .6fr); }
   .hawb-row { row-gap: 4px; }
