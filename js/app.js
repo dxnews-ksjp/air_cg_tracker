@@ -21,6 +21,8 @@
   let lastHash = null;
 
   async function updateTabs(active) {
+    // 今どのメニューの画面かを body に記録（タスク管理だけ背景色を変えるため）
+    document.body.dataset.tab = active;
     document.querySelectorAll('.tab').forEach((t) => {
       const on = t.dataset.tab === active;
       t.classList.toggle('active', on);
