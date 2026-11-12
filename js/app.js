@@ -51,7 +51,7 @@
       console.error(e);
       main.innerHTML = '<div class="notice err">画面の表示中にエラーが発生しました：' + U.esc(e.message) + '</div>';
     }
-    document.title = r.title + '｜航空貨物 進捗管理（デモ）';
+    document.title = r.title + '｜荷捌ダッシュボード（デモ）';
     await updateTabs(r.tab);
     if (hash !== lastHash) window.scrollTo(0, 0);
     lastHash = hash;
