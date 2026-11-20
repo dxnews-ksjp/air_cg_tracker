@@ -448,6 +448,9 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 .task-sec-head .btn { margin-left: auto; }
 .sec-overdue .task-sec-head h2 { color: var(--overdue); }
 .sec-overdue .data-table { border-left: 4px solid var(--overdue); }
+/* 進捗管理の搭載遅延：タスク管理の「期限切れ」と同じ位置（絞り込み欄の下 約60px）から始める */
+.filters + .sec-departure { margin-top: 60px; } /* 上の余白と重なって合計60pxになる */
+.sec-departure .task-table tbody tr { cursor: pointer; }
 .sec-today .data-table { border-left: 4px solid var(--primary); }
 .sec-tomorrow .data-table { border-left: 4px solid #8fa6c4; }
 .task-table { border: 1px solid var(--border); border-radius: var(--radius); }
@@ -601,6 +604,7 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
   .page-head .actions .btn { flex: 1; }
   .list-actions .btn { flex: 1; }
   .list-buttons { width: 100%; justify-content: flex-start; }
+  .filters:not(.show) + .sec-departure { margin-top: 0; }
   .filter-toggle { display: flex; width: 100%; margin-bottom: 8px; }
   .filters:not(.task-filters) { display: none; }
   .filters.show { display: flex; }

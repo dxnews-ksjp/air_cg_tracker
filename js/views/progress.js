@@ -88,6 +88,44 @@
     return groups;
   }
 
+  /**
+   * 搭載遅延：「出発」の工程が予定日を過ぎても完了していないHAWB（輸出のみ）
+   * 該当があるときだけ、タスク管理の「期限切れ」と同じ書式で一覧を表示する
+   */
+  function departureDelays(snap, today) {
+    const out = [];
+    snap.hawbs.forEach((h) => {
+      const m = snap.mawbs.find((x) => x.id === h.mawbId);
+      if (!m) return;
+      const i = M.workflow(m.direction).findIndex((w) => w.code === 'DEPARTED');
+      if (i < 0) return;
+      const p = M.progress(h, m.direction);
+      const s = h.steps[i] || {};
+      if (M.stepState(s, today, i, p) !== 'overdue') return;
+      out.push({ h, m, planned: s.plannedDate, days: U.diffDays(s.plannedDate, today) });
+    });
+    return out.sort((a, b) => b.days - a.days || a.h.hawbNo.localeCompare(b.h.hawbNo));
+  }
+
+  function departureDelaySection(list) {
+    if (!list.length) return '';
+    const row = (x) => '<tr data-href="#/hawb/' + x.h.id + '">' +
+      '<td data-label="HAWB">' + UI.dirBadge(x.m.direction) + ' <a href="#/hawb/' + x.h.id + '">' + esc(x.h.hawbNo) + '</a></td>' +
+      '<td data-label="' + M.partyLabel(x.m.direction) + '">' + esc(M.partyName(x.h, x.m.direction) || '') + '</td>' +
+      '<td data-label="便">' + esc((x.m.flightNo || '') + (x.m.flight2No ? ' → ' + x.m.flight2No : '')) + ' <span class="muted">' + UI.route(x.m) + '</span></td>' +
+      '<td data-label="内容" class="c-content"><span class="kind-tag step">工程</span><span class="task-text">出発</span>' +
+        '<span class="late">' + U.fmtDate(x.planned) + ' 予定・' + x.days + '日超過</span>' + UI.specialLabels(x.h) +
+        (x.h.assignee ? '<span class="asg">担当：' + esc(x.h.assignee) + '</span>' : '') + '</td>' +
+      '<td class="c-act" data-label="操作"><a class="btn btn-sm" href="#/hawb/' + x.h.id + '">詳細を開く</a></td>' +
+      '</tr>';
+    return '<section class="task-sec sec-overdue sec-departure">' +
+      '<div class="task-sec-head"><h2>⚠ 搭載遅延（出発予定日を過ぎて未出発）</h2><span class="count">' + list.length + '件</span></div>' +
+      '<div class="table-scroll"><table class="data-table rwd task-table"><thead><tr>' +
+        '<th>HAWB</th><th>輸出者</th><th>便</th><th>内容</th><th class="c-act">操作</th>' +
+      '</tr></thead><tbody>' + list.map(row).join('') + '</tbody></table></div>' +
+    '</section>';
+  }
+
   function filterBar(snap) {
     const f = state.filter;
     const sel = (name, label, options) =>
@@ -180,6 +218,7 @@
       '<h1 class="sr-only">進捗管理</h1>' +
       UI.tabBar() +
       filterBar(snap) +
+      departureDelaySection(departureDelays(snap, today)) +
       '<div class="list-tools"><span class="count">MAWB ' + groups.length + '件 / HAWB ' + hawbCount + '件</span>' +
         UI.colorLegend() +
         '<span class="spacer"></span>' +
@@ -245,7 +284,7 @@
         }
         return;
       }
-      const row = e.target.closest('.hawb-row[data-href]');
+      const row = e.target.closest('.hawb-row[data-href], .sec-departure tr[data-href]');
       if (row && !e.target.closest('a,button')) location.hash = row.dataset.href;
     });
   }
