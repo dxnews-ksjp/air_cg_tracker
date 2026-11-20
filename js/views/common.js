@@ -123,6 +123,41 @@
       ' title="自分チェック：' + esc(c.label) + '（クリックで切替）" aria-label="自分チェック：' + esc(c.label) + '"></button>';
   };
 
+  /**
+   * AIアシスタント（キャラクター＋吹き出し）。今日のまとめと気づきを表示する
+   * 左の .ai-avatar にAIキャラクターのイラストを後から差し込む予定
+   */
+  UI.assistant = function (snap, today) {
+    const r = App.assistant.build(snap, today);
+    const t = r.at.slice(11, 16);
+    const line = (x) => '<li class="as-line' + (x.level ? ' as-' + x.level : '') + '">' +
+      '<span>' + esc(x.text) + '</span>' +
+      (x.href ? ' <a href="' + x.href + '" class="as-link">' + (x.href === '#/tasks' ? 'タスク管理を開く' : '詳細を開く') + ' ›</a>' : '') + '</li>';
+    const notice = (n) => '<li class="as-notice">' +
+      '<span class="as-icon" aria-hidden="true">⚠</span>' +
+      '<span class="as-text">' + esc(n.text) + ' <a href="' + n.href + '" class="as-link">詳細を開く ›</a></span>' +
+      '<span class="as-btns"><button type="button" class="btn btn-sm" data-notice-ack="' + esc(n.key) + '" data-status="checked">確認済み</button>' +
+      '<button type="button" class="btn btn-sm btn-link" data-notice-ack="' + esc(n.key) + '" data-status="dismissed">対応不要</button></span></li>';
+    return '<section class="assistant" aria-label="AIアシスタントからのお知らせ">' +
+      '<div class="ai-avatar" data-slot="ai-character" aria-hidden="true"><span>AIキャラ<br>イラスト<br>挿入予定</span></div>' +
+      '<div class="as-bubbles">' +
+        '<div class="as-bubble">' +
+          '<div class="as-head"><strong>今日のまとめ</strong><span class="as-time">' + U.fmtDate(today) + ' ' + t + ' 時点</span></div>' +
+          '<ul class="as-list">' + r.summary.map(line).join('') + '</ul>' +
+        '</div>' +
+        '<div class="as-bubble">' +
+          '<div class="as-head"><strong>気づいたこと</strong><span class="as-tag">参考情報</span>' +
+            (r.hiddenCount ? '<button type="button" class="btn btn-sm btn-link as-reset" data-notice-reset>確認済み・対応不要にした ' + r.hiddenCount + ' 件を再表示</button>' : '') + '</div>' +
+          (r.notices.length
+            ? '<ul class="as-list">' + r.notices.map(notice).join('') + '</ul>' +
+              (r.more ? '<p class="as-more">ほかに ' + r.more + ' 件あります（確認すると次のお知らせが表示されます）</p>' : '')
+            : '<p class="as-none">いま気づいたことはありません。※お知らせがないことは「問題なし」を保証するものではありません。</p>') +
+        '</div>' +
+        '<p class="as-foot">デモ版：AIには接続せず、登録データからルールで作成しています。本番では文章をAIが作成し、件数・番号・日付はシステムが入れる想定です。</p>' +
+      '</div>' +
+    '</section>';
+  };
+
   /** タイトル横に表示する注意事項（赤字・太字） */
   UI.disclaimer = () => '<p class="disclaimer" role="note">※この画面はあくまでもイメージ共有を目的としてAIが作成したものであり、この通りに開発できることを保証するものではありません。</p>';
 

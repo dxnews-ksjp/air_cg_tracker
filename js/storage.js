@@ -37,7 +37,7 @@
   let storageOk = true;
 
   const clone = (o) => JSON.parse(JSON.stringify(o));
-  const emptyDb = () => ({ schemaVersion: cfg.SCHEMA_VERSION, mawbs: [], hawbs: [], manualTasks: [], taskMarks: [] });
+  const emptyDb = () => ({ schemaVersion: cfg.SCHEMA_VERSION, mawbs: [], hawbs: [], manualTasks: [], taskMarks: [], noticeAcks: [] });
 
   function persist() {
     try {
@@ -215,9 +215,23 @@
       persist();
     },
 
+    // ---------- AIアシスタントのお知らせ ----------
+    /** 気づきを「確認済み」「対応不要」にする（誰がいつ対応したかは本番でユーザー情報と一緒に記録） */
+    async ackNotice(key, status) {
+      db.noticeAcks = (db.noticeAcks || []).filter((a) => a.key !== key);
+      db.noticeAcks.push({ key, status, at: U.now() });
+      persist();
+    },
+
+    /** 非表示にした気づきを元に戻す */
+    async clearNoticeAcks() {
+      db.noticeAcks = [];
+      persist();
+    },
+
     /** ダミーデータに戻す */
     async resetToSeed() {
-      db = App.seed.build();
+      db = Object.assign(emptyDb(), App.seed.build());
       persist();
     },
   };

@@ -112,41 +112,45 @@ small { font-size: 12px; color: var(--text-2); }
   max-width: 1440px; margin: 8px auto 24px; padding: 12px 20px;
   color: #c62828; font-weight: 700; font-size: 14px; line-height: 1.6; text-align: center;
 }
-/* ---------- AIに聞く ---------- */
-.ai-panel {
-  display: flex; gap: 16px; align-items: flex-start; margin-bottom: 12px; padding: 14px 16px;
-  background: #f4f8ff; border: 1px solid #c9daf5; border-radius: var(--radius);
-}
+/* ---------- AIアシスタント（キャラクター＋吹き出し） ---------- */
+.assistant { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 12px; }
 .ai-avatar {
   flex: 0 0 96px; height: 96px; border-radius: 12px; border: 2px dashed #9fb8e0; background: #fff;
   display: grid; place-items: center; text-align: center; font-size: 11px; color: #7b8fb0; line-height: 1.4;
 }
 .ai-avatar img { width: 100%; height: 100%; object-fit: contain; border-radius: 10px; }
-.ai-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
-.ai-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
-.ai-head h2 { font-size: 16px; color: #13294b; }
-.ai-note { font-size: 11px; color: var(--muted); }
-.ai-form { display: flex; gap: 8px; align-items: stretch; }
-.ai-form textarea { flex: 1; min-height: 44px; }
-.ai-examples { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
-.ai-examples-label { font-size: 12px; font-weight: 700; color: var(--text-2); margin-right: 2px; }
-.ai-example {
-  font: inherit; font-size: 12px; cursor: pointer; text-align: left;
-  padding: 4px 10px; border-radius: 14px; border: 1px solid #b9cdee; background: #fff; color: #23406e;
+.as-bubbles { flex: 1; min-width: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.as-bubble {
+  position: relative; background: #f4f8ff; border: 1px solid #c9daf5; border-radius: 12px; padding: 10px 14px;
 }
-.ai-example:hover { background: #e8f0fd; }
-.ai-example em { font-style: normal; font-weight: 700; color: #4169e1; margin-right: 6px; }
-.ai-answer {
-  font-size: 14px; line-height: 1.7; background: #fff; border: 1px solid #c9daf5; border-radius: 6px;
-  padding: 12px 14px; min-height: 120px; max-height: 320px; overflow-y: auto;
+.as-bubble:first-child::before {
+  content: ""; position: absolute; left: -9px; top: 26px; width: 14px; height: 14px; background: #f4f8ff;
+  border-left: 1px solid #c9daf5; border-bottom: 1px solid #c9daf5; transform: rotate(45deg);
 }
-.ai-q { color: var(--text-2); margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed #d7e2f3; }
-.ai-a { display: flex; gap: 4px; }
-.ai-label { flex: 0 0 auto; font-weight: 700; color: #13294b; }
+.as-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; color: #13294b; }
+.as-head strong { font-size: 15px; }
+.as-time { font-size: 11px; color: var(--muted); }
+.as-tag { font-size: 11px; background: #fff; border: 1px solid #c9daf5; color: #4a5f80; padding: 0 6px; border-radius: 4px; }
+.as-reset { margin-left: auto; }
+.as-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 13px; line-height: 1.6; }
+.as-line { padding-left: 14px; position: relative; }
+.as-line::before { content: "・"; position: absolute; left: 0; color: #4169e1; }
+.as-danger span:first-child { color: #b71c1c; font-weight: 700; }
+.as-ok span:first-child { color: #1d5632; }
+.as-link { white-space: nowrap; font-size: 12px; }
+.as-notice { display: flex; gap: 6px; align-items: flex-start; background: #fff; border: 1px solid #f0d58a; border-radius: 6px; padding: 6px 8px; }
+.as-icon { color: #b07800; }
+.as-text { flex: 1; min-width: 0; }
+.as-btns { display: flex; gap: 2px; flex-shrink: 0; }
+.as-none, .as-more { margin: 0; font-size: 12px; color: var(--text-2); }
+.as-foot { grid-column: 1 / -1; margin: 0; font-size: 11px; color: var(--muted); }
+@media (max-width: 1040px) { .as-bubbles { grid-template-columns: 1fr; } }
 @media (max-width: 720px) {
-  .ai-panel { flex-direction: column; align-items: stretch; }
+  .assistant { flex-direction: column; align-items: stretch; }
   .ai-avatar { flex-basis: auto; width: 72px; height: 72px; }
-  .ai-form { flex-direction: column; }
+  .as-bubble:first-child::before { display: none; }
+  .as-notice { flex-wrap: wrap; }
+  .as-btns { width: 100%; justify-content: flex-end; }
 }
 
 .disclaimer { flex: 1 1 320px; min-width: 0; margin: 0; color: #c62828; font-weight: 700; font-size: 13px; line-height: 1.5; }
