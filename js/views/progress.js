@@ -114,10 +114,15 @@
           AI_EXAMPLES.map((x, i) => '<button type="button" class="ai-example" data-act="ai-example" data-i="' + i + '">' +
             '<em>' + esc(x.tag) + '</em>' + esc(x.text) + '</button>').join('') +
         '</div>' +
-        (state.aiAsked
-          ? '<div class="ai-answer" role="status"><strong>質問：</strong>' + esc(state.aiAsked) +
-            '<p>（デモ版のため、AIの回答は表示されません。本番ではここにAIの回答や提案が表示され、内容を確認してから反映する形を想定しています。）</p></div>'
-          : '') +
+        // AIの回答表示欄（常に表示。送信前は案内文を薄く表示）
+        '<div class="ai-answer" role="status" aria-live="polite">' +
+          (state.aiAsked ? '<div class="ai-q"><span class="ai-label">質問：</span>' + esc(state.aiAsked) + '</div>' : '') +
+          '<div class="ai-a"><span class="ai-label">回答：</span>' +
+            (state.aiAsked
+              ? '<span>（デモ版のため、AIの回答は表示されません。本番ではここにAIの回答や提案が表示され、内容を確認してから反映する形を想定しています。）</span>'
+              : '<span class="muted">ここにAIの回答が表示されます。</span>') +
+          '</div>' +
+        '</div>' +
       '</div>' +
     '</section>';
   }
