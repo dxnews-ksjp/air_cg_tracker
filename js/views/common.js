@@ -123,6 +123,27 @@
       ' title="自分チェック：' + esc(c.label) + '（クリックで切替）" aria-label="自分チェック：' + esc(c.label) + '"></button>';
   };
 
+  /**
+   * AIアシスタント（キャラクター＋吹き出し）。今日のまとめを表示する（スマホでは非表示）
+   * 左の .ai-avatar にAIキャラクターのイラスト（images/ai-character.jpg・仮）を表示
+   */
+  UI.assistant = function (snap, today) {
+    const r = App.assistant.build(snap, today);
+    const t = r.at.slice(11, 16);
+    const line = (x) => '<li class="as-line' + (x.level ? ' as-' + x.level : '') + '">' +
+      '<span>' + esc(x.text) + '</span>' +
+      (x.href ? ' <a href="' + x.href + '" class="as-link">' + (x.href === '#/tasks' ? 'タスク管理を開く' : '詳細を開く') + ' ›</a>' : '') + '</li>';
+    return '<section class="assistant" aria-label="AIアシスタントからのお知らせ">' +
+      '<div class="ai-avatar" data-slot="ai-character"><img src="images/ai-character.jpg" alt="AIアシスタントのキャラクター（ラッコ）" width="96" height="96"></div>' +
+      '<div class="as-bubbles">' +
+        '<div class="as-bubble">' +
+          '<div class="as-head"><strong>今日のまとめ</strong><span class="as-time">' + U.fmtDate(today) + ' ' + t + ' 時点</span></div>' +
+          '<ul class="as-list">' + r.summary.map(line).join('') + '</ul>' +
+        '</div>' +
+      '</div>' +
+    '</section>';
+  };
+
   /** タイトル横に表示する注意事項（赤字・太字） */
   UI.disclaimer = () => '<p class="disclaimer" role="note">※この画面はあくまでもイメージ共有を目的としてAIが作成したものであり、この通りに開発できることを保証するものではありません。</p>';
 

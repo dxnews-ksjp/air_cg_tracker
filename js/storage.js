@@ -217,7 +217,7 @@
 
     /** ダミーデータに戻す */
     async resetToSeed() {
-      db = App.seed.build();
+      db = Object.assign(emptyDb(), App.seed.build());
       persist();
     },
   };

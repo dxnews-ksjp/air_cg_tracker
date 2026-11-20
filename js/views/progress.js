@@ -184,6 +184,7 @@
           '<a class="btn" href="#/data">CSV・データ管理</a>' +
         '</div>' +
       '</div>' +
+      UI.assistant(snap, today) +
       filterBar(snap) +
       '<div class="list-tools"><span class="count">MAWB ' + groups.length + '件 / HAWB ' + hawbCount + '件</span>' +
         UI.colorLegend() +

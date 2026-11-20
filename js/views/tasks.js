@@ -82,6 +82,7 @@
     el.innerHTML =
       '<div class="page-head"><h1>タスク管理</h1>' + UI.disclaimer() +
         '<div class="actions"><button type="button" class="btn btn-primary" data-add-task="' + today + '">＋ タスク追加</button></div></div>' +
+      UI.assistant(snap, today) +
       '<div class="filters task-filters">' +
         '<label class="filter"><span>担当者</span><select name="assignee">' +
           [['', '全員']].concat(assignees.map((a) => [a, a])).concat([['_none', '（未設定）']])
