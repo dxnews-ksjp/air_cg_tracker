@@ -14,6 +14,8 @@
     sort: 'etd',
     collapsed: new Set(),
     filtersOpen: false, // スマホ表示時の絞り込み欄の開閉
+    aiQuery: '',        // 「AIに聞く」の入力内容（再描画しても消えないよう保持）
+    aiAsked: '',        // 送信された質問（デモ用の回答欄に表示）
   };
   const DEFAULT_FILTER = { dir: '', status: '', assignee: '', special: '', alert: '', q: '' };
 
@@ -86,6 +88,38 @@
         : (x, y) => x.h.hawbNo.localeCompare(y.h.hawbNo));
     });
     return groups;
+  }
+
+  // 「AIに聞く」の使用例（クリックすると入力欄に入る）
+  const AI_EXAMPLES = [
+    { tag: '絞り込み', text: '来週出発の危険品で、佐藤さんが担当の案件を表示して' },
+    { tag: '今日のまとめ', text: '今日やることと注意点をまとめて' },
+    { tag: '気づき', text: '登録内容とメモの食い違いや、確認が必要な案件がないかチェックして' },
+  ];
+
+  /**
+   * 「AIに聞く」パネル（デモ：AIには未接続。送信すると接続予定の案内を表示）
+   * 左の .ai-avatar にAIキャラクターのイラストを後から差し込む予定
+   */
+  function aiPanel() {
+    return '<section class="ai-panel" aria-label="AIに聞く">' +
+      '<div class="ai-avatar" data-slot="ai-character" aria-hidden="true"><span>AIキャラ<br>イラスト<br>挿入予定</span></div>' +
+      '<div class="ai-body">' +
+        '<div class="ai-head"><h2>AIに聞く</h2><span class="ai-note">デモ版：AIには接続していません</span></div>' +
+        '<form class="ai-form" data-ai-form onsubmit="return false">' +
+          '<textarea name="aiQuery" rows="2" placeholder="例：来週出発の危険品を一覧にして" aria-label="AIへの質問">' + esc(state.aiQuery) + '</textarea>' +
+          '<button type="button" class="btn btn-primary" data-act="ai-send">送信</button>' +
+        '</form>' +
+        '<div class="ai-examples"><span class="ai-examples-label">使用例</span>' +
+          AI_EXAMPLES.map((x, i) => '<button type="button" class="ai-example" data-act="ai-example" data-i="' + i + '">' +
+            '<em>' + esc(x.tag) + '</em>' + esc(x.text) + '</button>').join('') +
+        '</div>' +
+        (state.aiAsked
+          ? '<div class="ai-answer" role="status"><strong>質問：</strong>' + esc(state.aiAsked) +
+            '<p>（デモ版のため、AIの回答は表示されません。本番ではここにAIの回答や提案が表示され、内容を確認してから反映する形を想定しています。）</p></div>'
+          : '') +
+      '</div>' +
+    '</section>';
   }
 
   function filterBar(snap) {
@@ -184,6 +218,7 @@
           '<a class="btn" href="#/data">CSV・データ管理</a>' +
         '</div>' +
       '</div>' +
+      aiPanel() +
       filterBar(snap) +
       '<div class="list-tools"><span class="count">MAWB ' + groups.length + '件 / HAWB ' + hawbCount + '件</span>' +
         UI.colorLegend() +
@@ -225,10 +260,25 @@
       }, 250);
     });
 
+    el.querySelector('[name="aiQuery"]').addEventListener('input', (e) => { state.aiQuery = e.target.value; });
+
     el.addEventListener('click', async (e) => {
       const b = e.target.closest('[data-act]');
       if (b) {
         const act = b.dataset.act;
+        if (act === 'ai-example') {
+          state.aiQuery = AI_EXAMPLES[+b.dataset.i].text;
+          const ta = el.querySelector('[name="aiQuery"]');
+          ta.value = state.aiQuery; ta.focus();
+          return;
+        }
+        if (act === 'ai-send') {
+          const q = el.querySelector('[name="aiQuery"]').value.trim();
+          if (!q) { U.toast('質問を入力してください', 'warn'); return; }
+          state.aiQuery = q; state.aiAsked = q;
+          render(container);
+          return;
+        }
         if (act === 'toggle') {
           state.collapsed.has(b.dataset.id) ? state.collapsed.delete(b.dataset.id) : state.collapsed.add(b.dataset.id);
           render(container);
