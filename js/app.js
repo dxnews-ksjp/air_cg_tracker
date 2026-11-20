@@ -29,11 +29,6 @@
       t.classList.toggle('active', on);
       if (on) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current');
     });
-    const c = await App.views.tasks.counts();
-    // メニュー・タブには今日・明日の件数は出さず、期限切れがあるときだけ件数を表示する
-    document.querySelectorAll('[data-task-badge]').forEach((badge) => {
-      badge.innerHTML = c.overdue ? '<span class="tb tb-overdue" title="期限切れ">期限切れ ' + c.overdue + '</span>' : '';
-    });
   }
 
   async function route() {
