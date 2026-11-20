@@ -72,11 +72,11 @@ small { font-size: 12px; color: var(--text-2); }
 /* ---------- 画面左端のメニュー（白い背景に濃いネイビーの文字） ---------- */
 :root { --header-h: 51px; --side-w: 200px; }
 
-/* PC（幅901px以上）では画面全体を80%の大きさで表示する（ブラウザのズーム80%とほぼ同じ見え方）。
+/* PC（幅901px以上）では画面全体を96%の大きさで表示する（以前の80%表示を1.2倍に拡大）。
    スマホ・タブレットなど幅900px以下は等倍のまま */
 @media (min-width: 901px) {
-  html { zoom: 0.8; }
-  :root { --vh-scale: 1.25; } /* ズーム中の 100vh は画面の80%になるため 1/0.8 倍して補正 */
+  html { zoom: 0.96; }
+  :root { --vh-scale: 1.0417; } /* ズーム中の 100vh は画面の96%になるため 1/0.96 倍して補正 */
 }
 .layout { display: flex; align-items: flex-start; }
 .layout-main { flex: 1; min-width: 0; }
@@ -509,7 +509,7 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
 /* ============================================================
    レスポンシブ
    ============================================================ */
-@media (max-width: 944px) { /* 1180px × 0.8（ズーム80%に合わせた値） */
+@media (max-width: 1133px) { /* 1180px × 0.96（ズーム96%に合わせた値） */
   .mawb-row { grid-template-columns: 32px 1fr 1fr auto; }
   .m-main { grid-column: 2; grid-row: 1; } .m-flights { grid-column: 3; grid-row: 1; } .m-act { grid-column: 4; grid-row: 1; }
   .m-sched { grid-column: 2; grid-row: 2; } .m-sum { grid-column: 3; grid-row: 2; }
@@ -517,7 +517,7 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
 }
 
 /* 狭い画面：工程は下の段に、工程名入りのマスで表示（横スクロール） */
-@media (max-width: 1040px) { /* 1300px × 0.8（ズーム80%に合わせた値） */
+@media (max-width: 1248px) { /* 1300px × 0.96（ズーム96%に合わせた値） */
   .hawb-head { display: none; }
   .hawb-list { --hawb-cols: minmax(120px, .8fr) minmax(160px, 1.6fr) 80px minmax(60px, .6fr); }
   .hawb-row { row-gap: 4px; }
