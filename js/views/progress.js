@@ -178,7 +178,6 @@
     el.innerHTML =
       // 画面上部のタイトルと注意事項は表示しない（画面の読み上げ用に見出しだけ残す。注意事項は画面最下部に表示）
       '<h1 class="sr-only">進捗管理</h1>' +
-      UI.assistant(snap, today) +
       UI.tabBar() +
       filterBar(snap) +
       // 登録・データ管理のボタンは絞り込み欄の下に置く

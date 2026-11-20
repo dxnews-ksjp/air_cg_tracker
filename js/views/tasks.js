@@ -82,7 +82,6 @@
     el.innerHTML =
       // 画面上部のタイトルと注意事項は表示しない（画面の読み上げ用に見出しだけ残す。注意事項は画面最下部に表示）
       '<h1 class="sr-only">タスク管理</h1>' +
-      UI.assistant(snap, today) +
       UI.tabBar() +
       '<div class="filters task-filters">' +
         '<label class="filter"><span>担当者</span><select name="assignee">' +

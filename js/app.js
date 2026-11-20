@@ -11,11 +11,12 @@
   const U = App.util;
 
   const routes = [
-    { re: /^#\/progress$/, tab: 'progress', view: () => App.views.progress, title: '進捗管理' },
+    // assistant: true の画面では、ヘッダー下に固定表示の「今日のまとめ」を出す
+    { re: /^#\/progress$/, tab: 'progress', view: () => App.views.progress, title: '進捗管理', assistant: true },
     { re: /^#\/mawb\/([\w-]+)$/, tab: 'progress', view: () => App.views.mawb, title: 'MAWB詳細' },
     { re: /^#\/hawb\/([\w-]+)$/, tab: 'progress', view: () => App.views.hawb, title: 'HAWB詳細' },
     { re: /^#\/data$/, tab: 'progress', view: () => App.views.data, title: 'CSV・データ管理' },
-    { re: /^#\/tasks$/, tab: 'tasks', view: () => App.views.tasks, title: 'タスク管理' },
+    { re: /^#\/tasks$/, tab: 'tasks', view: () => App.views.tasks, title: 'タスク管理', assistant: true },
   ];
 
   let lastHash = null;
@@ -52,6 +53,9 @@
       console.error(e);
       main.innerHTML = '<div class="notice err">画面の表示中にエラーが発生しました：' + U.esc(e.message) + '</div>';
     }
+    // 固定表示の「今日のまとめ」（進捗管理・タスク管理のみ。データが変わるたびに作り直す）
+    const slot = document.getElementById('assistant-slot');
+    slot.innerHTML = r.assistant ? App.ui.assistant(await App.repo.snapshot(), U.today()) : '';
     document.title = r.title + '｜荷捌ダッシュボード（デモ）';
     await updateTabs(r.tab);
     if (hash !== lastHash) window.scrollTo(0, 0);
