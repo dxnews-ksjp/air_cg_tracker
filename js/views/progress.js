@@ -180,17 +180,17 @@
       '<h1 class="sr-only">進捗管理</h1>' +
       UI.tabBar() +
       filterBar(snap) +
-      // 登録・データ管理のボタンは絞り込み欄の下に置く
-      '<div class="list-actions">' +
-        '<button type="button" class="btn btn-primary" data-act="new-mawb">＋ MAWB登録</button>' +
-        '<button type="button" class="btn btn-primary" data-act="new-hawb">＋ HAWB登録</button>' +
-        '<a class="btn" href="#/data">CSV・データ管理</a>' +
-      '</div>' +
       '<div class="list-tools"><span class="count">MAWB ' + groups.length + '件 / HAWB ' + hawbCount + '件</span>' +
         UI.colorLegend() +
         '<span class="spacer"></span>' +
-        '<button type="button" class="btn btn-sm" data-act="expand-all">すべて開く</button>' +
-        '<button type="button" class="btn btn-sm" data-act="collapse-all">すべて閉じる</button></div>' +
+        // 登録・データ管理のボタンは「すべて開く」の左に、同じ大きさで並べる
+        '<span class="list-buttons">' +
+          '<button type="button" class="btn btn-sm btn-primary" data-act="new-mawb">＋ MAWB登録</button>' +
+          '<button type="button" class="btn btn-sm btn-primary" data-act="new-hawb">＋ HAWB登録</button>' +
+          '<a class="btn btn-sm" href="#/data">CSV・データ管理</a>' +
+          '<button type="button" class="btn btn-sm" data-act="expand-all">すべて開く</button>' +
+          '<button type="button" class="btn btn-sm" data-act="collapse-all">すべて閉じる</button>' +
+        '</span></div>' +
       '<div class="tree">' +
         (groups.length ? groups.map((g) => {
           const open = !state.collapsed.has(g.m.id);
