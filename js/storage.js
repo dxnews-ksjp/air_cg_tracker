@@ -37,7 +37,7 @@
   let storageOk = true;
 
   const clone = (o) => JSON.parse(JSON.stringify(o));
-  const emptyDb = () => ({ schemaVersion: cfg.SCHEMA_VERSION, mawbs: [], hawbs: [], manualTasks: [], taskMarks: [], noticeAcks: [] });
+  const emptyDb = () => ({ schemaVersion: cfg.SCHEMA_VERSION, mawbs: [], hawbs: [], manualTasks: [], taskMarks: [] });
 
   function persist() {
     try {
@@ -212,20 +212,6 @@
         if (idx >= 0) db.hawbs[idx] = Object.assign({}, db.hawbs[idx], h, { updatedAt: now });
         else db.hawbs.push(Object.assign({ createdAt: now }, h, { updatedAt: now }));
       });
-      persist();
-    },
-
-    // ---------- AIアシスタントのお知らせ ----------
-    /** 気づきを「確認済み」「対応不要」にする（誰がいつ対応したかは本番でユーザー情報と一緒に記録） */
-    async ackNotice(key, status) {
-      db.noticeAcks = (db.noticeAcks || []).filter((a) => a.key !== key);
-      db.noticeAcks.push({ key, status, at: U.now() });
-      persist();
-    },
-
-    /** 非表示にした気づきを元に戻す */
-    async clearNoticeAcks() {
-      db.noticeAcks = [];
       persist();
     },
 

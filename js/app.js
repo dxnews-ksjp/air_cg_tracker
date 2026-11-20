@@ -63,22 +63,6 @@
     return route().then(() => window.scrollTo(0, y));
   };
 
-  // AIアシスタントの「確認済み」「対応不要」「再表示」ボタン（どの画面でも共通）
-  document.addEventListener('click', async (e) => {
-    const ack = e.target.closest('[data-notice-ack]');
-    if (ack) {
-      e.stopPropagation();
-      await App.repo.ackNotice(ack.dataset.noticeAck, ack.dataset.status);
-      U.toast(ack.dataset.status === 'checked' ? '確認済みにしました' : '対応不要にしました', 'ok');
-      App.refresh();
-      return;
-    }
-    if (e.target.closest('[data-notice-reset]')) {
-      await App.repo.clearNoticeAcks();
-      App.refresh();
-    }
-  });
-
   async function start() {
     await App.repo.init();
     document.getElementById('today-label').textContent = '今日：' + U.fmtDate(U.today(), true);

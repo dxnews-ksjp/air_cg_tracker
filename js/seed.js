@@ -142,7 +142,7 @@
         pieces: 8, weightKg: 210, volumeWeightKg: 240, commodity: '自動車用センサー', assignee: '高橋', done: 2 }));
 
       const m9 = mkMawb({ prefix: '160', serial: '5091236', direction: 'EXPORT', airline: 'CX', flightNo: 'CX505',
-        flight2No: 'CX767', flight2Date: day(3), transit: 'HKG', // ※気づきの見本：2ND FLTの日付が1ST FLTより前
+        flight2No: 'CX767', flight2Date: day(4), transit: 'HKG',
         origin: 'NRT', destination: 'SGN', etd: at(4, '10:05'), eta: at(4, '17:50') });
       mawbs.push(m9);
       hawbs.push(mkHawb(m9, { hawbNo: 'TYO-24110502', shipper: '株式会社さくらテキスタイル', consignee: 'Saigon Garment Co., Ltd.',

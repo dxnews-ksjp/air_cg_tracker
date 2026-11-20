@@ -119,7 +119,7 @@ small { font-size: 12px; color: var(--text-2); }
   display: grid; place-items: center; text-align: center; font-size: 11px; color: #7b8fb0; line-height: 1.4;
 }
 .ai-avatar img { width: 100%; height: 100%; object-fit: contain; border-radius: 10px; }
-.as-bubbles { flex: 1; min-width: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.as-bubbles { flex: 1; min-width: 0; }
 .as-bubble {
   position: relative; background: #f4f8ff; border: 1px solid #c9daf5; border-radius: 12px; padding: 10px 14px;
 }
@@ -130,27 +130,15 @@ small { font-size: 12px; color: var(--text-2); }
 .as-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; color: #13294b; }
 .as-head strong { font-size: 15px; }
 .as-time { font-size: 11px; color: var(--muted); }
-.as-tag { font-size: 11px; background: #fff; border: 1px solid #c9daf5; color: #4a5f80; padding: 0 6px; border-radius: 4px; }
-.as-reset { margin-left: auto; }
 .as-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 13px; line-height: 1.6; }
 .as-line { padding-left: 14px; position: relative; }
 .as-line::before { content: "・"; position: absolute; left: 0; color: #4169e1; }
 .as-danger span:first-child { color: #b71c1c; font-weight: 700; }
 .as-ok span:first-child { color: #1d5632; }
 .as-link { white-space: nowrap; font-size: 12px; }
-.as-notice { display: flex; gap: 6px; align-items: flex-start; background: #fff; border: 1px solid #f0d58a; border-radius: 6px; padding: 6px 8px; }
-.as-icon { color: #b07800; }
-.as-text { flex: 1; min-width: 0; }
-.as-btns { display: flex; gap: 2px; flex-shrink: 0; }
-.as-none, .as-more { margin: 0; font-size: 12px; color: var(--text-2); }
-.as-foot { grid-column: 1 / -1; margin: 0; font-size: 11px; color: var(--muted); }
-@media (max-width: 1040px) { .as-bubbles { grid-template-columns: 1fr; } }
+/* スマホではAIアシスタントは表示しない */
 @media (max-width: 720px) {
-  .assistant { flex-direction: column; align-items: stretch; }
-  .ai-avatar { flex-basis: auto; width: 72px; height: 72px; }
-  .as-bubble:first-child::before { display: none; }
-  .as-notice { flex-wrap: wrap; }
-  .as-btns { width: 100%; justify-content: flex-end; }
+  .assistant { display: none; }
 }
 
 .disclaimer { flex: 1 1 320px; min-width: 0; margin: 0; color: #c62828; font-weight: 700; font-size: 13px; line-height: 1.5; }
