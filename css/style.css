@@ -233,6 +233,8 @@ small { font-size: 12px; color: var(--text-2); }
 .filter.grow { flex: 1 1 220px; }
 .filter select, .filter input { min-height: 34px; }
 .task-filters { align-items: center; }
+/* 進捗管理の絞り込み欄の下は、1行分（約22px）余白を広げる */
+.filters:not(.task-filters) { margin-bottom: 32px; }
 .filter-toggle { display: none; }
 .list-tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; font-size: 13px; }
 .list-tools .count { font-weight: 700; }
