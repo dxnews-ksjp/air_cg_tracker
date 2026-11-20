@@ -94,8 +94,6 @@
           '<span class="lg-mark"><span class="mark-dot static mark-' + (c.code || 'none').toLowerCase() + '"></span>' + esc(c.label) + '</span>').join('') +
         '</span>' +
       '</div>' +
-      // タスク追加ボタンは絞り込み欄の下に置く
-      '<div class="list-actions"><button type="button" class="btn btn-primary" data-add-task="' + today + '">＋ タスク追加</button></div>' +
       (tasks.overdue.length || !state.hideDone
         ? section('overdue', '⚠ 期限切れ（予定日を過ぎて未完了）', tasks.overdue, { emptyMsg: '期限切れのタスクはありません。' })
         : '') +

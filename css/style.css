@@ -267,6 +267,8 @@ body[data-tab="tasks"] .assistant-slot { background: #ffffe5; }
 .filter.grow { flex: 1 1 220px; }
 .filter select, .filter input { min-height: 34px; }
 .task-filters { align-items: center; }
+/* タスク管理：絞り込み欄の下のボタンを削除した分も、元と同じ間隔（約60px）を空ける */
+.filters.task-filters { margin-bottom: 60px; }
 /* 進捗管理の絞り込み欄の下は、1行分（約22px）余白を広げる */
 .filters:not(.task-filters) { margin-bottom: 32px; }
 /* 絞り込み欄の下に並べる登録・データ管理のボタン */
