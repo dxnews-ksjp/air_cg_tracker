@@ -645,3 +645,62 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
   .legend { width: 100%; }
 }
 .tl-overdue .tl-title strong { color: var(--overdue); }
+
+/* ============================================================
+   ヘッダー部分のグラスモーフィズム
+   ヘッダー（荷捌ダッシュボード）と固定表示の「今日のまとめ」を、
+   淡い紫と淡い水色のマーブル模様の背景＋半透明のガラス風パネルで統一する。
+   背景は画面に固定（background-attachment: fixed）しているので、
+   ヘッダーと「今日のまとめ」の境目で模様がつながって見える。
+   ============================================================ */
+:root {
+  /* 背景は画面全体に対して固定しているため、模様はヘッダー部分（画面の上の方）に集めて配置する */
+  --marble:
+    radial-gradient(ellipse 26% 22% at 4% 6%, rgba(190, 172, 255, .95), transparent 72%),
+    radial-gradient(ellipse 24% 20% at 22% 22%, rgba(135, 205, 255, .90), transparent 72%),
+    radial-gradient(ellipse 22% 18% at 40% 4%, rgba(160, 216, 255, .85), transparent 72%),
+    radial-gradient(ellipse 26% 22% at 56% 20%, rgba(206, 186, 255, .95), transparent 72%),
+    radial-gradient(ellipse 24% 20% at 76% 6%, rgba(140, 210, 252, .90), transparent 72%),
+    radial-gradient(ellipse 24% 22% at 94% 22%, rgba(196, 178, 255, .90), transparent 72%),
+    linear-gradient(115deg, #ece6ff 0%, #e0f1ff 50%, #ede6ff 100%);
+  --glass-bg: rgba(255, 255, 255, .55);
+  --glass-border: rgba(255, 255, 255, .75);
+  --glass-shadow: 0 8px 32px rgba(60, 50, 120, .14);
+  --glass-blur: blur(16px) saturate(160%);
+}
+.app-header, .assistant-slot {
+  background: var(--marble); background-attachment: fixed;
+}
+.app-header { color: #2b2457; box-shadow: none; }
+/* 「今日のまとめ」がない画面（詳細・データ管理）では、ヘッダーの下に区切りの影を付ける */
+body:has(#assistant-slot:empty) .app-header { box-shadow: 0 10px 18px -14px rgba(60, 50, 120, .45); border-bottom: 1px solid rgba(255, 255, 255, .6); }
+.app-header .logo, .app-header .brand-name { color: #2b2457; }
+.today-label { color: #4d4a72; }
+.assistant-slot, body[data-tab="tasks"] .assistant-slot {
+  background: var(--marble); background-attachment: fixed;
+  box-shadow: 0 10px 18px -14px rgba(60, 50, 120, .45);
+  border-bottom: 1px solid rgba(255, 255, 255, .6);
+}
+/* キャラクターと吹き出しをガラス風のパネルに */
+.ai-avatar {
+  background: var(--glass-bg); border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+}
+.as-bubble {
+  background: rgba(255, 250, 242, .62); border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+}
+/* 吹き出しのしっぽ：外側の三角形だけを表示し、半透明でも重なりが濃くならないようにする */
+.as-bubble:first-child::before {
+  background: rgba(255, 250, 242, .62); border-color: var(--glass-border);
+  clip-path: polygon(0 0, 0 100%, 100% 100%);
+}
+/* スマホ：ヘッダー下の横並びメニューも同じ背景に */
+@media (max-width: 900px) {
+  .side-nav {
+    background: var(--marble); background-attachment: fixed;
+    border-bottom: 1px solid rgba(255, 255, 255, .6);
+  }
+  .tab:hover { background: rgba(255, 255, 255, .45); }
+  .tab.active { background: rgba(255, 255, 255, .65); }
+}
