@@ -24,11 +24,13 @@
       <div class="side-nav-title">メニュー</div>
       <nav class="tabs" aria-label="メインメニュー">
         <a class="tab" data-tab="progress" href="#/progress"><span class="tab-label">進捗管理</span></a>
-        <a class="tab" data-tab="tasks" href="#/tasks"><span class="tab-label">タスク管理</span> <span id="task-badge" class="tab-badges"></span></a>
+        <a class="tab" data-tab="tasks" href="#/tasks"><span class="tab-label">タスク管理</span> <span class="tab-badges" data-task-badge></span></a>
       </nav>
     </aside>
 
     <div class="layout-main">
+      <!-- 進捗管理・タスク管理で共通の「今日のまとめ」。ヘッダーと一緒に画面上部に固定表示（PCのみ） -->
+      <div id="assistant-slot" class="assistant-slot"></div>
       <main id="main" class="container" tabindex="-1">
         <p class="muted">読み込み中…</p>
       </main>

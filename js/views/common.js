@@ -144,6 +144,18 @@
     '</section>';
   };
 
+  /**
+   * PC用の切り替えタブ（進捗管理／タスク管理）。ニュースダッシュボードと同じピル型のデザイン
+   * 色は各タブの --tab-color で指定。選択中のタブは App のルーターが active を付ける
+   * スマホではヘッダー下の横並びメニューを使うため、このタブは表示しない
+   */
+  UI.tabBar = function () {
+    return '<nav class="tab-bar" aria-label="画面の切り替え"><div class="tab-bar-inner">' +
+      '<a class="tab-pill" data-tab="progress" href="#/progress" style="--tab-color: #2563c9">進捗管理</a>' +
+      '<a class="tab-pill" data-tab="tasks" href="#/tasks" style="--tab-color: #e8590c">タスク管理 <span class="tab-badges" data-task-badge></span></a>' +
+    '</div></nav>';
+  };
+
   /** タイトル横に表示する注意事項（赤字・太字） */
   UI.disclaimer = () => '<p class="disclaimer" role="note">※この画面はあくまでもイメージ共有を目的としてAIが作成したものであり、この通りに開発できることを保証するものではありません。</p>';
 

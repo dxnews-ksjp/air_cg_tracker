@@ -11,11 +11,12 @@
   const U = App.util;
 
   const routes = [
-    { re: /^#\/progress$/, tab: 'progress', view: () => App.views.progress, title: '進捗管理' },
+    // assistant: true の画面では、ヘッダー下に固定表示の「今日のまとめ」を出す
+    { re: /^#\/progress$/, tab: 'progress', view: () => App.views.progress, title: '進捗管理', assistant: true },
     { re: /^#\/mawb\/([\w-]+)$/, tab: 'progress', view: () => App.views.mawb, title: 'MAWB詳細' },
     { re: /^#\/hawb\/([\w-]+)$/, tab: 'progress', view: () => App.views.hawb, title: 'HAWB詳細' },
     { re: /^#\/data$/, tab: 'progress', view: () => App.views.data, title: 'CSV・データ管理' },
-    { re: /^#\/tasks$/, tab: 'tasks', view: () => App.views.tasks, title: 'タスク管理' },
+    { re: /^#\/tasks$/, tab: 'tasks', view: () => App.views.tasks, title: 'タスク管理', assistant: true },
   ];
 
   let lastHash = null;
@@ -23,15 +24,16 @@
   async function updateTabs(active) {
     // 今どのメニューの画面かを body に記録（タスク管理だけ背景色を変えるため）
     document.body.dataset.tab = active;
-    document.querySelectorAll('.tab').forEach((t) => {
+    document.querySelectorAll('.tab, .tab-pill').forEach((t) => {
       const on = t.dataset.tab === active;
       t.classList.toggle('active', on);
       if (on) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current');
     });
     const c = await App.views.tasks.counts();
-    const badge = document.getElementById('task-badge');
-    // メニューには今日・明日の件数は出さず、期限切れがあるときだけ件数を表示する
-    badge.innerHTML = c.overdue ? '<span class="tb tb-overdue" title="期限切れ">期限切れ ' + c.overdue + '</span>' : '';
+    // メニュー・タブには今日・明日の件数は出さず、期限切れがあるときだけ件数を表示する
+    document.querySelectorAll('[data-task-badge]').forEach((badge) => {
+      badge.innerHTML = c.overdue ? '<span class="tb tb-overdue" title="期限切れ">期限切れ ' + c.overdue + '</span>' : '';
+    });
   }
 
   async function route() {
@@ -51,6 +53,9 @@
       console.error(e);
       main.innerHTML = '<div class="notice err">画面の表示中にエラーが発生しました：' + U.esc(e.message) + '</div>';
     }
+    // 固定表示の「今日のまとめ」（進捗管理・タスク管理のみ。データが変わるたびに作り直す）
+    const slot = document.getElementById('assistant-slot');
+    slot.innerHTML = r.assistant ? App.ui.assistant(await App.repo.snapshot(), U.today()) : '';
     document.title = r.title + '｜荷捌ダッシュボード（デモ）';
     await updateTabs(r.tab);
     if (hash !== lastHash) window.scrollTo(0, 0);

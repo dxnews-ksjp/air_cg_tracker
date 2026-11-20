@@ -79,6 +79,7 @@
         '<div class="actions"><button type="button" class="btn" data-act="edit">編集</button>' +
         '<button type="button" class="btn btn-danger-outline" data-act="delete">削除</button></div>' +
       '</div>' +
+      UI.tabBar() +
       '<div class="head-flags">' + UI.specialLabels(h, true) + UI.alertBadge(a) + '</div>' +
 
       '<div class="detail-grid">' +
@@ -193,6 +194,7 @@
         '<button type="button" class="btn" data-act="edit">編集</button>' +
         '<button type="button" class="btn btn-danger-outline" data-act="delete">削除</button></div>' +
       '</div>' +
+      UI.tabBar() +
       '<div class="detail-grid mawb">' +
         '<section class="card"><h2>便情報</h2>' + flightInfo(m) + '</section>' +
         '<section class="card"><h2>進捗サマリー</h2>' + dl([

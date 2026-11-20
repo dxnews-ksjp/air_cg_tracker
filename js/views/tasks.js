@@ -80,9 +80,9 @@
     const el = document.createElement('div');
 
     el.innerHTML =
-      '<div class="page-head"><h1>タスク管理</h1>' + UI.disclaimer() +
-        '<div class="actions"><button type="button" class="btn btn-primary" data-add-task="' + today + '">＋ タスク追加</button></div></div>' +
-      UI.assistant(snap, today) +
+      // 画面上部のタイトルと注意事項は表示しない（画面の読み上げ用に見出しだけ残す。注意事項は画面最下部に表示）
+      '<h1 class="sr-only">タスク管理</h1>' +
+      UI.tabBar() +
       '<div class="filters task-filters">' +
         '<label class="filter"><span>担当者</span><select name="assignee">' +
           [['', '全員']].concat(assignees.map((a) => [a, a])).concat([['_none', '（未設定）']])
@@ -94,6 +94,8 @@
           '<span class="lg-mark"><span class="mark-dot static mark-' + (c.code || 'none').toLowerCase() + '"></span>' + esc(c.label) + '</span>').join('') +
         '</span>' +
       '</div>' +
+      // タスク追加ボタンは絞り込み欄の下に置く
+      '<div class="list-actions"><button type="button" class="btn btn-primary" data-add-task="' + today + '">＋ タスク追加</button></div>' +
       (tasks.overdue.length || !state.hideDone
         ? section('overdue', '⚠ 期限切れ（予定日を過ぎて未完了）', tasks.overdue, { emptyMsg: '期限切れのタスクはありません。' })
         : '') +
