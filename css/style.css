@@ -235,6 +235,8 @@ small { font-size: 12px; color: var(--text-2); }
 .task-filters { align-items: center; }
 /* 進捗管理の絞り込み欄の下は、1行分（約22px）余白を広げる */
 .filters:not(.task-filters) { margin-bottom: 32px; }
+/* 絞り込み欄の下に並べる登録・データ管理のボタン */
+.list-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
 .filter-toggle { display: none; }
 .list-tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; font-size: 13px; }
 .list-tools .count { font-weight: 700; }
@@ -552,6 +554,7 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
   .page-head h1 { font-size: 18px; }
   .page-head .actions { margin-left: 0; width: 100%; }
   .page-head .actions .btn { flex: 1; }
+  .list-actions .btn { flex: 1; }
   .filter-toggle { display: flex; width: 100%; margin-bottom: 8px; }
   .filters:not(.task-filters) { display: none; }
   .filters.show { display: flex; }

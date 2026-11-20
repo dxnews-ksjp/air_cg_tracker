@@ -178,14 +178,15 @@
     el.innerHTML =
       '<div class="page-head">' +
         '<h1>進捗管理</h1>' + UI.disclaimer() +
-        '<div class="actions">' +
-          '<button type="button" class="btn btn-primary" data-act="new-mawb">＋ MAWB登録</button>' +
-          '<button type="button" class="btn btn-primary" data-act="new-hawb">＋ HAWB登録</button>' +
-          '<a class="btn" href="#/data">CSV・データ管理</a>' +
-        '</div>' +
       '</div>' +
       UI.assistant(snap, today) +
       filterBar(snap) +
+      // 登録・データ管理のボタンは絞り込み欄の下に置く
+      '<div class="list-actions">' +
+        '<button type="button" class="btn btn-primary" data-act="new-mawb">＋ MAWB登録</button>' +
+        '<button type="button" class="btn btn-primary" data-act="new-hawb">＋ HAWB登録</button>' +
+        '<a class="btn" href="#/data">CSV・データ管理</a>' +
+      '</div>' +
       '<div class="list-tools"><span class="count">MAWB ' + groups.length + '件 / HAWB ' + hawbCount + '件</span>' +
         UI.colorLegend() +
         '<span class="spacer"></span>' +
