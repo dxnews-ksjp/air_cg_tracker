@@ -273,6 +273,8 @@ body[data-tab="tasks"] .assistant-slot { background: #ffffe5; }
 .filters:not(.task-filters) { margin-bottom: 32px; }
 /* 絞り込み欄の下に並べる登録・データ管理のボタン */
 .list-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+/* 一覧の上のボタン（MAWB登録・HAWB登録・CSV・すべて開く・すべて閉じる）を1列に並べる */
+.list-buttons { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
 .filter-toggle { display: none; }
 .list-tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; font-size: 13px; }
 .list-tools .count { font-weight: 700; }
@@ -587,7 +589,9 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
 
 @media (max-width: 720px) {
   body { font-size: 15px; }
-  .app-header { padding: 0 16px; gap: 0 12px; }
+  .app-header { padding: 0 16px; gap: 0 8px; }
+  .app-header .brand-name { font-size: 15px; }
+  .app-header .today-label { font-size: 11px; white-space: nowrap; }
   .brand { padding: 8px 0 4px; }
   .today-label { margin-left: auto; }
   .tab { justify-content: center; padding: 8px 6px; font-size: 14px; }
@@ -596,6 +600,7 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
   .page-head .actions { margin-left: 0; width: 100%; }
   .page-head .actions .btn { flex: 1; }
   .list-actions .btn { flex: 1; }
+  .list-buttons { width: 100%; justify-content: flex-start; }
   .filter-toggle { display: flex; width: 100%; margin-bottom: 8px; }
   .filters:not(.task-filters) { display: none; }
   .filters.show { display: flex; }
@@ -699,4 +704,11 @@ body:has(#assistant-slot:empty) .app-header { box-shadow: 0 10px 18px -14px rgba
   }
   .tab:hover { background: rgba(255, 255, 255, .45); }
   .tab.active { background: rgba(255, 255, 255, .65); }
+}
+
+/* 幅の狭いスマホ（380px以下）でも、アプリ名と日付を1行に収める */
+@media (max-width: 380px) {
+  .app-header .brand-name { font-size: 14px; }
+  .app-header .logo { font-size: 17px; }
+  .app-header .demo-tag { font-size: 10px; padding: 1px 4px; }
 }
