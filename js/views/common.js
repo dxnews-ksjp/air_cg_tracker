@@ -125,7 +125,7 @@
 
   /**
    * AIアシスタント（キャラクター＋吹き出し）。今日のまとめを表示する（スマホでは非表示）
-   * 左の .ai-avatar にAIキャラクターのイラストを後から差し込む予定
+   * 左の .ai-avatar にAIキャラクターのイラスト（images/ai-character.jpg・仮）を表示
    */
   UI.assistant = function (snap, today) {
     const r = App.assistant.build(snap, today);
@@ -134,7 +134,7 @@
       '<span>' + esc(x.text) + '</span>' +
       (x.href ? ' <a href="' + x.href + '" class="as-link">' + (x.href === '#/tasks' ? 'タスク管理を開く' : '詳細を開く') + ' ›</a>' : '') + '</li>';
     return '<section class="assistant" aria-label="AIアシスタントからのお知らせ">' +
-      '<div class="ai-avatar" data-slot="ai-character" aria-hidden="true"><span>AIキャラ<br>イラスト<br>挿入予定</span></div>' +
+      '<div class="ai-avatar" data-slot="ai-character"><img src="images/ai-character.jpg" alt="AIアシスタントのキャラクター（ラッコ）" width="96" height="96"></div>' +
       '<div class="as-bubbles">' +
         '<div class="as-bubble">' +
           '<div class="as-head"><strong>今日のまとめ</strong><span class="as-time">' + U.fmtDate(today) + ' ' + t + ' 時点</span></div>' +
