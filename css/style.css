@@ -64,7 +64,8 @@ small { font-size: 12px; color: var(--text-2); }
 .app-header {
   position: sticky; top: 0; z-index: 20;
   display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
-  padding: 0 20px; background: #13294b; color: #fff;
+  /* 中身の左右の端を、本文（最大幅1440px・左右20pxの余白）と同じ位置にそろえる */
+  padding: 0 max(20px, calc((100% - 1440px) / 2 + 20px)); background: #13294b; color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .15);
 }
 .brand { display: flex; align-items: center; gap: 8px; padding: 10px 0; }
@@ -576,7 +577,7 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
 @media (max-width: 900px) {
   .tab-bar { display: none; }
   .layout { display: block; }
-  .side-nav { position: static; width: auto; height: auto; padding: 8px 12px; border-right: 0; border-bottom: 1px solid #c5d7f0; }
+  .side-nav { position: static; width: auto; height: auto; padding: 8px 16px; border-right: 0; border-bottom: 1px solid #c5d7f0; }
   .side-nav-title { display: none; }
   .tabs { flex-direction: row; }
   .tab { flex: 1; justify-content: center; }
@@ -584,7 +585,7 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
 
 @media (max-width: 720px) {
   body { font-size: 15px; }
-  .app-header { padding: 0 12px; gap: 0 12px; }
+  .app-header { padding: 0 16px; gap: 0 12px; }
   .brand { padding: 8px 0 4px; }
   .today-label { margin-left: auto; }
   .tab { justify-content: center; padding: 8px 6px; font-size: 14px; }
