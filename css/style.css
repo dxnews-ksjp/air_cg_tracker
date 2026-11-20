@@ -69,7 +69,28 @@ small { font-size: 12px; color: var(--text-2); }
 .logo { font-size: 20px; }
 .brand-name { font-weight: 700; font-size: 16px; letter-spacing: .02em; }
 .demo-tag { font-size: 11px; background: #f0b429; color: #3d2a00; padding: 1px 6px; border-radius: 4px; font-weight: 700; }
-/* ---------- 画面左端のメニュー（白い背景に濃いネイビーの文字） ---------- */
+/* ---------- PC用の切り替えタブ（ニュースダッシュボードと同じピル型） ---------- */
+.tab-bar { margin-bottom: 12px; }
+.tab-bar-inner {
+  display: flex; gap: 8px; padding: 8px;
+  background: rgba(255, 255, 255, .72); border: 1px solid #e1e6ee; border-radius: 999px;
+  box-shadow: 0 8px 32px rgba(31, 52, 92, .14);
+}
+.tab-pill {
+  flex: 0 1 200px; display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 9px 16px; border: 2px solid var(--tab-color); border-radius: 999px;
+  background: rgba(255, 255, 255, .35); color: var(--tab-color);
+  font-size: 16px; font-weight: 700; letter-spacing: .1em; text-align: center;
+  transition: background .15s, color .15s, transform .1s, box-shadow .15s;
+}
+.tab-pill:hover { transform: translateY(-1px); text-decoration: none; }
+.tab-pill:active { transform: translateY(1px); }
+.tab-pill.active { background: var(--tab-color); color: #fff; box-shadow: 0 3px 10px rgba(0, 0, 0, .25); }
+.tab-pill:focus-visible { outline: 3px solid var(--tab-color); outline-offset: 2px; }
+.tab-pill .tb { letter-spacing: 0; }
+.tab-pill.active .tb-overdue { background: #fff; color: #c62828; }
+
+/* ---------- 画面左端のメニュー（スマホ・幅900px以下ではヘッダー下の横並びメニューとして使う） ---------- */
 :root { --header-h: 51px; --side-w: 200px; }
 
 /* PC（幅901px以上）では画面全体を96%の大きさで表示する（以前の80%表示を1.2倍に拡大）。
@@ -535,8 +556,13 @@ legend { font-weight: 700; font-size: 13px; color: var(--text-2); padding: 0 6px
   .detail-grid > .col-main, .detail-grid > .col-side { min-width: 0; }
 }
 
-/* 画面が狭いとき：左のメニューをヘッダーの下に横並びで表示 */
+/* PC：左のメニューは使わず、ピル型の切り替えタブで切り替える */
+@media (min-width: 901px) {
+  .side-nav { display: none; }
+}
+/* 画面が狭いとき：ピル型タブは使わず、メニューをヘッダーの下に横並びで表示 */
 @media (max-width: 900px) {
+  .tab-bar { display: none; }
   .layout { display: block; }
   .side-nav { position: static; width: auto; height: auto; padding: 8px 12px; border-right: 0; border-bottom: 1px solid #c5d7f0; }
   .side-nav-title { display: none; }

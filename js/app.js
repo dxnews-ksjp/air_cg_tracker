@@ -23,15 +23,16 @@
   async function updateTabs(active) {
     // 今どのメニューの画面かを body に記録（タスク管理だけ背景色を変えるため）
     document.body.dataset.tab = active;
-    document.querySelectorAll('.tab').forEach((t) => {
+    document.querySelectorAll('.tab, .tab-pill').forEach((t) => {
       const on = t.dataset.tab === active;
       t.classList.toggle('active', on);
       if (on) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current');
     });
     const c = await App.views.tasks.counts();
-    const badge = document.getElementById('task-badge');
-    // メニューには今日・明日の件数は出さず、期限切れがあるときだけ件数を表示する
-    badge.innerHTML = c.overdue ? '<span class="tb tb-overdue" title="期限切れ">期限切れ ' + c.overdue + '</span>' : '';
+    // メニュー・タブには今日・明日の件数は出さず、期限切れがあるときだけ件数を表示する
+    document.querySelectorAll('[data-task-badge]').forEach((badge) => {
+      badge.innerHTML = c.overdue ? '<span class="tb tb-overdue" title="期限切れ">期限切れ ' + c.overdue + '</span>' : '';
+    });
   }
 
   async function route() {

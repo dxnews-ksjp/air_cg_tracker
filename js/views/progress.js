@@ -180,6 +180,7 @@
         '<h1>進捗管理</h1>' + UI.disclaimer() +
       '</div>' +
       UI.assistant(snap, today) +
+      UI.tabBar() +
       filterBar(snap) +
       // 登録・データ管理のボタンは絞り込み欄の下に置く
       '<div class="list-actions">' +

@@ -13,6 +13,7 @@
     el.innerHTML =
       '<nav class="crumbs" aria-label="パンくず"><a href="#/progress">進捗管理</a><span>›</span><span>CSV・データ管理</span></nav>' +
       '<div class="page-head"><h1>CSV・データ管理</h1>' + UI.disclaimer() + '</div>' +
+      UI.tabBar() +
       (App.repo.isPersistent() ? '' : '<div class="notice warn">このブラウザではデータを保存できません（プライベートモード等）。画面を閉じると変更は消えます。</div>') +
       '<div class="detail-grid mawb">' +
         '<section class="card"><h2>CSVエクスポート</h2>' +
