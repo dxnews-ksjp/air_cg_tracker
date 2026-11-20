@@ -152,7 +152,7 @@
   UI.tabBar = function () {
     return '<nav class="tab-bar" aria-label="画面の切り替え"><div class="tab-bar-inner">' +
       '<a class="tab-pill" data-tab="progress" href="#/progress" style="--tab-color: #2563c9">進捗管理</a>' +
-      '<a class="tab-pill" data-tab="tasks" href="#/tasks" style="--tab-color: #e8590c">タスク管理 <span class="tab-badges" data-task-badge></span></a>' +
+      '<a class="tab-pill" data-tab="tasks" href="#/tasks" style="--tab-color: #e8590c">タスク管理</a>' +
     '</div></nav>';
   };
 
